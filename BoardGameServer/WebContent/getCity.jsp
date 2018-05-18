@@ -5,7 +5,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 Logger logger = Logger.getLogger("index.jsp");
+String data = new String();
 
+DBconn dbconn = new DBconn();
+try{
+	data = dbconn.getData();
+}catch(SQLException e){
+	e.printStackTrace();
+}catch(ClassNotFoundException e){
+	e.printStackTrace();
+}
+logger.info(data);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -14,9 +24,6 @@ Logger logger = Logger.getLogger("index.jsp");
 <title>Insert title here</title>
 </head>
 <body>
-
-<a href="getCity.jsp">게임맵</a>
-<a href="getPerson.jsp">사람들</a>
-
+<%= data %>
 </body>
 </html>

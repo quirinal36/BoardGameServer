@@ -10,6 +10,9 @@ import java.util.Properties;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import kr.bacoder.coding.bean.AndroidVersionInfo;
+import kr.bacoder.coding.bean.Person;
+
 public class DBconn {
 	private String userName 	= "root";
 	private String password 	= "789gagul";
@@ -43,7 +46,49 @@ public class DBconn {
 	    System.out.println("Connected to database");
 	    return conn;
 	}
-	
+	public String getData(String tableName) throws SQLException, ClassNotFoundException{
+		JSONObject resultObj = new JSONObject();
+		Connection conn;
+		conn = getConnection();
+		
+		Statement stmt = conn.createStatement();
+		ResultSet rs;
+		rs = stmt.executeQuery("SELECT * FROM " + tableName);
+		
+		JSONArray array = new JSONArray();
+		if(tableName.equals("Person")){
+			while(rs.next()){
+				array.add(getPerson(rs));
+			}
+		}else if(tableName.equals("Android_Version")){
+			while(rs.next()){
+				array.add(getAndroidVer(rs));
+			}
+		}
+		resultObj.put("list", array);
+		
+		return resultObj.toJSONString();
+	}
+	private JSONObject getAndroidVer(ResultSet rs) throws SQLException{
+		JSONObject item = new JSONObject();
+		item.put(AndroidVersionInfo.alphabet, rs.getString(AndroidVersionInfo.alphabet));
+		item.put(AndroidVersionInfo.version_name, rs.getString(AndroidVersionInfo.version_name));
+		item.put(AndroidVersionInfo.version_name_kor, rs.getString(AndroidVersionInfo.version_name_kor));
+		item.put(AndroidVersionInfo.version_num, rs.getDouble(AndroidVersionInfo.version_num));
+		item.put(AndroidVersionInfo.year_key, rs.getInt(AndroidVersionInfo.year_key));
+		return item;
+	}
+	private JSONObject getPerson(ResultSet rs) throws SQLException{
+		JSONObject item = new JSONObject();
+		item.put(Person.NAME_KEY, rs.getString(Person.NAME_KEY));
+		item.put(Person.AGE_KEY, rs.getInt(Person.AGE_KEY));
+		item.put(Person.SEX_KEY, rs.getString(Person.SEX_KEY));
+		item.put(Person.ADDRESS_KEY, rs.getString(Person.ADDRESS_KEY));
+		item.put(Person.SKILL_KEY, rs.getString(Person.SKILL_KEY));
+		item.put(Person.FAMILY_KEY, rs.getInt(Person.FAMILY_KEY));
+		item.put(Person.COMPANY_KEY, rs.getString(Person.COMPANY_KEY));
+		return item;
+	}
 	public String getData() throws SQLException, ClassNotFoundException{
 		JSONObject resultObj = new JSONObject();
 		Connection conn;

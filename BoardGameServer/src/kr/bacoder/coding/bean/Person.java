@@ -9,6 +9,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  *
  */
 public class Person {
+	public static final String NAME_KEY = "name";
+	public static final String AGE_KEY = "age";
+	public static final String SEX_KEY = "sex";
+	public static final String ADDRESS_KEY = "address";
+	public static final String SKILL_KEY = "skill";
+	public static final String FAMILY_KEY = "family";
+	public static final String COMPANY_KEY = "company";
+	
 	String name;
 	int age;
 	String sex;
