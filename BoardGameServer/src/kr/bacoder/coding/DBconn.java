@@ -21,8 +21,13 @@ public class DBconn {
 	private String serverName 	= "35.194.236.5";
 	private int portNumber 		= 3306;
 	
-	public Connection getConnection() throws SQLException, ClassNotFoundException {
-		Class.forName("com.mysql.jdbc.Driver");
+	public Connection getConnection() throws SQLException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	    Connection conn = null;
 	    Properties connectionProps = new Properties();
 	    connectionProps.put("user", this.userName);
@@ -43,7 +48,6 @@ public class DBconn {
 	                   ";create=true",
 	                   connectionProps);
 	    }
-	    System.out.println("Connected to database");
 	    return conn;
 	}
 	public String getData(String tableName) throws SQLException, ClassNotFoundException{
@@ -62,22 +66,14 @@ public class DBconn {
 			}
 		}else if(tableName.equals("Android_Version")){
 			while(rs.next()){
-				array.add(getAndroidVer(rs));
+				array.add(AndroidVersionInfo.getAndroidVer(rs));
 			}
 		}
 		resultObj.put("list", array);
 		
 		return resultObj.toJSONString();
 	}
-	private JSONObject getAndroidVer(ResultSet rs) throws SQLException{
-		JSONObject item = new JSONObject();
-		item.put(AndroidVersionInfo.alphabet, rs.getString(AndroidVersionInfo.alphabet));
-		item.put(AndroidVersionInfo.version_name, rs.getString(AndroidVersionInfo.version_name));
-		item.put(AndroidVersionInfo.version_name_kor, rs.getString(AndroidVersionInfo.version_name_kor));
-		item.put(AndroidVersionInfo.version_num, rs.getDouble(AndroidVersionInfo.version_num));
-		item.put(AndroidVersionInfo.year_key, rs.getInt(AndroidVersionInfo.year_key));
-		return item;
-	}
+	
 	private JSONObject getPerson(ResultSet rs) throws SQLException{
 		JSONObject item = new JSONObject();
 		item.put(Person.NAME_KEY, rs.getString(Person.NAME_KEY));
@@ -102,10 +98,16 @@ public class DBconn {
 		while(rs.next()){
 			int id = rs.getInt("idMap");
 			String name = rs.getString("name");
-//			System.out.println("id::::"+id +"::::name::::"+name);
+			int xLoc = rs.getInt("x_loc");
+			int yLoc = rs.getInt("y_loc");
+			int price = rs.getInt("price");
+			
 			JSONObject item = new JSONObject();
 			item.put("id", id);
 			item.put("name", name);
+			item.put("xLoc", xLoc);
+			item.put("yLoc", yLoc);
+			item.put("price", price);
 			array.add(item);
 		}
 		resultObj.put("list", array);

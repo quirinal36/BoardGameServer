@@ -14,12 +14,7 @@ public class MainClass {
 	
 	public static void main(String[] args) throws SQLException {
 		DBconn dbConn = new DBconn();
-		Connection conn = null;
-		try {
-			conn = dbConn.getConnection();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		Connection conn = dbConn.getConnection();
 		if(conn != null){
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
