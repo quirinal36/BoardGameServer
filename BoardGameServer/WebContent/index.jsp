@@ -16,7 +16,10 @@ Logger logger = Logger.getLogger("index.jsp");
 <body>
 
 <a href="getCity.jsp">게임맵</a>
+<br>
 <a href="getPerson.jsp">사람들</a>
+<br>
+<a href="getAndroidVer.jsp">안드로이드버젼</a>
 
 </body>
 </html>

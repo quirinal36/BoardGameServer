@@ -2,30 +2,32 @@ package kr.bacoder.coding;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import kr.bacoder.coding.bean.AndroidVersionInfo;
 import kr.bacoder.coding.bean.Person;
 
 public class DBconn {
-	private String userName 	= "root";
+	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
+	
+	private String userName 	= "dev";
 	private String password 	= "789gagul";
 	private String dbms 		= "mysql";
 	private String dbName 		= "new_schema";
-	private String serverName 	= "35.194.236.5";
+	private String serverName 	= "35.234.23.104";
 	private int portNumber 		= 3306;
 	
 	public Connection getConnection() throws SQLException {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    Connection conn = null;
@@ -41,50 +43,27 @@ public class DBconn {
 	                   this.dbName + "?" +
 	                   "useSSL=false",
 	                   connectionProps);
-	    } else if (this.dbms.equals("derby")) {
-	        conn = DriverManager.getConnection(
-	                   "jdbc:" + this.dbms + ":" +
-	                   this.dbName +
-	                   ";create=true",
-	                   connectionProps);
 	    }
 	    return conn;
 	}
-	public String getData(String tableName) throws SQLException, ClassNotFoundException{
-		JSONObject resultObj = new JSONObject();
+	public int insertPerson(Person person) throws SQLException {
 		Connection conn;
 		conn = getConnection();
+		String sql = "INSERT INTO Person "
+				+ "(name, address, email, phone, password, uniqueId) "
+				+ "VALUES (?,?,?,?,?,?)";
+		logger.info(sql);
 		
-		Statement stmt = conn.createStatement();
-		ResultSet rs;
-		rs = stmt.executeQuery("SELECT * FROM " + tableName);
-		
-		JSONArray array = new JSONArray();
-		if(tableName.equals("Person")){
-			while(rs.next()){
-				array.add(getPerson(rs));
-			}
-		}else if(tableName.equals("Android_Version")){
-			while(rs.next()){
-				array.add(AndroidVersionInfo.getAndroidVer(rs));
-			}
-		}
-		resultObj.put("list", array);
-		
-		return resultObj.toJSONString();
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, person.getName());
+		pstmt.setString(2, person.getAddress());
+		pstmt.setString(3, person.getEmail());
+		pstmt.setString(4, person.getPhone());
+		pstmt.setString(5, person.getPassword());
+		pstmt.setString(6, person.getUniqueId());
+		return pstmt.executeUpdate();
 	}
 	
-	private JSONObject getPerson(ResultSet rs) throws SQLException{
-		JSONObject item = new JSONObject();
-		item.put(Person.NAME_KEY, rs.getString(Person.NAME_KEY));
-		item.put(Person.AGE_KEY, rs.getInt(Person.AGE_KEY));
-		item.put(Person.SEX_KEY, rs.getString(Person.SEX_KEY));
-		item.put(Person.ADDRESS_KEY, rs.getString(Person.ADDRESS_KEY));
-		item.put(Person.SKILL_KEY, rs.getString(Person.SKILL_KEY));
-		item.put(Person.FAMILY_KEY, rs.getInt(Person.FAMILY_KEY));
-		item.put(Person.COMPANY_KEY, rs.getString(Person.COMPANY_KEY));
-		return item;
-	}
 	public String getData() throws SQLException, ClassNotFoundException{
 		JSONObject resultObj = new JSONObject();
 		Connection conn;

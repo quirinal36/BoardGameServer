@@ -27,7 +27,6 @@ public class MainClass {
 				person.setCompany(rs.getString("Company"));
 				person.setName(rs.getString("name"));
 				person.setSex(rs.getString("Sex"));
-				person.setSkills(rs.getString("Skill").split(","));
 				person.setFamily(rs.getInt("family"));
 				logger.info(person.toString());
 			}

@@ -22,8 +22,8 @@ public class ControlAndroid {
 			PreparedStatement stmt = conn.prepareStatement(makeAddQuery());
 			stmt.setDouble(1, info.getVersion());
 			stmt.setInt(2, info.getYear());
-			stmt.setString(3, info.getVersionNameKor());
-			stmt.setString(4, info.getVersionNameEng());
+			stmt.setString(3, info.getVersionNameEng());
+			stmt.setString(4, info.getVersionNameKor());
 			stmt.setString(5, info.getAlphaBet());
 			result = stmt.executeUpdate();
 //			JSONObject object = new JSONObject();
