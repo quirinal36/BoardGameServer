@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.SQLException"%>
@@ -7,12 +8,10 @@
 <%@page import="java.util.logging.Logger"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-Logger logger = Logger.getLogger("getPerson.jsp");
+Logger logger = Logger.getLogger("getPatients.jsp");
 String data = new String();
-String phone = request.getParameter("phone");
-String deviceId = request.getParameter("deviceId");
 
 DBconn dbconn = new DBconn();
-
-out.print(dbconn.getPerson(phone, deviceId));
+logger.info(dbconn.getPatients().toString());
+out.print(URLEncoder.encode(dbconn.getPatients(), "UTF-8"));
 %>

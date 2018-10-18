@@ -16,6 +16,7 @@ public class Person {
 	public static final String FAMILY_KEY = "family";
 	public static final String COMPANY_KEY = "company";
 	
+	private int id;
 	private String name;
 	private int age;
 	private String sex;
@@ -26,12 +27,23 @@ public class Person {
 	private String phone;
 	private String password;
 	private String uniqueId;
+	private String photo;
+	private String department;
 	
 	/**
 	 * 생성자
 	 */
 	public Person() {
 	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -92,8 +104,23 @@ public class Person {
 	public void setUniqueId(String uniqueId) {
 		this.uniqueId = uniqueId;
 	}
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+	
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
 	@Override
 	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }

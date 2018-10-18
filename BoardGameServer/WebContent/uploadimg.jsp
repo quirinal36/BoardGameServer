@@ -1,3 +1,6 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="java.io.File"%>
 <%@page import="java.io.IOException"%>
@@ -9,27 +12,29 @@
 <%
 	Logger logger = Logger.getLogger("uploadimg.jsp");
 	final String path = getServletContext().getRealPath("/upload");
+	logger.info(path);
+	
 	String imgEncodedStr = request.getParameter("image");
 	String fileName = request.getParameter("filename");
-	logger.info("Filename: " + fileName);
+	JSONObject json = new JSONObject();
+	
 	if (imgEncodedStr != null) {
 		//ManipulateImage.convertStringtoImage(imgEncodedStr, fileName);
 		try {
 			// Decode String using Base64 Class
 			byte[] imageByteArray = Base64.decodeBase64(imgEncodedStr); 
-
+			
+			String ext = fileName.substring(fileName.lastIndexOf("."));
+			String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
+			
 			// Write Image into File system - Make sure you update the path
-			File file = new File(path +File.separator + fileName);
+			File file = new File(path + File.separator + timeStamp + ext);
 			FileOutputStream imageOutFile = new FileOutputStream(file);
 			imageOutFile.write(imageByteArray);
 
 			imageOutFile.close();
-
-			System.out.println("Image Successfully Stored");
-			JSONObject json = new JSONObject();
-			
 			json.put("result", 1);
-			json.put("fileurl", "http://upload.uffda.kr/upload/");
+			json.put("fileurl", "http://www.bacoder.kr/upload/" + file.getName());
 			
 			out.print(json.toJSONString());
 		} catch (FileNotFoundException fnfe) {
@@ -38,9 +43,8 @@
 			System.out.println("Exception while converting the Image " + ioe);
 		}
 		System.out.println("Inside if");
-		out.print("Image upload complete, Please check your directory");
 	} else {
+		json.put("result", 0);
 		System.out.println("Inside else");
-		out.print("Image is empty");
 	}
 %>
