@@ -45,5 +45,4 @@
 	json.put("result", dbconn.insertPerson(person));
 	
 	out.print(json.toJSONString());
-	System.out.println("Inside if");
 %>

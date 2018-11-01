@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
+import kr.bacoder.coding.bean.Photo;
 
 public class DBconn {
 	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
@@ -213,5 +214,28 @@ public class DBconn {
 			e.printStackTrace();
 		}
 		return resultObj.toJSONString();
+	}
+	public int addPhotoInfo(Photo photoInfo) {
+		int result = 0;
+		try(Connection conn = getConnection()){
+			String sql = "INSERT INTO PhotoInfo "
+					+ "(patientId, patientName, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?)";
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, photoInfo.getPatientId());
+			pstmt.setString(2, photoInfo.getPatientName());
+			pstmt.setString(3, photoInfo.getPhotoUrl());
+			pstmt.setString(4, photoInfo.getClassification());
+			pstmt.setString(5, photoInfo.getDoctor());
+			pstmt.setString(6, photoInfo.getDate());
+			pstmt.setString(7, photoInfo.getUploader());
+			pstmt.setString(8, photoInfo.getComment());
+			pstmt.setInt(9, photoInfo.getAccessLv());
+			result= pstmt.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

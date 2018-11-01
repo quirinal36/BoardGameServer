@@ -11,9 +11,33 @@ import java.util.Locale;
 import org.apache.commons.codec.binary.Base64;
 
 import kr.bacoder.coding.bean.Person;
+import kr.bacoder.coding.bean.Photo;
 
 public class UploadUtil {
-
+	public String setPhoto(String path, String imgEncodedStr, String fileName, int patientId) {
+		StringBuilder photoUrl = new StringBuilder();
+		photoUrl.append("http://www.bacoder.kr/upload/").append(patientId).append("/");
+		String ext = fileName.substring(fileName.lastIndexOf("."));
+		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
+		
+		File parentPath = new File(path);
+		if(!parentPath.exists()) {
+			parentPath.mkdirs();
+		}
+		// Write Image into File system - Make sure you update the path
+		File file = new File(path + File.separator + timeStamp + ext);
+		photoUrl.append(file.getName());
+		
+		try(FileOutputStream imageOutFile = new FileOutputStream(file)){
+			byte[] imageByteArray = Base64.decodeBase64(imgEncodedStr); 
+			imageOutFile.write(imageByteArray);			
+		}catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return photoUrl.toString();
+	}
 	public Person setFile(String path, String imgEncodedStr, String fileName, Person person){
 		
 		try {
