@@ -29,14 +29,20 @@
 	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	
 	Photo photoInfo = new Photo();
-	photoInfo.setPatientId(patientId);
+	if(patientId != null){
+		photoInfo.setPatientId(patientId);
+	}
 	photoInfo.setPatientName(patientName);
 	photoInfo.setClassification(classification);
 	photoInfo.setDoctor(doctor);
 	photoInfo.setDate(timeStamp);
 	photoInfo.setUploader(uploader);
-	photoInfo.setComment(comment);
-	photoInfo.setAccessLv(accessLv);
+	if(comment != null){
+		photoInfo.setComment(comment);
+	}
+	if(accessLv != null){
+		photoInfo.setAccessLv(accessLv);
+	}
 	
 	JSONObject json = new JSONObject();
 	String imgUrl = new String();

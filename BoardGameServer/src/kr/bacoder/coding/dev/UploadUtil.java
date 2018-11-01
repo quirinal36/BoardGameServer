@@ -16,7 +16,7 @@ import kr.bacoder.coding.bean.Photo;
 public class UploadUtil {
 	public String setPhoto(String path, String imgEncodedStr, String fileName, int patientId) {
 		StringBuilder photoUrl = new StringBuilder();
-		photoUrl.append("http://www.bacoder.kr/upload/").append(patientId).append("/");
+		photoUrl.append("http://www.bacoder.kr/upload/").append("/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
 		

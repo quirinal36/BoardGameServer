@@ -238,4 +238,22 @@ public class DBconn {
 		}
 		return result;
 	}
+	public JSONArray getPhotos(Photo photo) {
+		JSONArray result = new JSONArray();
+		try(Connection conn = getConnection()){
+			String sql = "SELECT * FROM PhotoInfo WHERE patientId = ?";
+			logger.info(sql);;
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, photo.getPatientId());
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Photo p = Photo.makePhoto(rs);
+				result.add(Photo.parseJSON(p));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

@@ -1,7 +1,11 @@
 package kr.bacoder.coding.bean;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.json.simple.JSONObject;
 
 public class Photo {
     private int photoId;
@@ -79,6 +83,34 @@ public class Photo {
 	}
 	public void setAccessLv(String accessLv) {
 		setAccessLv(Integer.parseInt(accessLv));
+	}
+	public static Photo makePhoto(ResultSet rs) throws SQLException {
+		Photo result = new Photo();
+		result.setAccessLv(rs.getInt("accessLv"));
+		result.setClassification(rs.getString("classification"));
+		result.setComment(rs.getString("comment"));
+		result.setDate(rs.getString("date"));
+		result.setDoctor(rs.getString("doctor"));
+		result.setPatientId(rs.getInt("patientId"));
+		result.setPatientName(rs.getString("patientName"));
+		result.setPhotoId(rs.getInt("id"));
+		result.setPhotoUrl(rs.getString("photoUrl"));
+		result.setUploader(rs.getString("uploader"));
+		return result;
+	}
+	public static JSONObject parseJSON(Photo photo) {
+		JSONObject result = new JSONObject();
+		result.put("accessLv", photo.getAccessLv());
+		result.put("classification", photo.getClassification());
+		result.put("comment", photo.getComment());
+		result.put("date", photo.getDate());
+		result.put("doctor", photo.getDoctor());
+		result.put("patientId", photo.getPatientId());
+		result.put("patientName", photo.getPatientName());
+		result.put("id", photo.getPhotoId());
+		result.put("photoUrl", photo.getPhotoUrl());
+		result.put("uploader", photo.getUploader());
+		return result;
 	}
     @Override
     public String toString() {
