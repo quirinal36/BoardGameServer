@@ -24,6 +24,15 @@ public class Photo {
 	public void setPhotoId(int photoId) {
 		this.photoId = photoId;
 	}
+	public String getPatientName() {
+		return patientName;
+	}
+	public void setPatientName(String patientName) {
+		this.patientName = patientName;
+	}
+	public void setPhotoId(String photoId) {
+		setPhotoId(Integer.parseInt(photoId));
+	}
 	public int getPatientId() {
 		return patientId;
 	}
@@ -33,12 +42,7 @@ public class Photo {
 	public void setPatientId(String patientId) {
 		setPatientId(Integer.parseInt(patientId));
 	}
-	public String getPatientName() {
-		return patientName;
-	}
-	public void setPatientName(String patientName) {
-		this.patientName = patientName;
-	}
+	
 	public String getPhotoUrl() {
 		return photoUrl;
 	}
@@ -87,12 +91,12 @@ public class Photo {
 	public static Photo makePhoto(ResultSet rs) throws SQLException {
 		Photo result = new Photo();
 		result.setAccessLv(rs.getInt("accessLv"));
+		result.setPatientName(rs.getString("patientName"));
 		result.setClassification(rs.getString("classification"));
 		result.setComment(rs.getString("comment"));
 		result.setDate(rs.getString("date"));
 		result.setDoctor(rs.getString("doctor"));
 		result.setPatientId(rs.getInt("patientId"));
-		result.setPatientName(rs.getString("patientName"));
 		result.setPhotoId(rs.getInt("id"));
 		result.setPhotoUrl(rs.getString("photoUrl"));
 		result.setUploader(rs.getString("uploader"));
@@ -101,12 +105,12 @@ public class Photo {
 	public static JSONObject parseJSON(Photo photo) {
 		JSONObject result = new JSONObject();
 		result.put("accessLv", photo.getAccessLv());
+		result.put("patientName", photo.getPatientName());
 		result.put("classification", photo.getClassification());
 		result.put("comment", photo.getComment());
 		result.put("date", photo.getDate());
 		result.put("doctor", photo.getDoctor());
 		result.put("patientId", photo.getPatientId());
-		result.put("patientName", photo.getPatientName());
 		result.put("id", photo.getPhotoId());
 		result.put("photoUrl", photo.getPhotoUrl());
 		result.put("uploader", photo.getUploader());

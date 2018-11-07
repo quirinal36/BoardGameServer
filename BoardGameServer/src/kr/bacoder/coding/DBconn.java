@@ -18,6 +18,7 @@ import org.json.simple.JSONObject;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Photo;
+import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class DBconn {
 	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
@@ -219,21 +220,45 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, patientName, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
-					+ "VALUES (?,?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
+					+ "VALUES (?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photoInfo.getPatientId());
-			pstmt.setString(2, photoInfo.getPatientName());
-			pstmt.setString(3, photoInfo.getPhotoUrl());
-			pstmt.setString(4, photoInfo.getClassification());
-			pstmt.setString(5, photoInfo.getDoctor());
-			pstmt.setString(6, photoInfo.getDate());
-			pstmt.setString(7, photoInfo.getUploader());
-			pstmt.setString(8, photoInfo.getComment());
-			pstmt.setInt(9, photoInfo.getAccessLv());
+			pstmt.setString(2, photoInfo.getPhotoUrl());
+			pstmt.setString(3, photoInfo.getClassification());
+			pstmt.setString(4, photoInfo.getDoctor());
+			pstmt.setString(5, photoInfo.getDate());
+			pstmt.setString(6, photoInfo.getUploader());
+			pstmt.setString(7, photoInfo.getComment());
+			pstmt.setInt(8, photoInfo.getAccessLv());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public JSONObject getPhoto(Photo photo) {
+		JSONObject result = new JSONObject();
+		try(Connection conn = getConnection()){
+			String sql = new StringBuilder()
+					.append("SELECT ").append(" ")
+					.append("photo.id, patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge").append(" ")
+					.append("FROM ").append(" ")
+					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
+					.append("WHERE ").append(" ")
+					.append("photo.id = ? AND ").append(" ")
+					.append("patient.id = photo.patientId").toString();
+			logger.info(sql);
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, photo.getPhotoId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+			result = PhotoPatientInfo.parseJSON(p);
+			
+		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
@@ -241,8 +266,15 @@ public class DBconn {
 	public JSONArray getPhotos(Photo photo) {
 		JSONArray result = new JSONArray();
 		try(Connection conn = getConnection()){
-			String sql = "SELECT * FROM PhotoInfo WHERE patientId = ?";
-			logger.info(sql);;
+			String sql = new StringBuilder()
+					.append("SELECT ").append(" ")
+					.append("photo.id, patientId, patient.name, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge").append(" ")
+					.append("FROM ").append(" ")
+					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
+					.append("WHERE ").append(" ")
+					.append("photo.patientId = ? and").append(" ")
+					.append("patient.id = photo.patientId").toString();
+			logger.info(sql);
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photo.getPatientId());
@@ -256,4 +288,5 @@ public class DBconn {
 		}
 		return result;
 	}
+
 }
