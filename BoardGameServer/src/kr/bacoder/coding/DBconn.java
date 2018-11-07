@@ -263,7 +263,10 @@ public class DBconn {
 		try(Connection conn = getConnection()){
 			String sql = new StringBuilder()
 					.append("SELECT ").append(" ")
-					.append("photo.id, patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge").append(" ")
+					.append("photo.id, patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge,")
+					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
+					.append("patient.birth AS patientBirth, patient.etc AS patientEtc")
+					.append(" ")
 					.append("FROM ").append(" ")
 					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
 					.append("WHERE ").append(" ")
