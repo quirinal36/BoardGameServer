@@ -79,12 +79,17 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PatientInfo "
-					+ "(photo, p_date, name) "
-					+ "VALUES (?, ?, ?)";
+					+ "(photo, p_date, name, birth, sex, address, phone, etc) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, patient.getPhoto());
 			pstmt.setString(2, new SimpleDateFormat("yyyyMMddhhmm", Locale.KOREA).format(new Date()));
 			pstmt.setString(3, patient.getName());
+			pstmt.setString(4, patient.getBirth());
+			pstmt.setString(5, patient.getSex());
+			pstmt.setString(6, patient.getAddress());
+			pstmt.setString(7, patient.getPhone());
+			pstmt.setString(8, patient.getEtc());
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -95,12 +100,17 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "UPDATE PatientInfo "
-					+ "SET photo=?, name=? "
+					+ "SET photo=?, name=?, birth=?, sex=?, phone=?, address=?, etc=? "
 					+ "WHERE id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, patient.getPhoto());
 			pstmt.setString(2, patient.getName());
-			pstmt.setInt(3, patient.getId());
+			pstmt.setString(3, patient.getBirth());
+			pstmt.setString(4, patient.getSex());
+			pstmt.setString(5, patient.getPhone());
+			pstmt.setString(6, patient.getAddress());
+			pstmt.setString(7, patient.getEtc());
+			pstmt.setInt(8, patient.getId());
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -121,6 +131,11 @@ public class DBconn {
 				patient.setPhoto(rs.getString("photo"));
 				patient.setP_date(rs.getString("p_date"));
 				patient.setName(rs.getString("name"));
+				patient.setAddress(rs.getString("address"));
+				patient.setBirth(rs.getString("birth"));
+				patient.setEtc("etc");
+				patient.setPhone("phone");
+				patient.setSex("sex");
 				array.add(patient.toString());
 			}
 			json.put("list", array);
@@ -141,7 +156,12 @@ public class DBconn {
 				patient.setPhoto(rs.getString("photo"));
 				patient.setP_date(rs.getString("p_date"));
 				patient.setName(rs.getString("name"));
-				patient.toString();
+				patient.setAddress(rs.getString("address"));
+				patient.setBirth(rs.getString("birth"));
+				patient.setEtc("etc");
+				patient.setPhone("phone");
+				patient.setSex("sex");
+				
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -263,31 +283,4 @@ public class DBconn {
 		}
 		return result;
 	}
-	public JSONArray getPhotos(Photo photo) {
-		JSONArray result = new JSONArray();
-		try(Connection conn = getConnection()){
-			String sql = new StringBuilder()
-					.append("SELECT ").append(" ")
-					.append("photo.id, patientId, patient.name, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge").append(" ")
-					.append("FROM ").append(" ")
-					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
-					.append("WHERE ").append(" ")
-					.append("photo.patientId = ? and").append(" ")
-					.append("patient.id = photo.patientId").toString();
-			logger.info(sql);
-			
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, photo.getPatientId());
-			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
-				Photo p = Photo.makePhoto(rs);
-				result.add(Photo.parseJSON(p));
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
 }
->>>>>>> branch 'master' of https://github.com/quirinal36/BoardGameServer.git

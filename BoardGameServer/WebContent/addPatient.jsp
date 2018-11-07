@@ -9,12 +9,24 @@ Logger logger = Logger.getLogger("addPatient.jsp");
 
 String name = request.getParameter("name");
 String photo = request.getParameter("photo");
+String birth = request.getParameter("birth");
+String sex = request.getParameter("sex");
+String phone = request.getParameter("phone");
+String address = request.getParameter("address");
+String etc = request.getParameter("etc");
 
 Patient patient = new Patient();
 patient.setName(name);
 patient.setPhoto(photo);
+patient.setBirth(birth);
+patient.setSex(sex);
+patient.setPhone(phone);
+patient.setAddress(address);
+patient.setEtc(etc);
 
 DBconn dbconn = new DBconn();
+
+logger.info(patient.toString());
 
 JSONObject json = new JSONObject();
 json.put("result", dbconn.insertPatient(patient));

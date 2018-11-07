@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -14,7 +15,11 @@ import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Photo;
 
 public class UploadUtil {
+	Logger logger = Logger.getLogger(UploadUtil.class.getSimpleName());
+	
 	public String setPhoto(String path, String imgEncodedStr, String fileName, int patientId) {
+		logger.info(path);
+		
 		StringBuilder photoUrl = new StringBuilder();
 		photoUrl.append("http://www.bacoder.kr/upload/").append("/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
