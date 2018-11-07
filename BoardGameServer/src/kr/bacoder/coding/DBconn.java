@@ -18,6 +18,7 @@ import org.json.simple.JSONObject;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Photo;
+import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class DBconn {
 	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
@@ -78,17 +79,12 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PatientInfo "
-					+ "(photo, p_date, name, birth, sex, address, phone, etc) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "(photo, p_date, name) "
+					+ "VALUES (?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, patient.getPhoto());
 			pstmt.setString(2, new SimpleDateFormat("yyyyMMddhhmm", Locale.KOREA).format(new Date()));
 			pstmt.setString(3, patient.getName());
-			pstmt.setString(4, patient.getBirth());
-			pstmt.setString(5, patient.getSex());
-			pstmt.setString(6, patient.getAddress());
-			pstmt.setString(7, patient.getPhone());
-			pstmt.setString(8, patient.getEtc());
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -99,17 +95,12 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "UPDATE PatientInfo "
-					+ "SET photo=?, name=?, birth=?, sex=?, phone=?, address=?, etc=? "
+					+ "SET photo=?, name=? "
 					+ "WHERE id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, patient.getPhoto());
 			pstmt.setString(2, patient.getName());
-			pstmt.setString(3, patient.getBirth());
-			pstmt.setString(4, patient.getSex());
-			pstmt.setString(5, patient.getPhone());
-			pstmt.setString(6, patient.getAddress());
-			pstmt.setString(7, patient.getEtc());
-			pstmt.setInt(8, patient.getId());
+			pstmt.setInt(3, patient.getId());
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -130,11 +121,6 @@ public class DBconn {
 				patient.setPhoto(rs.getString("photo"));
 				patient.setP_date(rs.getString("p_date"));
 				patient.setName(rs.getString("name"));
-				patient.setAddress(rs.getString("address"));
-				patient.setBirth(rs.getString("birth"));
-				patient.setEtc("etc");
-				patient.setPhone("phone");
-				patient.setSex("sex");
 				array.add(patient.toString());
 			}
 			json.put("list", array);
@@ -155,12 +141,7 @@ public class DBconn {
 				patient.setPhoto(rs.getString("photo"));
 				patient.setP_date(rs.getString("p_date"));
 				patient.setName(rs.getString("name"));
-				patient.setAddress(rs.getString("address"));
-				patient.setBirth(rs.getString("birth"));
-				patient.setEtc("etc");
-				patient.setPhone("phone");
-				patient.setSex("sex");
-				
+				patient.toString();
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -239,21 +220,45 @@ public class DBconn {
 		int result = 0;
 		try(Connection conn = getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, patientName, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
-					+ "VALUES (?,?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
+					+ "VALUES (?,?,?,?,?,?,?,?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photoInfo.getPatientId());
-			pstmt.setString(2, photoInfo.getPatientName());
-			pstmt.setString(3, photoInfo.getPhotoUrl());
-			pstmt.setString(4, photoInfo.getClassification());
-			pstmt.setString(5, photoInfo.getDoctor());
-			pstmt.setString(6, photoInfo.getDate());
-			pstmt.setString(7, photoInfo.getUploader());
-			pstmt.setString(8, photoInfo.getComment());
-			pstmt.setInt(9, photoInfo.getAccessLv());
+			pstmt.setString(2, photoInfo.getPhotoUrl());
+			pstmt.setString(3, photoInfo.getClassification());
+			pstmt.setString(4, photoInfo.getDoctor());
+			pstmt.setString(5, photoInfo.getDate());
+			pstmt.setString(6, photoInfo.getUploader());
+			pstmt.setString(7, photoInfo.getComment());
+			pstmt.setInt(8, photoInfo.getAccessLv());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public JSONObject getPhoto(Photo photo) {
+		JSONObject result = new JSONObject();
+		try(Connection conn = getConnection()){
+			String sql = new StringBuilder()
+					.append("SELECT ").append(" ")
+					.append("photo.id, patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge").append(" ")
+					.append("FROM ").append(" ")
+					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
+					.append("WHERE ").append(" ")
+					.append("photo.id = ? AND ").append(" ")
+					.append("patient.id = photo.patientId").toString();
+			logger.info(sql);
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, photo.getPhotoId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+			result = PhotoPatientInfo.parseJSON(p);
+			
+		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
@@ -261,8 +266,15 @@ public class DBconn {
 	public JSONArray getPhotos(Photo photo) {
 		JSONArray result = new JSONArray();
 		try(Connection conn = getConnection()){
-			String sql = "SELECT * FROM PhotoInfo WHERE patientId = ?";
-			logger.info(sql);;
+			String sql = new StringBuilder()
+					.append("SELECT ").append(" ")
+					.append("photo.id, patientId, patient.name, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge").append(" ")
+					.append("FROM ").append(" ")
+					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
+					.append("WHERE ").append(" ")
+					.append("photo.patientId = ? and").append(" ")
+					.append("patient.id = photo.patientId").toString();
+			logger.info(sql);
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photo.getPatientId());
@@ -276,4 +288,6 @@ public class DBconn {
 		}
 		return result;
 	}
+
 }
+>>>>>>> branch 'master' of https://github.com/quirinal36/BoardGameServer.git
