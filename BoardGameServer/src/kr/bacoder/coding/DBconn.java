@@ -286,4 +286,39 @@ public class DBconn {
 		}
 		return result;
 	}
+	public JSONArray getPhotos(Photo photo) {
+		JSONArray result = new JSONArray();
+		try(Connection conn = getConnection()){
+			StringBuilder sql = new StringBuilder()
+					.append("SELECT ").append(" ")
+					.append("patient.id AS patientId, name AS patientName, age AS patientAge,")
+					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
+					.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
+					.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
+					.append("photo.doctor, photo.id AS id")
+					.append(" ")
+					.append("FROM ").append(" ")
+					.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
+					.append("ON ").append(" ")
+					.append("photo.patientId = patient.id").append(" ");
+					if(photo.getPatientId() > 0) {
+						sql.append("WHERE patient.id = ?").append(" ");
+					}
+					sql.append("limit 0, 10");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(photo.getPatientId() > 0) {
+				pstmt.setInt(1, photo.getPatientId());
+			}
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				result.add(PhotoPatientInfo.parseJSON(p));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

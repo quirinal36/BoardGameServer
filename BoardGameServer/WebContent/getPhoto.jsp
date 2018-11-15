@@ -7,7 +7,6 @@
 <%
 Logger logger = Logger.getLogger("getPhoto.jsp");
 String patientId = request.getParameter("patientId");
-logger.info("getPhoto.jsp");
 
 JSONObject resultJson = new JSONObject();
 DBconn dbconn = new DBconn();

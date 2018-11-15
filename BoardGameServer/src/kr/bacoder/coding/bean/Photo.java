@@ -40,7 +40,11 @@ public class Photo {
 		this.patientId = patientId;
 	}
 	public void setPatientId(String patientId) {
-		setPatientId(Integer.parseInt(patientId));
+		if(patientId!=null && patientId.length()>0) {
+			setPatientId(Integer.parseInt(patientId));
+		}else {
+			this.patientId = 0;
+		}
 	}
 	
 	public String getPhotoUrl() {

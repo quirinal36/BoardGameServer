@@ -66,25 +66,30 @@ public class PhotoPatientInfo extends Photo{
 	}
 	public static PhotoPatientInfo makeInfo(ResultSet rs) throws SQLException {
 		PhotoPatientInfo result = new PhotoPatientInfo();
-		if(rs.next()) {
+		
+		try {
 			result.setAccessLv(rs.getInt("accessLv"));
 			result.setClassification(rs.getString("classification"));
 			result.setComment(rs.getString("comment"));
 			result.setDate(rs.getString("date"));
 			result.setDoctor(rs.getString("doctor"));
 			result.setPatientId(rs.getInt("patientId"));
-			result.setPhotoId(rs.getInt("id"));
 			result.setPhotoUrl(rs.getString("photoUrl"));
 			result.setUploader(rs.getString("uploader"));
-			result.setPatientId(rs.getInt("patientId"));
-			result.setPatientName(rs.getString("patientName"));
-			result.setPatientAge(rs.getInt("patientAge"));
-			result.setPatientAddress(rs.getString("patientAddress"));
-			result.setPatientBirth(rs.getString("patientBirth"));
-			result.setPatientEtc(rs.getString("patientEtc"));
-			result.setPatientPhone(rs.getString("patientPhone"));
-			result.setPatientSex(rs.getString("patientSex"));
+			result.setPhotoId(rs.getInt("id"));
+		}catch(SQLException e) {
+			e.printStackTrace();
 		}
+		
+		result.setPatientId(rs.getInt("patientId"));
+		result.setPatientName(rs.getString("patientName"));
+		result.setPatientAge(rs.getInt("patientAge"));
+		result.setPatientAddress(rs.getString("patientAddress"));
+		result.setPatientBirth(rs.getString("patientBirth"));
+		result.setPatientEtc(rs.getString("patientEtc"));
+		result.setPatientPhone(rs.getString("patientPhone"));
+		result.setPatientSex(rs.getString("patientSex"));
+		
 		return result;
 	}
 	public static JSONObject parseJSON(PhotoPatientInfo info) {
