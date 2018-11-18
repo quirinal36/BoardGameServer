@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="java.util.Iterator"%>
@@ -14,11 +15,13 @@ String searchQuery = request.getParameter("query");
 PatientControl control = new PatientControl();
 List<Patient> list = control.searchPatientByQuery(searchQuery);
 
+JSONObject json = new JSONObject();
 JSONArray array = new JSONArray();
 
 Iterator <Patient> iter = list.iterator();
 while(iter.hasNext()){
 	array.put(new JSONObject(iter.next().toString()));
 }
-out.print(array.toString());
+json.put("list", array);
+out.print(URLEncoder.encode(json.toString(), "UTF-8"));
 %>
