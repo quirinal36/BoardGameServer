@@ -1,3 +1,4 @@
+<%@page import="kr.bacoder.coding.control.PersonControl"%>
 <%@page import="kr.bacoder.coding.bean.Person"%>
 <%@page import="kr.bacoder.coding.DBconn"%>
 <%@page import="org.json.simple.JSONObject"%>
@@ -20,9 +21,10 @@ person.setAddress(address);
 person.setPhoto(photo);
 
 DBconn dbconn = new DBconn();
+PersonControl control = new PersonControl();
 
 JSONObject json = new JSONObject();
-json.put("result", dbconn.updatePerson(person));
+json.put("result", control.updatePerson(person));
 String result = json.toJSONString();
 %>
 <%=result%>

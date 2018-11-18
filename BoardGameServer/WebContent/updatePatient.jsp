@@ -1,3 +1,4 @@
+<%@page import="kr.bacoder.coding.control.PatientControl"%>
 <%@page import="kr.bacoder.coding.bean.Patient"%>
 <%@page import="kr.bacoder.coding.bean.Person"%>
 <%@page import="kr.bacoder.coding.DBconn"%>
@@ -27,11 +28,12 @@ patient.setEtc(etc);
 patient.setId(Integer.parseInt(id));
 
 DBconn dbconn = new DBconn();
+PatientControl control = new PatientControl();
 
 logger.info(patient.toString());
 
 JSONObject json = new JSONObject();
-json.put("result", dbconn.updatePatient(patient));
+json.put("result", control.updatePatient(patient));
 String result = json.toJSONString();
 %>
 <%=result%>

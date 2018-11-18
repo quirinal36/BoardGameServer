@@ -1,3 +1,4 @@
+<%@page import="kr.bacoder.coding.control.PhotoControl"%>
 <%@page import="org.json.simple.JSONArray"%>
 <%@page import="kr.bacoder.coding.bean.Photo"%>
 <%@page import="kr.bacoder.coding.DBconn"%>
@@ -12,7 +13,8 @@ logger.info("getPhotoById.jsp");
 DBconn dbconn = new DBconn();
 Photo photo = new Photo();
 photo.setPhotoId(photoId);
+PhotoControl control = new PhotoControl();
 
-JSONObject resultJson = dbconn.getPhoto(photo);
+JSONObject resultJson = control.getPhoto(photo);
 out.print(resultJson.toJSONString());
 %>

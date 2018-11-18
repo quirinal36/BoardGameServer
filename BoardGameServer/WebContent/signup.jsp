@@ -1,3 +1,4 @@
+<%@page import="kr.bacoder.coding.control.PersonControl"%>
 <%@page import="kr.bacoder.coding.dev.UploadUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="kr.bacoder.coding.DBconn"%>
@@ -40,9 +41,10 @@
 	}
 	
 	DBconn dbconn = new DBconn();
+	PersonControl control = new PersonControl();
 	logger.info(person.toString());
 	
-	json.put("result", dbconn.insertPerson(person));
+	json.put("result", control.insertPerson(person));
 	
 	out.print(json.toJSONString());
 %>

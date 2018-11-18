@@ -1,3 +1,4 @@
+<%@page import="kr.bacoder.coding.control.PersonControl"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.SQLException"%>
@@ -13,6 +14,6 @@ String phone = request.getParameter("phone");
 String deviceId = request.getParameter("deviceId");
 
 DBconn dbconn = new DBconn();
-
-out.print(dbconn.getPerson(phone, deviceId));
+PersonControl control = new PersonControl();
+out.print(control.getPerson(phone, deviceId));
 %>

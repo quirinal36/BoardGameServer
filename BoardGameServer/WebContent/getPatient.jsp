@@ -1,3 +1,4 @@
+<%@page import="kr.bacoder.coding.control.PatientControl"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
@@ -13,6 +14,7 @@ String data = new String();
 String id = request.getParameter("id");
 
 DBconn dbconn = new DBconn();
+PatientControl control = new PatientControl();
 
-out.print(URLEncoder.encode(dbconn.getPatient(Integer.parseInt(id)), "UTF-8"));
+out.print(URLEncoder.encode(control.getPatient(Integer.parseInt(id)), "UTF-8"));
 %>
