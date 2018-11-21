@@ -43,7 +43,7 @@ public class PhotoControl {
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = new StringBuilder()
 					.append("SELECT ").append(" ")
-					.append("photo.id, patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge,")
+					.append("photo.id, patient.patientId, photoUrl, classification, photo.doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge,")
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 					.append("patient.birth AS patientBirth, patient.etc AS patientEtc")
 					.append(" ")
@@ -52,7 +52,6 @@ public class PhotoControl {
 					.append("WHERE ").append(" ")
 					.append("photo.id = ? AND ").append(" ")
 					.append("patient.id = photo.patientId").toString();
-			logger.info(sql);
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photo.getPhotoId());
@@ -71,7 +70,7 @@ public class PhotoControl {
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder()
 					.append("SELECT ").append(" ")
-					.append("patient.id AS patientId, name AS patientName, age AS patientAge,")
+					.append("patient.patientId AS patientId, name AS patientName, age AS patientAge,")
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 					.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 					.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
@@ -80,12 +79,13 @@ public class PhotoControl {
 					.append("FROM ").append(" ")
 					.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
 					.append("ON ").append(" ")
-					.append("photo.patientId = patient.id").append(" ");
+					.append("photo.patientId = patient.patientId").append(" ");
 					if(photo.getPatientId() > 0) {
-						sql.append("WHERE patient.id = ?").append(" ");
+						sql.append("WHERE patient.patientId = ?").append(" ");
 					}
-					sql.append("limit 0, 10");
-			
+					sql.append("order by photo.id desc ");
+					sql.append("limit 0, 20 ");
+			System.out.println(sql.toString());
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			if(photo.getPatientId() > 0) {
 				pstmt.setInt(1, photo.getPatientId());
