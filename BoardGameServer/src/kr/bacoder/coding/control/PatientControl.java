@@ -16,20 +16,43 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import kr.bacoder.coding.DBconn;
+import kr.bacoder.coding.bean.Doctor;
 import kr.bacoder.coding.bean.Patient;
 
 public class PatientControl {
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 	
+	
+	public int setPatientRepresentPhoto(Patient patient) {
+		
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE PatientInfo ").append("SET photoId=? ").append("WHERE patientId=?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, patient.getPhotoId());
+			pstmt.setString(2, patient.getPatientId());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public List<Patient> searchPatientByQuery(String search){
 		List<Patient> result = new ArrayList<>();
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT id, photo, name, doctor, birth, sex, address, phone, memo, room, admission, patientId ")
-			.append("FROM PatientInfo ");
+			sql.append("SELECT patient.id, photo.photoUrl, patient.name, patient.doctor, patient.birth, patient.sex, ").append(" ")
+			.append("patient.address, patient.phone, patient.memo, patient.room, patient.admission, patient.patientId ").append(" ")
+			.append("FROM PatientInfo patient , PhotoInfo photo").append(" ");
 			if(search!=null && search.length() > 0) {
 				search = "%"+search+"%";
-				sql.append("WHERE patientId like ? OR name like ? OR memo like ?");
+				sql.append("WHERE patient.patientId like ? OR patient.name like ? OR patient.memo like ?").append(" ")
+				.append(" AND (photo.id = patient.photoId)");
+			}else {
+				sql.append(" WHERE photo.id = patient.photoId");
 			}
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			if(search!=null && search.length() > 0) {
@@ -140,6 +163,57 @@ public class PatientControl {
 				patient.setRoom(rs.getString("room"));
 				patient.setAdmission(rs.getInt("admission") > 0);
 				patient.setPatientId(rs.getString("patientId"));
+				array.add(patient.toString());
+			}
+			json.put("list", array);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return json.toJSONString();
+	}
+	public String getPatientsByDoctor(Doctor doctor, String search) {
+		
+		
+		JSONObject json = new JSONObject();
+		try(Connection conn = new DBconn().getConnection()){
+			
+			ResultSet rs;
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+			.append("patient.id AS id, patient.name AS name, age AS age,")
+			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
+			.append("patient.birth AS birth, patient.etc AS etc,")
+			.append("patient.memo, patient.room, patient.admission,")
+			.append("doctor.doctorName AS doctor, patient.patientId AS patientId")
+			.append(" ")
+			.append("FROM ").append(" ")
+			.append("PatientInfo patient , Doctor doctor").append(" ")
+			.append(" WHERE doctorId = ?").append(" ");
+			
+			if(search!=null &&search.length()>0) {
+				search = "%"+search+"%";
+				sql.append("AND (name like ? ")
+				.append("OR memo like ? ")
+				.append("OR patientId like ? )");
+				
+			}
+			
+			logger.info(sql.toString());
+			
+			PreparedStatement stmt = conn.prepareStatement(sql.toString());
+			stmt.setInt(1, doctor.getId());
+			if(search!=null &&search.length()>0) {
+				search = "%"+search+"%";
+				stmt.setString(2, search);
+				stmt.setString(3, search);
+				stmt.setString(4, search);
+			}
+			rs = stmt.executeQuery();
+			
+			JSONArray array = new JSONArray();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+				
 				array.add(patient.toString());
 			}
 			json.put("list", array);

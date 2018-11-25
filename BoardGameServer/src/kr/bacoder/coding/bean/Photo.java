@@ -41,7 +41,12 @@ public class Photo {
 	}
 	public void setPatientId(String patientId) {
 		if(patientId!=null && patientId.length()>0) {
-			setPatientId(Integer.parseInt(patientId));
+			try {
+				setPatientId(Integer.parseInt(patientId));
+			}catch(NumberFormatException e) {
+				this.patientId = 0;
+				e.printStackTrace();
+			}
 		}else {
 			this.patientId = 0;
 		}

@@ -51,15 +51,16 @@ public class PhotoControl {
 					.append("PhotoInfo photo, PatientInfo patient ").append(" ")
 					.append("WHERE ").append(" ")
 					.append("photo.id = ? AND ").append(" ")
-					.append("patient.id = photo.patientId").toString();
+					.append("patient.patientId = photo.patientId").toString();
+			logger.info(sql +"id="+photo.getPhotoId());
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photo.getPhotoId());
 			ResultSet rs = pstmt.executeQuery();
-			
-			PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
-			result = PhotoPatientInfo.parseJSON(p);
-			
+			if(rs.next()) {
+				PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				result = PhotoPatientInfo.parseJSON(p);
+			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
