@@ -21,7 +21,12 @@ public class Patient {
 	private boolean admission;
 	private String etc;
 	private String patientId;
-	
+	private int age;
+	private int photoId;
+	public Patient() {}
+	public Patient(String patientId) {
+		this.patientId = patientId;
+	}
 	public int getId() {
 		return id;
 	}
@@ -76,7 +81,7 @@ public class Patient {
 	public void setEtc(String etc) {
 		this.etc = etc;
 	}
-	
+
 	public String getDoctor() {
 		return doctor;
 	}
@@ -101,27 +106,102 @@ public class Patient {
 	public void setAdmission(boolean admission) {
 		this.admission = admission;
 	}
-	
+
 	public String getPatientId() {
 		return patientId;
 	}
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
+
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
+	public int getPhotoId() {
+		return photoId;
+	}
+	public void setPhotoId(int photoId) {
+		this.photoId = photoId;
+	}
+	public void setPhotoId(String photoId) {
+		try {
+			this.photoId = Integer.parseInt(photoId);
+		}catch(Exception e) {
+			
+		}
+	}
 	public static Patient parseToPatient(ResultSet rs) throws SQLException {
 		Patient result = new Patient();
 		result.setId(rs.getInt("id"));
-		result.setPhoto(rs.getString("photo"));
-		result.setName(rs.getString("name"));
-		result.setDoctor(rs.getString("doctor"));
-		result.setBirth(rs.getString("birth"));
-		result.setSex(rs.getString("sex"));
-		result.setAddress(rs.getString("address"));
-		result.setPhone(rs.getString("phone"));
-		result.setMemo(rs.getString("memo"));
-		result.setRoom(rs.getString("room"));
-		result.setAdmission(rs.getInt("admission")>0);
-		result.setPatientId(rs.getString("patientId"));
+		try {
+			result.setPhoto(rs.getString("photo"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setName(rs.getString("name"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setDoctor(rs.getString("doctor"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setBirth(rs.getString("birth"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setSex(rs.getString("sex"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setAddress(rs.getString("address"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setPhone(rs.getString("phone"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setMemo(rs.getString("memo"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setRoom(rs.getString("room"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setAdmission(rs.getInt("admission")>0);
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setPatientId(rs.getString("patientId"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setAge(rs.getInt("age"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setPhotoId(rs.getInt("photoId"));
+		}catch(SQLException e) {
+
+		}
 		return result;
 	}
 	@Override
