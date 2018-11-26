@@ -35,7 +35,7 @@ $(function(){
 		var param = "";
 		$(this).parent().parent().find("input").each(function(){
 			if($(this).attr("name") != undefined && $(this).attr("name").length > 0){
-				param = param + $(this).attr("name") + "=" + $(this).val(); 
+				param = param + "&" +$(this).attr("name") + "=" + $(this).val(); 
 			}
 		});
 		// url = url + param;
