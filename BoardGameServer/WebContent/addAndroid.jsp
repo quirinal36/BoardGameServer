@@ -5,6 +5,7 @@
 <%
 Logger logger = Logger.getLogger("getPerson.jsp");
 AndroidVersionInfo info = AndroidVersionInfo.setParameters(request);
+
 int result = new ControlAndroid().addAndroidInfo(info);
 %>
 <%=result%>

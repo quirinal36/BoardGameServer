@@ -148,14 +148,36 @@ public class PatientControl {
 		}
 		return json.toJSONString();
 	}
-	public String getPatient(int id) {
-		Patient patient = new Patient();
+	public String getPatient(String id, String query) {
+		org.json.JSONObject result = new org.json.JSONObject();
+		org.json.JSONArray array = new org.json.JSONArray();
+		
 		try(Connection conn = new DBconn().getConnection()){
-			final String sql = "SELECT * FROM PatientInfo WHERE id=?";
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM PatientInfo ");
+			if(id != null && query != null) {
+				sql.append("WHERE patientId=?");
+				sql.append(" OR ");
+				sql.append("name like ?");
+			} else if(id!=null && query == null) {
+				sql.append("WHERE patientId=?");
+			}else if(id==null && query!=null) {
+				sql.append("WHERE name like ?");
+			}
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(id != null && query==null) {
+				pstmt.setString(1, id);
+			}else if(id != null && query!=null) {
+				pstmt.setString(1, id);
+				pstmt.setString(2, "%"+query+"%");
+			}else if(id == null && query != null) {
+				pstmt.setString(1, "%"+query+"%");
+			}
+			
 			ResultSet rs = pstmt.executeQuery();
-			if(rs.next()) {
+			while(rs.next()) {
+				Patient patient = new Patient();
 				patient.setId(rs.getInt("id"));
 				patient.setPhoto(rs.getString("photo"));
 				patient.setP_date(rs.getString("p_date"));
@@ -169,10 +191,13 @@ public class PatientControl {
 				patient.setMemo(rs.getString("memo"));
 				patient.setRoom(rs.getString("room"));
 				patient.setAdmission(rs.getInt("admission")>0);
+				patient.setPatientId(rs.getString("patientId"));
+				array.put(patient.toString());
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return patient.toString();
+		result.put("list", array);
+		return result.toString();
 	}
 }

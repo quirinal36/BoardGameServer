@@ -12,9 +12,11 @@
 Logger logger = Logger.getLogger("getPatient.jsp");
 String data = new String();
 String id = request.getParameter("id");
-
+String name = request.getParameter("name");
+if(id.length()==0) id=null;
+if(name.length()==0) name=null;
 DBconn dbconn = new DBconn();
 PatientControl control = new PatientControl();
 
-out.print(URLEncoder.encode(control.getPatient(Integer.parseInt(id)), "UTF-8"));
+out.print(URLEncoder.encode(control.getPatient(id, name), "UTF-8"));
 %>
