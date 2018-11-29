@@ -23,5 +23,5 @@ while(iter.hasNext()){
 	array.put(new JSONObject(iter.next().toString()));
 }
 json.put("list", array);
-out.print(URLEncoder.encode(json.toString(), "UTF-8"));
+out.print(json.toString());
 %>

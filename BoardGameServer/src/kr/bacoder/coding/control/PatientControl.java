@@ -46,13 +46,12 @@ public class PatientControl {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT patient.id, photo.photoUrl, patient.name, patient.doctor, patient.birth, patient.sex, ").append(" ")
 			.append("patient.address, patient.phone, patient.memo, patient.room, patient.admission, patient.patientId ").append(" ")
-			.append("FROM PatientInfo patient , PhotoInfo photo").append(" ");
+			.append("FROM PatientInfo patient left join PhotoInfo photo on photo.id = patient.photoId").append(" ");
 			if(search!=null && search.length() > 0) {
 				search = "%"+search+"%";
-				sql.append("WHERE patient.patientId like ? OR patient.name like ? OR patient.memo like ?").append(" ")
-				.append(" AND (photo.id = patient.photoId)");
-			}else {
-				sql.append(" WHERE photo.id = patient.photoId");
+				sql.append("WHERE patient.patientId like ? ").append(" ");
+				sql.append("OR patient.name like ? ").append(" ");
+				sql.append("OR patient.memo like ?").append(" ");
 			}
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			if(search!=null && search.length() > 0) {
