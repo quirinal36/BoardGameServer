@@ -18,5 +18,5 @@ if(name.length()==0) name=null;
 DBconn dbconn = new DBconn();
 PatientControl control = new PatientControl();
 
-out.print(URLEncoder.encode(control.getPatient(id, name), "UTF-8"));
+out.print(URLEncoder.encode(control.getPatient(Integer.parseInt(id)), "UTF-8"));
 %>
