@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.json.simple.JSONObject;
 
-public class Photo {
+public class Photo extends SearchInfo {
     private int photoId;
     private int patientId;
     private String patientName;

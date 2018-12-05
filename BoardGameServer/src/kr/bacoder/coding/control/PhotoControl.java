@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
@@ -114,6 +117,51 @@ public class PhotoControl {
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+	public List<PhotoPatientInfo> getEmergencyPhotos(Photo photo){
+		List<PhotoPatientInfo> list = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+				.append("patient.patientId AS patientId, name AS patientName, age AS patientAge,")
+				.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
+				.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
+				.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
+				.append("photo.doctor, photo.id AS id")
+				.append(" ")
+				.append("FROM ").append(" ")
+				.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
+				.append("ON ").append(" ")
+				.append("photo.patientId = patient.patientId").append(" ");
+			sql.append("WHERE photo.classification IS NOT NULL AND photo.classification like ? ")
+				.append(" AND photo.date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW()") ;
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, photo.getClassification());
+			pstmt.setInt(2, photo.getDay());
+			logger.info(sql.toString());
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				list.add(p);
+			}
+		}catch(SQLException e) {
+			
+		}
+		return list;
+	}
+	public org.json.JSONObject toJSONObject(List<PhotoPatientInfo> input){
+		org.json.JSONObject result = new org.json.JSONObject();
+		org.json.JSONArray array = new org.json.JSONArray();
+		Iterator<PhotoPatientInfo> iter = input.iterator();
+		while(iter.hasNext()) {
+			PhotoPatientInfo info = iter.next();
+			array.put(PhotoPatientInfo.parseJSON(info));
+		}
+		
+		result.put("list", array);
 		return result;
 	}
 }
