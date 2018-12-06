@@ -21,19 +21,19 @@ import kr.bacoder.coding.bean.Patient;
 
 public class PatientControl {
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
-	
-	
+
+
 	public int setPatientRepresentPhoto(Patient patient) {
-		
+
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE PatientInfo ").append("SET photoId=? ").append("WHERE patientId=?");
-			
+
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setInt(1, patient.getPhotoId());
 			pstmt.setString(2, patient.getPatientId());
-			
+
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -142,7 +142,7 @@ public class PatientControl {
 			.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
 			.append("ON ").append(" ")
 			.append("photo.patientId = patient.id").append(" ");
-			
+
 			rs = stmt.executeQuery(sql.toString());
 
 			JSONArray array = new JSONArray();
@@ -170,35 +170,88 @@ public class PatientControl {
 		}
 		return json.toJSONString();
 	}
+	public String getPatient(String id, String query) {
+		org.json.JSONObject result = new org.json.JSONObject();
+		org.json.JSONArray array = new org.json.JSONArray();
+
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM PatientInfo ");
+			if(id != null && query != null) {
+				sql.append("WHERE patientId=?");
+				sql.append(" OR ");
+				sql.append("name like ?");
+			} else if(id!=null && query == null) {
+				sql.append("WHERE patientId=?");
+			}else if(id==null && query!=null) {
+				sql.append("WHERE name like ?");
+			}
+
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(id != null && query==null) {
+				pstmt.setString(1, id);
+			}else if(id != null && query!=null) {
+				pstmt.setString(1, id);
+				pstmt.setString(2, "%"+query+"%");
+			}else if(id == null && query != null) {
+				pstmt.setString(1, "%"+query+"%");
+			}
+
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Patient patient = new Patient();
+				patient.setId(rs.getInt("id"));
+				patient.setPhoto(rs.getString("photo"));
+				patient.setP_date(rs.getString("p_date"));
+				patient.setName(rs.getString("name"));
+				patient.setAddress(rs.getString("address"));
+				patient.setBirth(rs.getString("birth"));
+				patient.setEtc(rs.getString("etc"));
+				patient.setPhone(rs.getString("phone"));
+				patient.setSex(rs.getString("sex"));
+				patient.setDoctor(rs.getString("doctor"));
+				patient.setMemo(rs.getString("memo"));
+				patient.setRoom(rs.getString("room"));
+				patient.setAdmission(rs.getInt("admission")>0);
+				patient.setPatientId(rs.getString("patientId"));
+				array.put(patient.toString());
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		result.put("list", array);
+		return result.toString();
+	}
 	public String getPatientsByDoctor(Doctor doctor, String search) {
-		
-		
 		JSONObject json = new JSONObject();
 		try(Connection conn = new DBconn().getConnection()){
-			
+
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
 			.append("patient.id AS id, patient.name AS name, age AS age,")
 			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
-			.append("patient.birth AS birth, patient.etc AS etc,")
+			.append("patient.birth AS birth, patient.etc AS etc, photo.photoUrl AS photo,")
 			.append("patient.memo, patient.room, patient.admission,")
 			.append("doctor.doctorName AS doctor, patient.patientId AS patientId")
 			.append(" ")
 			.append("FROM ").append(" ")
-			.append("PatientInfo patient , Doctor doctor").append(" ")
+			.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
+			.append(" ON ").append(" ")
+			.append("photo.patientId = patient.id").append(" ")
+			.append(", Doctor doctor").append(" ")
 			.append(" WHERE doctorId = ?").append(" ");
-			
+
 			if(search!=null &&search.length()>0) {
 				search = "%"+search+"%";
-				sql.append("AND (name like ? ")
-				.append("OR memo like ? ")
-				.append("OR patientId like ? )");
-				
+				sql.append("AND (patient.name like ? ")
+				.append("OR patient.memo like ? ")
+				.append("OR patient.patientId like ? )");
+
 			}
-			
+
 			logger.info(sql.toString());
-			
+
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
 			stmt.setInt(1, doctor.getId());
 			if(search!=null &&search.length()>0) {
@@ -208,11 +261,11 @@ public class PatientControl {
 				stmt.setString(4, search);
 			}
 			rs = stmt.executeQuery();
-			
+
 			JSONArray array = new JSONArray();
 			while(rs.next()) {
 				Patient patient = Patient.parseToPatient(rs);
-				
+
 				array.add(patient.toString());
 			}
 			json.put("list", array);

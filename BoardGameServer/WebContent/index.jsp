@@ -50,6 +50,7 @@ $(function(){
 			}
 		});
 	});
+	
 });
 </script>
 </head>
@@ -58,7 +59,8 @@ $(function(){
 	<thead>
 		<colgroup>
 			<col width="5%" />
-			<col width="50%" />
+			<col width="30%" />
+			<col width="20%" />
 			<col width="15%" />
 			<col width="15%" />
 			<col width="12%" />
@@ -67,6 +69,7 @@ $(function(){
 			<tr>
 				<th>번호</th>
 				<th>링크</th>
+				<th>설명</th>
 				<th>param1</th>
 				<th>param2</th>
 				<th>test</th>
@@ -76,7 +79,8 @@ $(function(){
 			<tr>
 				<td class="center-horizontal">1</td>
 				<td>getPhotoById.jsp</td>
-				<td><input type="text" name="id" placeholder="id" value="73"/></td>
+				<td></td>
+				<td>id: <input type="text" name="id" placeholder="id" value="73"/></td>
 				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
@@ -85,24 +89,49 @@ $(function(){
 			<tr>
 				<td class="center-horizontal">2</td>
 				<td>patient/getPatientsByDoctor.jsp</td>
-				<td><input type="text" name="doctor" placeholder="doctor" value="1"/></td>
-				<td><input type="text" name="search" placeholder="search" value="12345"/></td>
+				<td></td>
+				<td>doctor : <input type="text" name="doctor" placeholder="doctor" value="1"/></td>
+				<td>search : <input type="text" name="search" placeholder="search" value="12345"/></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+					<input type="button" value="table" onclick="location.href='/patient/getPatientsByDoctorTable.jsp'"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="center-horizontal">3</td>
+				<td>patient/setPatientRepresentPhoto.jsp</td>
+				<td>환자의 메인 사진을 수정한</td>
+				<td>patientId : <input type="text" name="patientId" placeholder="patientId" value="12345"/></td>
+				<td>photoId : <input type="text" name="photoId" placeholder="photoId" value="73"/></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
 				</td>
 			</tr>
 			<tr>
-				<td class="center-horizontal">2</td>
-				<td>patient/setPatientRepresentPhoto.jsp</td>
-				<td><input type="text" name="patientId" placeholder="patientId" value="12345"/></td>
-				<td><input type="text" name="photoId" placeholder="photoId" value="73"/></td>
+				<td class="center-horizontal">4</td>
+				<td>/getPatientBySearch.jsp</td>
+				<td></td>
+				<td>query : <input type="text" name="query" placeholder="query" value="12345"/></td>
+				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
+					<input type="button" value="table" onclick="location.href='/patient/patientList.jsp'"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="center-horizontal">5</td>
+				<td>photo/getEmergency.jsp</td>
+				<td></td>
+				<td>day : <input type="text" name="day" placeholder="10" value="10"/></td>
+				<td></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+					<input type="button" value="table" onclick="location.href='/photo/photoList.jsp'"/>
 				</td>
 			</tr>
 		</tbody>
 				
-	</thead>
+	
 </table>
 </body>
 </html>
