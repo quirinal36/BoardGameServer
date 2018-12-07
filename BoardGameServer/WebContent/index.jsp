@@ -94,7 +94,7 @@ $(function(){
 				<td>search : <input type="text" name="search" placeholder="search" value="12345"/></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
-					<input type="button" value="table" onclick="location.href='/patient/getPatientsByDoctorTable.jsp'"/>
+					<input type="button" value="table" onclick="location.href='patient/getPatientsByDoctorTable.jsp'"/>
 				</td>
 			</tr>
 			<tr>
@@ -109,13 +109,13 @@ $(function(){
 			</tr>
 			<tr>
 				<td class="center-horizontal">4</td>
-				<td>/getPatientBySearch.jsp</td>
+				<td>getPatientBySearch.jsp</td>
 				<td></td>
 				<td>query : <input type="text" name="query" placeholder="query" value="12345"/></td>
 				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
-					<input type="button" value="table" onclick="location.href='/patient/patientList.jsp'"/>
+					<input type="button" value="table" onclick="location.href='patient/patientList.jsp'"/>
 				</td>
 			</tr>
 			<tr>
@@ -126,7 +126,7 @@ $(function(){
 				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
-					<input type="button" value="table" onclick="location.href='/photo/photoList.jsp'"/>
+					<input type="button" value="table" onclick="location.href='photo/photoList.jsp'"/>
 				</td>
 			</tr>
 		</tbody>

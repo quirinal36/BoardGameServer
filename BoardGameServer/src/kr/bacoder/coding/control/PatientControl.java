@@ -236,11 +236,11 @@ public class PatientControl {
 			.append("doctor.doctorName AS doctor, patient.patientId AS patientId")
 			.append(" ")
 			.append("FROM ").append(" ")
-			.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
+			.append("PatientInfo patient LEFT JOIN PhotoInfo photo").append(" ")
 			.append(" ON ").append(" ")
-			.append("photo.patientId = patient.id").append(" ")
+			.append("photo.id = patient.photoId").append(" ")
 			.append(", Doctor doctor").append(" ")
-			.append(" WHERE doctorId = ?").append(" ");
+			.append(" WHERE patient.doctorId = ? and patient.doctorId = doctor.id").append(" ");
 
 			if(search!=null &&search.length()>0) {
 				search = "%"+search+"%";
@@ -249,17 +249,19 @@ public class PatientControl {
 				.append("OR patient.patientId like ? )");
 
 			}
-
-			logger.info(sql.toString());
-
+			
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
 			stmt.setInt(1, doctor.getId());
+			
 			if(search!=null &&search.length()>0) {
-				search = "%"+search+"%";
+//				search = "%"+search+"%";
 				stmt.setString(2, search);
 				stmt.setString(3, search);
 				stmt.setString(4, search);
 			}
+			
+			logger.info(stmt.toString());
+			
 			rs = stmt.executeQuery();
 
 			JSONArray array = new JSONArray();

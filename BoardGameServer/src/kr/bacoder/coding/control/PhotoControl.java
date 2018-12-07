@@ -136,12 +136,12 @@ public class PhotoControl {
 				.append("photo.patientId = patient.patientId").append(" ");
 			sql.append("WHERE photo.classification IS NOT NULL AND photo.classification like ? ")
 				.append(" AND photo.date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW()")
-				.append(" order by patient.id desc");
+				.append(" order by photo.id desc");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, photo.getClassification());
 			pstmt.setInt(2, photo.getDay());
-			logger.info(sql.toString());
+			logger.info(pstmt.toString());
 			
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
