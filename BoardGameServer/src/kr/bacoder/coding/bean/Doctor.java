@@ -13,6 +13,7 @@ public class Doctor {
 		try {
 			this.id = Integer.parseInt(idStr);
 		}catch(Exception e) {
+			this.id = 0;
 			e.printStackTrace();
 		}
 	}
