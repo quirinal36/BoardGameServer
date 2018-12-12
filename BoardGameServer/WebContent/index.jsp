@@ -123,6 +123,7 @@ $(function(){
 				<td>photo/getEmergency.jsp</td>
 				<td></td>
 				<td>day : <input type="text" name="day" placeholder="10" value="10"/></td>
+				<td>class : <input type="text" name="class" placeholder="10" /></td>
 				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
