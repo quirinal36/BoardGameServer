@@ -54,6 +54,7 @@ public class PersonControl {
 		return result;
 	}
 	public int insertPerson(Person person) {
+		
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO Person "
