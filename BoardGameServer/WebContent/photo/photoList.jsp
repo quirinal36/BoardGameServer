@@ -23,6 +23,7 @@ List<PhotoPatientInfo> list = control.getEmergencyPhotos(photo);
 <html>
 	<body>
 		<form method="get" action="/photo/photoList.jsp">
+			<a href="/" >홈으로 가기</a>
 			<div>
 				day: <input type="text" name="day" value="<%=photo.getDay()%>"/>
 				분류: <input type="text" name="classification" value="<%=photo.getClassification()%>"/>

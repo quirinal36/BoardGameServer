@@ -8,12 +8,10 @@
 <%@page import="java.util.logging.Logger"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-Logger logger = Logger.getLogger("getPerson.jsp");
-String userName = request.getParameter("userName");
+Logger logger = Logger.getLogger("hasSamePerson.jsp");
 String userId = request.getParameter("userId");
-String userBirth = request.getParameter("userBirth");
 
 DBconn dbconn = new DBconn();
 PersonControl control = new PersonControl();
-out.print(control.getPerson(userName, userBirth, userId));
+out.print(control.getPerson(userId));
 %>

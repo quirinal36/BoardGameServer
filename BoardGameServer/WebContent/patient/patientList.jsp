@@ -14,6 +14,8 @@ List<Patient> list = control.searchPatientByQuery(searchQuery);
 <html>
 	<body>
 		<form method="get" action="/patient/patientList.jsp">
+			<div><a href="/" >홈으로 가기</a></div>
+		
 			<div>
 				<input type="text" name="query"/>
 				<input type="submit" value="검색"/>

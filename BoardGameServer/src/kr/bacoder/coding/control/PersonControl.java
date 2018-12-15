@@ -35,7 +35,44 @@ public class PersonControl {
 		}
 		return person.toString();
 	}
-	
+	public String getPerson(String name, String birth, String uniqueId) throws SQLException {
+		Person person = new Person();
+		try(Connection conn = new DBconn().getConnection()){
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Person WHERE name =? and birth = ? and uniqueId = ?");
+			pstmt.setString(1, name);
+			pstmt.setString(2, birth);
+			pstmt.setString(3, uniqueId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				person.setId(rs.getInt("NUM"));
+				person.setName(rs.getString("name"));
+				person.setPhone(rs.getString("phone"));
+				person.setPhoto(rs.getString("photo"));
+				person.setUniqueId(rs.getString("uniqueId"));
+				person.setDepartment(rs.getString("department"));
+				person.setBirth(rs.getString("birth"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return person.toString();
+	}
+	public String getPerson(String uniqueId) throws SQLException {
+		Person person = new Person();
+		try(Connection conn = new DBconn().getConnection()){
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Person WHERE uniqueId = ?");
+			pstmt.setString(1, uniqueId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				person.setId(rs.getInt("NUM"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return person.toString();
+	}
 	public int updatePerson(Person person) {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){

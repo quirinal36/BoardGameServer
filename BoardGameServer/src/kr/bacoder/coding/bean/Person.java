@@ -29,6 +29,8 @@ public class Person {
 	private String uniqueId;
 	private String photo;
 	private String department;
+	private String birth;
+	
 	
 	/**
 	 * 생성자
@@ -117,6 +119,14 @@ public class Person {
 
 	public void setDepartment(String department) {
 		this.department = department;
+	}
+	
+	public String getBirth() {
+		return birth;
+	}
+
+	public void setBirth(String birth) {
+		this.birth = birth;
 	}
 
 	@Override
