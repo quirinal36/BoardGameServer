@@ -44,7 +44,7 @@ public class PatientControl {
 		List<Patient> result = new ArrayList<>();
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT patient.id, photo.photoUrl, patient.name, patient.doctor, patient.birth, patient.sex, ").append(" ")
+			sql.append("SELECT patient.id, patient.photo, patient.name, patient.doctor, patient.birth, patient.sex, ").append(" ")
 			.append("patient.address, patient.phone, patient.memo, patient.room, patient.admission, patient.patientId ").append(" ")
 			.append("FROM PatientInfo patient left join PhotoInfo photo on photo.id = patient.photoId").append(" ");
 			if(search!=null && search.length() > 0) {
@@ -276,6 +276,7 @@ public class PatientControl {
 		}
 		return json.toJSONString();
 	}
+	
 	public String getPatient(int id) {
 		Patient patient = new Patient();
 		try(Connection conn = new DBconn().getConnection()){
