@@ -18,11 +18,11 @@
 	Logger logger = Logger.getLogger("signup.jsp");
 	
 	String imgEncodedStr = request.getParameter("image");
-	String fileName = request.getParameter("filename");
+	
 	String name = request.getParameter("name");
 	String phone = request.getParameter("phone");
 	String email = request.getParameter("email");
-	String device_id = request.getParameter("unique_id");
+	String uniqueId = request.getParameter("unique_id");
 	String password = request.getParameter("password");
 	String department = request.getParameter("department");
 	
@@ -30,13 +30,14 @@
 	person.setName(name);
 	person.setPhone(phone);
 	person.setEmail(email);
-	person.setPassword(password);
-	person.setUniqueId(device_id);
+	//person.setPassword(password);
+	person.setUniqueId(uniqueId);
 	person.setDepartment(department);
 	
 	JSONObject json = new JSONObject();
 	
 	if (imgEncodedStr != null) {
+		String fileName = request.getParameter("filename");
 		person = new UploadUtil().setFile(path, imgEncodedStr, fileName, person);
 	}
 	

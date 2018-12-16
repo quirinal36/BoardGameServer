@@ -15,6 +15,14 @@ public class Person {
 	public static final String ADDRESS_KEY = "address";
 	public static final String FAMILY_KEY = "family";
 	public static final String COMPANY_KEY = "company";
+	public static final String BIRTH_KEY = "birth";
+	public static final String PHONE_KEY = "phone";
+	public static final String EMAIL_KEY = "email";
+	public static final String PHOTO_KEY = "photo";
+	public static final String UNIQUE_ID_KEY = "uniqueId";
+	public static final String DEPARTMENT_KEY = "department";
+	public static final String USER_LEVEL_KEY = "userLevel";
+	public static final String NUM_KEY = "NUM";
 	
 	private int id;
 	private String name;
@@ -30,12 +38,13 @@ public class Person {
 	private String photo;
 	private String department;
 	private String birth;
-	
+	private int userLevel;
 	
 	/**
 	 * 생성자
 	 */
 	public Person() {
+		this.userLevel = 0;
 	}
 	
 	public int getId() {
@@ -129,6 +138,22 @@ public class Person {
 		this.birth = birth;
 	}
 
+	public void setUserLevel(int userLevel) {
+		this.userLevel = userLevel;
+	}
+	
+	public void setUserLevel(String userLevel) {
+		try {
+			this.userLevel = Integer.parseInt(userLevel);
+		}catch(NumberFormatException e) {
+			this.userLevel = 0;
+		}
+	}
+	
+	public int getUserLevel() {
+		return userLevel;
+	}
+	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);

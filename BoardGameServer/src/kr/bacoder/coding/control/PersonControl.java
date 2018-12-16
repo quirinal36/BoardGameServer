@@ -73,31 +73,17 @@ public class PersonControl {
 		}
 		return person.toString();
 	}
-	public int updatePerson(Person person) {
-		int result = 0;
-		try(Connection conn = new DBconn().getConnection()){
-			String sql = "UPDATE Person "
-					+ "SET name=?,address=?,email=?,photo=? WHERE phone= ?";
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, person.getName());
-			pstmt.setString(2, person.getAddress());
-			pstmt.setString(3, person.getEmail());
-			pstmt.setString(4, person.getPhoto());
-			pstmt.setString(5, person.getPhone());
-			result= pstmt.executeUpdate();
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+	
 	public int insertPerson(Person person) {
 		
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO Person "
-					+ "(name, email, phone, password, uniqueId, photo, department) "
-					+ "VALUES (?,?,?,?,?,?,?)";
+					+ "(name, email, phone, password, uniqueId, photo, department, userLevel) "
+					+ "VALUES (?,?,?,?,?,?,?,?)";
+			
 			logger.info(sql.toString());
+			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, person.getName());
 			pstmt.setString(2, person.getEmail());
@@ -106,11 +92,96 @@ public class PersonControl {
 			pstmt.setString(5, person.getUniqueId());
 			pstmt.setString(6, person.getPhoto());
 			pstmt.setString(7, person.getDepartment());
+			pstmt.setInt(8, person.getUserLevel());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
+	public int updatePerson(Person person) {
+		
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE Person ");
+			sql.append("SET ");
+			if(person.getName()!=null && person.getName().length()>0) {
+				sql.append("name=?,"); 
+			}
+			if(person.getEmail()!=null && person.getEmail().length()>0) {
+				sql.append("email=?,");
+			}
+			if(person.getPhone()!=null && person.getPhone().length()>0) {
+				sql.append("phone=?,");
+			}
+			if(person.getPhoto()!=null && person.getPhoto().length()>0) {
+				sql.append("photo=?,");
+			}
+			if(person.getDepartment()!=null && person.getDepartment().length()>0) {
+				sql.append("department=?,");
+			}
+			if(person.getUserLevel()>=0) {
+				sql.append("userLevel=? ");
+			}
+			sql.append("WHERE uniqueId=?");
+				
+			int i = 1;
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(person.getName()!=null && person.getName().length()>0) {
+				pstmt.setString(i++, person.getName());
+			}
+			if(person.getEmail()!=null && person.getEmail().length()>0) {
+				pstmt.setString(i++, person.getEmail());	
+			}
+			if(person.getPhone()!=null && person.getPhone().length()>0) {
+				pstmt.setString(i++, person.getPhone());
+			}
+			if(person.getPhoto()!=null && person.getPhoto().length()>0) {
+				pstmt.setString(i++, person.getPhoto());
+			}
+			if(person.getDepartment()!=null && person.getDepartment().length()>0) {
+				pstmt.setString(i++, person.getDepartment());
+			}
+			if(person.getUserLevel() >= 0 ) {
+				pstmt.setInt(i++, person.getUserLevel());
+			}
+			pstmt.setString(i, person.getUniqueId());
+			
+			logger.info(pstmt.toString());
+			
+			result= pstmt.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public Person getPersonByUniqueId(Person person) {
+		
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder builder = new StringBuilder();
+			builder.append("SELECT * FROM Person WHERE uniqueId=?");
+			PreparedStatement pstmt = conn.prepareStatement(builder.toString());
+			pstmt.setString(1, person.getUniqueId());
+			
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				person.setAddress(rs.getString(Person.ADDRESS_KEY));
+				person.setAge(rs.getInt(Person.AGE_KEY));
+				person.setBirth(rs.getString(Person.BIRTH_KEY));
+				person.setDepartment(rs.getString(Person.DEPARTMENT_KEY));
+				person.setEmail(rs.getString(Person.EMAIL_KEY));
+				person.setId(rs.getInt(Person.NUM_KEY));
+				person.setName(rs.getString(Person.NAME_KEY));
+				person.setPhone(rs.getString(Person.PHONE_KEY));
+				person.setPhoto(rs.getString(Person.PHOTO_KEY));
+				person.setUniqueId(rs.getString(Person.UNIQUE_ID_KEY));
+				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
+				
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return person;
+	}
 }

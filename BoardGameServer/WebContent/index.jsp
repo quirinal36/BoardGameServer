@@ -157,6 +157,18 @@ $(function(){
 					<input type="button" value="table" onclick="location.href='photo/photoList.jsp'"/>
 				</td>
 			</tr>
+			<tr>
+				<td class="center-horizontal">8</td>
+				<td>person/updatePerson.jsp</td>
+				<td>unique_id 에 해당하는 사람정보를 수정</td>
+				<td>unique_id : <input type="text" name="unique_id" placeholder="D0000" value="D0000"/></td>
+				<td>department : <input type="text" name="department" placeholder="응급"/></td>
+				<td>name : <input type="text" name="name" placeholder="홍길동"/></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+					<input type="button" value="세부수정" onclick="location.href='person/update.jsp'"/>
+				</td>
+			</tr>
 		</tbody>
 				
 	
