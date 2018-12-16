@@ -26,7 +26,7 @@ String data = new String();
 PatientControl control = new PatientControl();
 
 DBconn dbconn = new DBconn();
-List<Patient> list = control.getPatientsByDoctor(doctor, query);
+List<Patient> list = control.getPatientsByDoctorList(doctor, query);
 %>
 <html>
 	<body>

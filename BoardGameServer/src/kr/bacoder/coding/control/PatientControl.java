@@ -28,11 +28,12 @@ public class PatientControl {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
-			sql.append("UPDATE PatientInfo ").append("SET photoId=? ").append("WHERE patientId=?");
+			sql.append("UPDATE PatientInfo ").append("SET photoId=?, photo=(SELECT photoUrl FROM PhotoInfo WHERE id=?)").append("WHERE patientId=?");
 
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setInt(1, patient.getPhotoId());
-			pstmt.setString(2, patient.getPatientId());
+			pstmt.setInt(2, patient.getPhotoId());
+			pstmt.setString(3, patient.getPatientId());
 
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
@@ -276,7 +277,63 @@ public class PatientControl {
 		}
 		return json.toJSONString();
 	}
-	
+	public List<Patient> getPatientsByDoctorList(Doctor doctor, String search) {
+		List<Patient> result = new ArrayList<>();
+		
+		JSONObject json = new JSONObject();
+		try(Connection conn = new DBconn().getConnection()){
+
+			ResultSet rs;
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+			.append("patient.id AS id, patient.name AS name, age AS age,")
+			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
+			.append("patient.birth AS birth, patient.etc AS etc, photo.photoUrl AS photo,")
+			.append("patient.memo, patient.room, patient.admission,")
+			.append("doctor.doctorName AS doctor, patient.patientId AS patientId")
+			.append(" ")
+			.append("FROM ").append(" ")
+			.append("PatientInfo patient LEFT JOIN PhotoInfo photo").append(" ")
+			.append(" ON ").append(" ")
+			.append("photo.id = patient.photoId").append(" ")
+			.append(", Doctor doctor").append(" ")
+			.append(" WHERE patient.doctorId = ? and patient.doctorId = doctor.id").append(" ");
+
+			if(search!=null &&search.length()>0) {
+				search = "%"+search+"%";
+				sql.append("AND (patient.name like ? ")
+				.append("OR patient.memo like ? ")
+				.append("OR patient.patientId like ? )");
+
+			}
+			
+			PreparedStatement stmt = conn.prepareStatement(sql.toString());
+			stmt.setInt(1, doctor.getId());
+			
+			if(search!=null &&search.length()>0) {
+//				search = "%"+search+"%";
+				stmt.setString(2, search);
+				stmt.setString(3, search);
+				stmt.setString(4, search);
+			}
+			
+			logger.info(stmt.toString());
+			
+			rs = stmt.executeQuery();
+
+			JSONArray array = new JSONArray();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+
+				result.add(patient);
+				//array.add(patient.toString());
+			}
+			//json.put("list", array);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public String getPatient(int id) {
 		Patient patient = new Patient();
 		try(Connection conn = new DBconn().getConnection()){
