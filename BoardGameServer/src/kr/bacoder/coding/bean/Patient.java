@@ -120,7 +120,13 @@ public class Patient {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
+	public void setAge(String age) {
+		try {
+			this.age = Integer.parseInt(age);
+		}catch(NumberFormatException e) {
+			
+		}
+	}
 	public int getPhotoId() {
 		return photoId;
 	}

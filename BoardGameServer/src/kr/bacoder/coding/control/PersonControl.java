@@ -124,6 +124,10 @@ public class PersonControl {
 			if(person.getUserLevel()>=0) {
 				sql.append("userLevel=? ");
 			}
+			if(person.getBirth()!=null && person.getBirth().length()>0) {
+				sql.append("birth=?,");
+			}
+			
 			sql.append("WHERE uniqueId=?");
 				
 			int i = 1;
@@ -146,6 +150,10 @@ public class PersonControl {
 			if(person.getUserLevel() >= 0 ) {
 				pstmt.setInt(i++, person.getUserLevel());
 			}
+			if(person.getBirth()!=null && person.getBirth().length()>0) {
+				pstmt.setString(i++, person.getBirth());
+			}
+			
 			pstmt.setString(i, person.getUniqueId());
 			
 			logger.info(pstmt.toString());

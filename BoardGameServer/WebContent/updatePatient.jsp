@@ -16,6 +16,11 @@ String sex = request.getParameter("sex");
 String phone = request.getParameter("phone");
 String address = request.getParameter("address");
 String etc = request.getParameter("etc");
+String age = request.getParameter("age");
+String doctor = request.getParameter("doctor");
+String memo = request.getParameter("memo");
+String room = request.getParameter("room");
+String patientId = request.getParameter("patientId");
 
 Patient patient = new Patient();
 patient.setName(name);
@@ -26,6 +31,11 @@ patient.setPhone(phone);
 patient.setAddress(address);
 patient.setEtc(etc);
 patient.setId(Integer.parseInt(id));
+patient.setAge(age);
+patient.setDoctor(doctor);
+patient.setMemo(memo);
+patient.setRoom(room);
+patient.setPatientId(patientId);
 
 DBconn dbconn = new DBconn();
 PatientControl control = new PatientControl();

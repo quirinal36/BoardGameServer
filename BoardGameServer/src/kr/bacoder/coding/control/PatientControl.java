@@ -19,7 +19,7 @@ import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Doctor;
 import kr.bacoder.coding.bean.Patient;
 
-public class PatientControl {
+public class PatientControl extends Controller{
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 
 
@@ -73,52 +73,129 @@ public class PatientControl {
 	}
 	public int insertPatient(Patient patient) {
 		int result = 0;
+		int i = 1;
+		
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO PatientInfo "
-					+ "(photo, p_date, name, birth, sex, address, phone, etc, "
+					+ "(photo, p_date, name, age, birth, sex, address, phone, etc, "
 					+ "doctor, memo, room, admission, patientId) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, patient.getPhoto());
-			pstmt.setString(2, new SimpleDateFormat("yyyyMMddhhmm", Locale.KOREA).format(new Date()));
-			pstmt.setString(3, patient.getName());
-			pstmt.setString(4, patient.getBirth());
-			pstmt.setString(5, patient.getSex());
-			pstmt.setString(6, patient.getAddress());
-			pstmt.setString(7, patient.getPhone());
-			pstmt.setString(8, patient.getEtc());
-			pstmt.setString(9, patient.getDoctor());
-			pstmt.setString(10, patient.getMemo());
-			pstmt.setString(11, patient.getRoom());
-			pstmt.setInt(12, patient.isAdmission()?1:0);
-			pstmt.setString(13, patient.getPatientId());
+			pstmt.setString(i++, patient.getPhoto());
+			pstmt.setString(i++, new SimpleDateFormat("yyyyMMddhhmm", Locale.KOREA).format(new Date()));
+			pstmt.setString(i++, patient.getName());
+			pstmt.setInt(i++, patient.getAge());
+			pstmt.setString(i++, patient.getBirth());
+			pstmt.setString(i++, patient.getSex());
+			pstmt.setString(i++, patient.getAddress());
+			pstmt.setString(i++, patient.getPhone());
+			pstmt.setString(i++, patient.getEtc());
+			pstmt.setString(i++, patient.getDoctor());
+			pstmt.setString(i++, patient.getMemo());
+			pstmt.setString(i++, patient.getRoom());
+			pstmt.setInt(i++, patient.isAdmission()?1:0);
+			pstmt.setString(i++, patient.getPatientId());
+			
+			logger.info(pstmt.toString());
+			
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
+	
 	public int updatePatient(Patient patient) {
 		int result = 0;
+		int i = 1;
+		
 		try(Connection conn = new DBconn().getConnection()){
-			String sql = "UPDATE PatientInfo "
-					+ "SET photo=?, name=?, birth=?, sex=?, phone=?, address=?, etc=? "
-					+ " doctor=?, phone=?, memo=?, room=?, admission=?, patientId=? " 
-					+ "WHERE id=?";
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, patient.getPhoto());
-			pstmt.setString(2, patient.getName());
-			pstmt.setString(3, patient.getBirth());
-			pstmt.setString(4, patient.getSex());
-			pstmt.setString(5, patient.getPhone());
-			pstmt.setString(6, patient.getAddress());
-			pstmt.setString(7, patient.getEtc());
-			pstmt.setString(8, patient.getDoctor());
-			pstmt.setString(9, patient.getMemo());
-			pstmt.setString(10, patient.getRoom());
-			pstmt.setInt(11, patient.isAdmission()?1:0);
-			pstmt.setString(12, patient.getPatientId());
-			pstmt.setInt(13, patient.getId());
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE PatientInfo ");
+			sql.append("SET ");
+			if(hasString(patient.getPhoto())) {
+				appendSql(sql, "photo");
+			}
+			if(hasString(patient.getName())) {
+				appendSql(sql, "name");
+			}
+			if(hasString(patient.getBirth())) {
+				appendSql(sql, "birth");
+			}
+			if(hasString(patient.getSex())) {
+				appendSql(sql, "sex");
+			}
+			if(hasString(patient.getPhone())) {
+				appendSql(sql, "phone");
+			}
+			if(hasString(patient.getAddress())) {
+				appendSql(sql, "address");
+			}
+			if(hasString(patient.getEtc())) {
+				appendSql(sql, "etc");
+			}
+			if(hasString(patient.getDoctor())) {
+				appendSql(sql, "doctor");
+			}
+			if(hasString(patient.getMemo())) {
+				appendSql(sql, "memo");
+			}
+			if(hasString(patient.getRoom())) {
+				appendSql(sql, "room");
+			}
+			if(hasString(patient.getPatientId())) {
+				appendSql(sql, "patientId");
+			}
+			if(patient.getAge() > 0) {
+				sql.append("age=?,");
+			}
+			sql.append("admission=?");
+			sql.append(" WHERE id=?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(hasString(patient.getPhoto())) {
+				pstmt.setString(i++, patient.getPhoto());
+			}
+			if(hasString(patient.getName())) {
+				pstmt.setString(i++, patient.getName());
+			}
+			if(hasString(patient.getBirth())) {
+				pstmt.setString(i++, patient.getBirth());
+			}
+			if(hasString(patient.getSex())) {
+				pstmt.setString(i++, patient.getSex());
+			}
+			if(hasString(patient.getPhone())) {
+				pstmt.setString(i++, patient.getPhone());
+			}
+			if(hasString(patient.getAddress())) {
+				pstmt.setString(i++, patient.getAddress());
+			}
+			if(hasString(patient.getEtc())) {
+				pstmt.setString(i++, patient.getEtc());
+			}
+			if(hasString(patient.getDoctor())) {
+				pstmt.setString(i++, patient.getDoctor());
+			}
+			if(hasString(patient.getMemo())) {
+				pstmt.setString(i++, patient.getMemo());
+			}
+			if(hasString(patient.getRoom())) {
+				pstmt.setString(i++, patient.getRoom());
+			}
+			if(hasString(patient.getPatientId())) {
+				pstmt.setString(i++, patient.getPatientId());
+			}
+			if(patient.getAge()>0) {
+				pstmt.setInt(i++, patient.getAge());
+			}
+			pstmt.setInt(i++, patient.isAdmission()?1:0);
+			pstmt.setInt(i++, patient.getId());
+			
+			logger.info(pstmt.toString());
+			
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -317,8 +394,6 @@ public class PatientControl {
 				stmt.setString(4, search);
 			}
 			
-			logger.info(stmt.toString());
-			
 			rs = stmt.executeQuery();
 
 			JSONArray array = new JSONArray();
@@ -333,6 +408,36 @@ public class PatientControl {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public Patient getPatientById(int id) {
+		Patient patient = new Patient();
+		try(Connection conn = new DBconn().getConnection()){
+			final String sql = "SELECT * FROM PatientInfo WHERE id=?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				patient.setId(rs.getInt("id"));
+				patient.setAge(rs.getInt("age"));
+				patient.setPhoto(rs.getString("photo"));
+				patient.setP_date(rs.getString("p_date"));
+				patient.setName(rs.getString("name"));
+				patient.setAddress(rs.getString("address"));
+				patient.setBirth(rs.getString("birth"));
+				patient.setEtc(rs.getString("etc"));
+				patient.setPhone(rs.getString("phone"));
+				patient.setSex(rs.getString("sex"));
+				patient.setDoctor(rs.getString("doctor"));
+				patient.setMemo(rs.getString("memo"));
+				patient.setRoom(rs.getString("room"));
+				patient.setAdmission(rs.getInt("admission")>0);
+				patient.setPatientId(rs.getString("patientId"));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return patient;
 	}
 	public String getPatient(int id) {
 		Patient patient = new Patient();
