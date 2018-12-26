@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -22,7 +23,32 @@ import kr.bacoder.coding.bean.Patient;
 public class PatientControl extends Controller{
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 
-
+	public List<Patient> getPatientByClassification(String room) {
+		List<Patient> patientList = new ArrayList<>();
+		
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM PatientInfo WHERE room = UPPER(?)");
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, room);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+				patientList.add(patient);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return patientList;
+	}
+	public org.json.JSONArray parseToJsonArray(List<Patient> list){
+		org.json.JSONArray result = new org.json.JSONArray();
+		Iterator<Patient> iter = list.iterator();
+		while(iter.hasNext()) {
+			result.put(new org.json.JSONObject(iter.next().toString()));
+		}
+		return result;
+	}
 	public int setPatientRepresentPhoto(Patient patient) {
 
 		int result = 0;
@@ -145,14 +171,12 @@ public class PatientControl extends Controller{
 			if(hasString(patient.getRoom())) {
 				appendSql(sql, "room");
 			}
-			if(hasString(patient.getPatientId())) {
-				appendSql(sql, "patientId");
-			}
+			
 			if(patient.getAge() > 0) {
 				sql.append("age=?,");
 			}
 			sql.append("admission=?");
-			sql.append(" WHERE id=?");
+			sql.append(" WHERE patientId=?");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			if(hasString(patient.getPhoto())) {
@@ -185,14 +209,12 @@ public class PatientControl extends Controller{
 			if(hasString(patient.getRoom())) {
 				pstmt.setString(i++, patient.getRoom());
 			}
-			if(hasString(patient.getPatientId())) {
-				pstmt.setString(i++, patient.getPatientId());
-			}
+			
 			if(patient.getAge()>0) {
 				pstmt.setInt(i++, patient.getAge());
 			}
 			pstmt.setInt(i++, patient.isAdmission()?1:0);
-			pstmt.setInt(i++, patient.getId());
+			pstmt.setString(i++, patient.getPatientId());
 			
 			logger.info(pstmt.toString());
 			
@@ -409,7 +431,35 @@ public class PatientControl extends Controller{
 		}
 		return result;
 	}
-	
+	public Patient getPatientById(String patientId) {
+		Patient patient = new Patient();
+		try(Connection conn = new DBconn().getConnection()){
+			final String sql = "SELECT * FROM PatientInfo WHERE patientId=?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, patientId);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()) {
+				patient.setId(rs.getInt("id"));
+				patient.setAge(rs.getInt("age"));
+				patient.setPhoto(rs.getString("photo"));
+				patient.setP_date(rs.getString("p_date"));
+				patient.setName(rs.getString("name"));
+				patient.setAddress(rs.getString("address"));
+				patient.setBirth(rs.getString("birth"));
+				patient.setEtc(rs.getString("etc"));
+				patient.setPhone(rs.getString("phone"));
+				patient.setSex(rs.getString("sex"));
+				patient.setDoctor(rs.getString("doctor"));
+				patient.setMemo(rs.getString("memo"));
+				patient.setRoom(rs.getString("room"));
+				patient.setAdmission(rs.getInt("admission")>0);
+				patient.setPatientId(rs.getString("patientId"));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return patient;
+	}
 	public Patient getPatientById(int id) {
 		Patient patient = new Patient();
 		try(Connection conn = new DBconn().getConnection()){

@@ -4,17 +4,14 @@
 <%@page import="kr.bacoder.coding.control.PersonControl"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-String strId = request.getParameter("id");
-int id = 0;
-try{
-	id = Integer.parseInt(strId);
-}catch(NumberFormatException e){
-	
-}
+String patientId = request.getParameter("id");
+
 PatientControl control = new PatientControl();
 Patient patient = new Patient();
-patient.setId(id);
-patient = control.getPatientById(id);
+if(patientId!=null && patientId.length()>0){
+	patient.setPatientId(patientId);
+	patient = control.getPatientById(patientId);
+}
 %>
 <html>
 <head>
@@ -36,7 +33,7 @@ patient = control.getPatientById(id);
 			<tr>
 				<td>id</td>
 				<td>
-					<input id="uniqueId" type="text" name="id" value="<%=patient.getId()%>">
+					<input id="uniqueId" type="text" name="patientId" value="<%=patient.getPatientId()%>">
 					<input type="button" onclick="javascript:getInfo();" value="가져오기">
 				</td>
 			</tr>
@@ -83,9 +80,9 @@ patient = control.getPatientById(id);
 				</td>
 			</tr>
 			<tr>
-				<td>patientId</td>
+				<td>admission</td>
 				<td>
-					<input type="text" name="patientId" value="<%=patient.getPatientId()!=null?patient.getPatientId():"" %>"/>
+					<input type="text" name="admission" value="<%=patient.isAdmission()%>"/>
 				</td>
 			</tr>
 		</table>

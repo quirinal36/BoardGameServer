@@ -182,8 +182,8 @@ $(function(){
 			<tr>
 				<td class="center-horizontal">9</td>
 				<td>updatePatient.jsp</td>
-				<td>id 에 해당하는 patient정보를 수정</td>
-				<td>id : <input type="text" name="id" placeholder="2" value="2"/></td>
+				<td>patientId 에 해당하는 patient정보를 수정</td>
+				<td>patientId : <input type="text" name="patientId" placeholder="12345" value="12345"/></td>
 				<td>age : <input type="text" name="age" placeholder="32"/></td>
 				<td>name : <input type="text" name="name" placeholder="kim"/></td>
 				<td></td>
@@ -214,6 +214,18 @@ $(function(){
 				<td>comment : <input type="text" name="comment" placeholder="comment"/></td>
 				<td>classification : <input type="text" name="classification" placeholder="classification"/></td>
 				<td>doctor : <input type="text" name="doctor" placeholder="doctor"/></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="center-horizontal">12</td>
+				<td>patient/getEmergency.jsp</td>
+				<td>응급환자조회하기</td>
+				<td>classification : <input type="text" name="room" placeholder="ER"/></td>
+				<td></td>
+				<td></td>
+				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
 				</td>
