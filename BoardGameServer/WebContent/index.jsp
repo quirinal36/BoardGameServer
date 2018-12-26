@@ -230,6 +230,18 @@ $(function(){
 					<input type="button" value="전송" class="send-button"/>
 				</td>
 			</tr>
+			<tr>
+				<td class="center-horizontal">13</td>
+				<td>person/like.jsp</td>
+				<td>즐겨찾기 </td>
+				<td>uniqueId : <input type="text" name="uniqueId" placeholder="D0000"/></td>
+				<td>patientId : <input type="text" name="patientId" placeholder="12345"/></td>
+				<td></td>
+				<td></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+				</td>
+			</tr>
 		</tbody>
 				
 	

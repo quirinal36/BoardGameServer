@@ -7,11 +7,30 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import kr.bacoder.coding.DBconn;
+import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
 
 public class PersonControl {
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 	
+	
+	public int insertLike(Person person, Patient patient) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("INSERT INTO LikePatient (personId, patientId) values (?, ?)");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, person.getUniqueId());
+			pstmt.setString(2, patient.getPatientId());
+			logger.info(pstmt.toString());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public String getPerson(String phone, String deviceId) throws SQLException {
 		Person person = new Person();
 		try(Connection conn = new DBconn().getConnection()){

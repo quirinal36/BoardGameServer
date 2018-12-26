@@ -54,6 +54,13 @@ public class Person {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public void setId(String id) {
+		try {
+			this.id = Integer.parseInt(id);
+		}catch(NumberFormatException e) {
+			
+		}
+	}
 
 	public String getName() {
 		return name;
