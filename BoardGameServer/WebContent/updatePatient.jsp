@@ -53,4 +53,3 @@ JSONObject json = new JSONObject();
 json.put("result", control.updatePatient(patient));
 String result = json.toJSONString();
 %>
-<%=result%>

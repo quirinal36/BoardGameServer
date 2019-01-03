@@ -16,7 +16,7 @@ import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Photo;
 import kr.bacoder.coding.bean.PhotoPatientInfo;
 
-public class PhotoControl {
+public class PhotoControl extends Controller {
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 	
 	public int addPhotoInfo(Photo photoInfo) {
@@ -152,6 +152,43 @@ public class PhotoControl {
 			
 		}
 		return list;
+	}
+	public int updatePhoto(Photo photo) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE PhotoInfo SET ");
+			
+			if(hasString(photo.getComment())) {
+				appendSql(sql, "comment");
+			}
+			if(hasString(photo.getClassification())) {
+				appendSql(sql, "classification");
+			}
+			if(hasString(photo.getDoctor())) {
+				appendSql(sql, "doctor");
+			}
+			sql.replace(sql.lastIndexOf(","), sql.lastIndexOf(",")+1, " ");
+			sql.append("WHERE id = ?");
+			
+			int i = 1;
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(hasString(photo.getComment())) {
+				pstmt.setString(i++, photo.getComment());
+			}
+			if(hasString(photo.getClassification())) {
+				pstmt.setString(i++, photo.getClassification());
+			}
+			if(hasString(photo.getDoctor())) {
+				pstmt.setString(i++, photo.getDoctor());
+			}
+			pstmt.setInt(i++, photo.getPhotoId());
+			logger.info(pstmt.toString());
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			
+		}
+		return result;
 	}
 	public org.json.JSONObject toJSONObject(List<PhotoPatientInfo> input){
 		org.json.JSONObject result = new org.json.JSONObject();

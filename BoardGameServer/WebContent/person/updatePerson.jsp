@@ -26,6 +26,7 @@
 	//String password = request.getParameter("password");
 	String department = request.getParameter("department");
 	String userLevel = request.getParameter("userLevel");
+	String birth = request.getParameter("birth");
 	
 	Person person = new Person();
 	person.setName(name);
@@ -35,6 +36,7 @@
 	person.setUniqueId(uniqueId);
 	person.setDepartment(department);
 	person.setUserLevel(userLevel);
+	person.setBirth(birth);
 	
 	JSONObject json = new JSONObject();
 	

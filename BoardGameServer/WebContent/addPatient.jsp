@@ -44,4 +44,3 @@ JSONObject json = new JSONObject();
 json.put("result", control.insertPatient(patient));
 String result = json.toJSONString();
 %>
-<%=result%>
