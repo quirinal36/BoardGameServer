@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%@page import="kr.bacoder.coding.control.PatientControl"%>
 <%@page import="kr.bacoder.coding.bean.Patient"%>
 <%@page import="kr.bacoder.coding.bean.Person"%>
