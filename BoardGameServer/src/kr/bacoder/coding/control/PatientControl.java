@@ -20,12 +20,99 @@ import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Doctor;
 import kr.bacoder.coding.bean.NfcTag;
 import kr.bacoder.coding.bean.Patient;
+import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Photo;
 import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class PatientControl extends Controller{
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 
+	public JSONArray getNfcListJson(NfcTag nfc){
+//		List<NfcTag> list = new ArrayList<>();
+		JSONArray array = new JSONArray();
+		
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("select * from NfcTag ");
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				sql.append("where patientId = ?");
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				sql.append("where tagId = ? ");
+			}
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				pstmt.setString(1, nfc.getPatientId());
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				pstmt.setString(1, nfc.getTagId());
+			}
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				NfcTag tag = new NfcTag();
+				tag.setId(rs.getInt("id"));
+				tag.setPatientId(rs.getString("patientId"));
+				tag.setTagId(rs.getString("tagId"));
+				
+//				list.add(tag);
+				array.add(tag.toString());
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return array;
+	}
+	public List<NfcTag> getNfcList(NfcTag nfc){
+		List<NfcTag> list = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("select * from NfcTag ");
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				sql.append("where patientId = ?");
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				sql.append("where tagId = ? ");
+			}
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				pstmt.setString(1, nfc.getPatientId());
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				pstmt.setString(1, nfc.getTagId());
+			}
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				NfcTag tag = new NfcTag();
+				tag.setId(rs.getInt("id"));
+				tag.setPatientId(rs.getString("patientId"));
+				tag.setTagId(rs.getString("tagId"));
+				
+				list.add(tag);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public int updateNfc(NfcTag nfc) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			if(nfc.getId() > 0) {
+				sql.append("update NfcTag set tagId=?, patientId=? where id =?");
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getTagId());
+			pstmt.setString(2, nfc.getPatientId());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			
+		}
+		return result;
+	}
+	
 	public int insertNfc(NfcTag nfc) {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
