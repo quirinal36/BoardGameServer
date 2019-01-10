@@ -266,6 +266,18 @@ $(function(){
 					<input type="button" value="전송" class="send-button"/>
 				</td>
 			</tr>
+			<tr>
+				<td class="center-horizontal">16</td>
+				<td>patient/addScreenshot.jsp</td>
+				<td>screen shot 추가하기 </td>
+				<td>patientId : <input type="text" name="patientId" placeholder="12345"/></td>
+				<td>photoUrl : <input type="text" name="photoUrl" placeholder="http://hsbong.synology.me:7070/image/image.jpg"/></td>
+				<td>name: <input type="text" name="name" placeholder="새이름"/></td>
+				<td>birth: <input type="text" name="birth" placeholder="20190109"/></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+				</td>
+			</tr>
 		</tbody>
 				
 	
