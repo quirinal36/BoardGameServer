@@ -12,14 +12,13 @@
 <%
 Logger logger = Logger.getLogger("getPatients.jsp");
 
-String doctorIdStr = request.getParameter("doctor");
+String doctorId = request.getParameter("doctor");
 String query = request.getParameter("search");
-
-Doctor doctor = new Doctor(doctorIdStr);
+String department = request.getParameter("department");
 
 String data = new String();
 PatientControl control = new PatientControl();
 
 DBconn dbconn = new DBconn();
-out.print(control.getPatientsByDoctor(doctor, query));
+out.print(control.getPatientsByDoctor(doctorId, query, department).toJSONString());
 %>

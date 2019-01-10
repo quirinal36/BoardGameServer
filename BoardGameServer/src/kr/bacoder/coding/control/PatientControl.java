@@ -18,28 +18,165 @@ import org.json.simple.JSONObject;
 
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Doctor;
+import kr.bacoder.coding.bean.NfcTag;
 import kr.bacoder.coding.bean.Patient;
+import kr.bacoder.coding.bean.Person;
+import kr.bacoder.coding.bean.Photo;
+import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class PatientControl extends Controller{
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 
-	public List<Patient> getPatientByClassification(String room) {
-		List<Patient> patientList = new ArrayList<>();
+	public JSONArray getNfcListJson(NfcTag nfc){
+//		List<NfcTag> list = new ArrayList<>();
+		JSONArray array = new JSONArray();
 		
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM PatientInfo WHERE room = UPPER(?)");
+			sql.append("select * from NfcTag ");
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				sql.append("where patientId = ?");
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				sql.append("where tagId = ? ");
+			}
+			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, room);
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				pstmt.setString(1, nfc.getPatientId());
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				pstmt.setString(1, nfc.getTagId());
+			}
+			
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
-				Patient patient = Patient.parseToPatient(rs);
-				patientList.add(patient);
+				NfcTag tag = new NfcTag();
+				tag.setId(rs.getInt("id"));
+				tag.setPatientId(rs.getString("patientId"));
+				tag.setTagId(rs.getString("tagId"));
+				
+//				list.add(tag);
+				array.add(tag.toString());
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return patientList;
+		return array;
+	}
+	public List<NfcTag> getNfcList(NfcTag nfc){
+		List<NfcTag> list = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("select * from NfcTag ");
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				sql.append("where patientId = ?");
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				sql.append("where tagId = ? ");
+			}
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
+				pstmt.setString(1, nfc.getPatientId());
+			}else if(nfc.getTagId()!=null && nfc.getTagId().length()>0) {
+				pstmt.setString(1, nfc.getTagId());
+			}
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				NfcTag tag = new NfcTag();
+				tag.setId(rs.getInt("id"));
+				tag.setPatientId(rs.getString("patientId"));
+				tag.setTagId(rs.getString("tagId"));
+				
+				list.add(tag);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public int updateNfc(NfcTag nfc) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			if(nfc.getId() > 0) {
+				sql.append("update NfcTag set tagId=?, patientId=? where id =?");
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getTagId());
+			pstmt.setString(2, nfc.getPatientId());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			
+		}
+		return result;
+	}
+	
+	public int insertNfc(NfcTag nfc) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("insert into NfcTag (tagId, patientId) values (?,?)");
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getTagId());
+			pstmt.setString(2, nfc.getPatientId());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			
+		}
+		return result;
+	}
+	
+	public List<Patient> getPatientListByNfc(NfcTag nfc){
+		List<Patient> result = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM PatientInfo WHERE patientId IN (SELECT patientId FROM NfcTag WHERE tagId = ?)");
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getTagId());
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+				result.add(patient);
+			}
+		}catch(SQLException e) {
+			
+		}
+		return result;
+	}
+	
+	public List<Patient> getPatientByClassification(Photo photo) {
+		List<Patient> list = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+				.append("id, photo, p_date, name, age, birth, sex, phone, address, etc, doctor, memo, room, admission, patientId, doctorId, photoId")
+				.append(" ")
+				.append("FROM ").append(" ")
+				.append("PatientInfo").append(" ")
+				.append("WHERE patientId IN").append(" ");
+			sql.append("(SELECT patientId FROM PhotoInfo ")
+				.append("WHERE classification IS NOT NULL AND classification like ? ")
+				.append(" AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW()")
+				.append(" group by patientId)");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, photo.getClassification());
+			pstmt.setInt(2, photo.getDay());
+			logger.info(pstmt.toString());
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+				//PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				list.add(patient);
+			}
+		}catch(SQLException e) {
+			
+		}
+		return list;
 	}
 	public org.json.JSONArray parseToJsonArray(List<Patient> list){
 		org.json.JSONArray result = new org.json.JSONArray();
@@ -176,7 +313,7 @@ public class PatientControl extends Controller{
 				sql.append("age=?,");
 			}
 			sql.append("admission=?");
-			sql.append(" WHERE patientId=?");
+			sql.append(" WHERE id=?");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			if(hasString(patient.getPhoto())) {
@@ -214,7 +351,7 @@ public class PatientControl extends Controller{
 				pstmt.setInt(i++, patient.getAge());
 			}
 			pstmt.setInt(i++, patient.isAdmission()?1:0);
-			pstmt.setString(i++, patient.getPatientId());
+			pstmt.setInt(i++, patient.getId());
 			
 			logger.info(pstmt.toString());
 			
@@ -322,36 +459,35 @@ public class PatientControl extends Controller{
 		result.put("list", array);
 		return result.toString();
 	}
-	public String getPatientsByDoctor(Doctor doctor, String search) {
+	public String getPatientsByDoctor(String doctor, String search) {
 		JSONObject json = new JSONObject();
 		try(Connection conn = new DBconn().getConnection()){
 
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
-			.append("patient.id AS id, patient.name AS name, age AS age,")
+			.append("patient.id AS id, patient.name AS name, patient.age AS age,")
 			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
 			.append("patient.birth AS birth, patient.etc AS etc, photo.photoUrl AS photo,")
 			.append("patient.memo, patient.room, patient.admission,")
-			.append("doctor.doctorName AS doctor, patient.patientId AS patientId")
+			.append("person.name AS doctor, patient.patientId AS patientId")
 			.append(" ")
 			.append("FROM ").append(" ")
 			.append("PatientInfo patient LEFT JOIN PhotoInfo photo").append(" ")
 			.append(" ON ").append(" ")
 			.append("photo.id = patient.photoId").append(" ")
-			.append(", Doctor doctor").append(" ")
-			.append(" WHERE patient.doctorId = ? and patient.doctorId = doctor.id").append(" ");
+			.append(", Person person").append(" ")
+			.append(" WHERE patient.doctorId = ? and patient.doctorId = person.uniqueId").append(" ");
 
 			if(search!=null &&search.length()>0) {
 				search = "%"+search+"%";
 				sql.append("AND (patient.name like ? ")
 				.append("OR patient.memo like ? ")
 				.append("OR patient.patientId like ? )");
-
 			}
 			
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
-			stmt.setInt(1, doctor.getId());
+			stmt.setString(1, doctor);
 			
 			if(search!=null &&search.length()>0) {
 //				search = "%"+search+"%";
@@ -376,16 +512,70 @@ public class PatientControl extends Controller{
 		}
 		return json.toJSONString();
 	}
-	public List<Patient> getPatientsByDoctorList(Doctor doctor, String search) {
-		List<Patient> result = new ArrayList<>();
-		
+	public JSONObject getPatientsByDoctor(String doctor, String search, String department) {
 		JSONObject json = new JSONObject();
 		try(Connection conn = new DBconn().getConnection()){
 
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
-			.append("patient.id AS id, patient.name AS name, age AS age,")
+			.append("patient.id AS id, patient.name AS name, patient.age AS age,")
+			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
+			.append("patient.birth AS birth, patient.etc AS etc, photo.photoUrl AS photo,")
+			.append("patient.memo, patient.room, patient.admission,")
+			.append("person.name AS doctor, patient.patientId AS patientId")
+			.append(" ")
+			.append("FROM ").append(" ")
+			.append("PatientInfo patient LEFT JOIN PhotoInfo photo").append(" ")
+			.append(" ON ").append(" ")
+			.append("photo.id = patient.photoId").append(" ")
+			.append(", Person person").append(" ")
+			.append(" WHERE patient.doctorId = ? and patient.doctorId = person.uniqueId").append(" ")
+			.append("AND person.department = ?");
+			
+			if(search!=null &&search.length()>0) {
+				search = "%"+search+"%";
+				sql.append("AND (patient.name like ? ")
+				.append("OR patient.memo like ? ")
+				.append("OR patient.patientId like ? )");
+			}
+			
+			PreparedStatement stmt = conn.prepareStatement(sql.toString());
+			stmt.setString(1, doctor);
+			stmt.setString(2, department);
+			
+			if(search!=null &&search.length()>0) {
+//				search = "%"+search+"%";
+				stmt.setString(2, search);
+				stmt.setString(3, search);
+				stmt.setString(4, search);
+			}
+			
+			logger.info(stmt.toString());
+			
+			rs = stmt.executeQuery();
+
+			JSONArray array = new JSONArray();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+
+				array.add(patient.toString());
+			}
+			json.put("list", array);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+	public List<Patient> getPatientsByDoctorList(String doctorId, String search) {
+		List<Patient> result = new ArrayList<>();
+		
+		try(Connection conn = new DBconn().getConnection()){
+
+			ResultSet rs;
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+			.append("patient.id AS id, patient.name AS name, patient.age AS age,")
 			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
 			.append("patient.birth AS birth, patient.etc AS etc, photo.photoUrl AS photo,")
 			.append("patient.memo, patient.room, patient.admission,")
@@ -395,8 +585,8 @@ public class PatientControl extends Controller{
 			.append("PatientInfo patient LEFT JOIN PhotoInfo photo").append(" ")
 			.append(" ON ").append(" ")
 			.append("photo.id = patient.photoId").append(" ")
-			.append(", Doctor doctor").append(" ")
-			.append(" WHERE patient.doctorId = ? and patient.doctorId = doctor.id").append(" ");
+			.append(", Person person").append(" ")
+			.append(" WHERE patient.doctorId = ? and patient.doctorId = person.uniqueId").append(" ");
 
 			if(search!=null &&search.length()>0) {
 				search = "%"+search+"%";
@@ -407,7 +597,7 @@ public class PatientControl extends Controller{
 			}
 			
 			PreparedStatement stmt = conn.prepareStatement(sql.toString());
-			stmt.setInt(1, doctor.getId());
+			stmt.setString(1, doctorId);
 			
 			if(search!=null &&search.length()>0) {
 //				search = "%"+search+"%";
@@ -415,15 +605,14 @@ public class PatientControl extends Controller{
 				stmt.setString(3, search);
 				stmt.setString(4, search);
 			}
+			logger.info(stmt.toString());
 			
 			rs = stmt.executeQuery();
 
-			JSONArray array = new JSONArray();
 			while(rs.next()) {
 				Patient patient = Patient.parseToPatient(rs);
 
 				result.add(patient);
-				//array.add(patient.toString());
 			}
 			//json.put("list", array);
 		}catch(SQLException e) {
@@ -457,6 +646,7 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 		return patient;
 	}
@@ -515,5 +705,17 @@ public class PatientControl extends Controller{
 			e.printStackTrace();
 		}
 		return patient.toString();
+	}
+	public org.json.JSONObject toJSONObject(List<PhotoPatientInfo> input){
+		org.json.JSONObject result = new org.json.JSONObject();
+		org.json.JSONArray array = new org.json.JSONArray();
+		Iterator<PhotoPatientInfo> iter = input.iterator();
+		while(iter.hasNext()) {
+			PhotoPatientInfo info = iter.next();
+			array.put(PhotoPatientInfo.parseJSON(info));
+		}
+		
+		result.put("list", array);
+		return result;
 	}
 }
