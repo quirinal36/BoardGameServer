@@ -507,6 +507,7 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			return null;
 		}
 		return patient;
 	}
