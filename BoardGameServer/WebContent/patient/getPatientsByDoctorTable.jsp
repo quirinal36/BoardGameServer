@@ -20,13 +20,11 @@ Logger logger = Logger.getLogger("getPatients.jsp");
 String doctorIdStr = request.getParameter("doctor");
 String query = request.getParameter("search");
 
-Doctor doctor = new Doctor(doctorIdStr);
-
 String data = new String();
 PatientControl control = new PatientControl();
 
 DBconn dbconn = new DBconn();
-List<Patient> list = control.getPatientsByDoctorList(doctor, query);
+List<Patient> list = control.getPatientsByDoctorList(doctorIdStr, query);
 %>
 <html>
 	<body>
