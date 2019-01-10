@@ -71,6 +71,7 @@ public class PersonControl {
 				person.setUniqueId(rs.getString("uniqueId"));
 				person.setDepartment(rs.getString("department"));
 				person.setBirth(rs.getString("birth"));
+				person.setUserLevel(rs.getInt("userLevel"));
 			}
 		}catch(SQLException e){
 			e.printStackTrace();

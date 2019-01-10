@@ -18,28 +18,78 @@ import org.json.simple.JSONObject;
 
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Doctor;
+import kr.bacoder.coding.bean.NfcTag;
 import kr.bacoder.coding.bean.Patient;
+import kr.bacoder.coding.bean.Photo;
+import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class PatientControl extends Controller{
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 
-	public List<Patient> getPatientByClassification(String room) {
-		List<Patient> patientList = new ArrayList<>();
-		
+	public int insertNfc(NfcTag nfc) {
+		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM PatientInfo WHERE room = UPPER(?)");
+			sql.append("insert into NfcTag (tagId, patientId) values (?,?)");
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, room);
+			pstmt.setString(1, nfc.getTagId());
+			pstmt.setString(2, nfc.getPatientId());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			
+		}
+		return result;
+	}
+	
+	public List<Patient> getPatientListByNfc(NfcTag nfc){
+		List<Patient> result = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM PatientInfo WHERE patientId IN (SELECT patientId FROM NfcTag WHERE tagId = ?)");
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getTagId());
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Patient patient = Patient.parseToPatient(rs);
-				patientList.add(patient);
+				result.add(patient);
 			}
 		}catch(SQLException e) {
-			e.printStackTrace();
+			
 		}
-		return patientList;
+		return result;
+	}
+	
+	public List<Patient> getPatientByClassification(Photo photo) {
+		List<Patient> list = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+				.append("id, photo, p_date, name, age, birth, sex, phone, address, etc, doctor, memo, room, admission, patientId, doctorId, photoId")
+				.append(" ")
+				.append("FROM ").append(" ")
+				.append("PatientInfo").append(" ")
+				.append("WHERE patientId IN").append(" ");
+			sql.append("(SELECT patientId FROM PhotoInfo ")
+				.append("WHERE classification IS NOT NULL AND classification like ? ")
+				.append(" AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW()")
+				.append(" group by patientId)");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, photo.getClassification());
+			pstmt.setInt(2, photo.getDay());
+			logger.info(pstmt.toString());
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Patient patient = Patient.parseToPatient(rs);
+				//PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				list.add(patient);
+			}
+		}catch(SQLException e) {
+			
+		}
+		return list;
 	}
 	public org.json.JSONArray parseToJsonArray(List<Patient> list){
 		org.json.JSONArray result = new org.json.JSONArray();
@@ -176,7 +226,7 @@ public class PatientControl extends Controller{
 				sql.append("age=?,");
 			}
 			sql.append("admission=?");
-			sql.append(" WHERE patientId=?");
+			sql.append(" WHERE id=?");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			if(hasString(patient.getPhoto())) {
@@ -214,7 +264,7 @@ public class PatientControl extends Controller{
 				pstmt.setInt(i++, patient.getAge());
 			}
 			pstmt.setInt(i++, patient.isAdmission()?1:0);
-			pstmt.setString(i++, patient.getPatientId());
+			pstmt.setInt(i++, patient.getId());
 			
 			logger.info(pstmt.toString());
 			
@@ -515,5 +565,17 @@ public class PatientControl extends Controller{
 			e.printStackTrace();
 		}
 		return patient.toString();
+	}
+	public org.json.JSONObject toJSONObject(List<PhotoPatientInfo> input){
+		org.json.JSONObject result = new org.json.JSONObject();
+		org.json.JSONArray array = new org.json.JSONArray();
+		Iterator<PhotoPatientInfo> iter = input.iterator();
+		while(iter.hasNext()) {
+			PhotoPatientInfo info = iter.next();
+			array.put(PhotoPatientInfo.parseJSON(info));
+		}
+		
+		result.put("list", array);
+		return result;
 	}
 }

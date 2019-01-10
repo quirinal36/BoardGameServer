@@ -5,7 +5,7 @@
 Logger logger = Logger.getLogger("index.jsp");
 
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -222,8 +222,8 @@ $(function(){
 				<td class="center-horizontal">12</td>
 				<td>patient/getEmergency.jsp</td>
 				<td>응급환자조회하기</td>
-				<td>classification : <input type="text" name="room" placeholder="ER"/></td>
-				<td></td>
+				<td>classification : <input type="text" name="classification" placeholder="응급"/></td>
+				<td>day : <input type="text" name="day" placeholder="10"/></td>
 				<td></td>
 				<td></td>
 				<td class="center-horizontal">
@@ -235,6 +235,30 @@ $(function(){
 				<td>person/like.jsp</td>
 				<td>즐겨찾기 </td>
 				<td>uniqueId : <input type="text" name="uniqueId" placeholder="D0000"/></td>
+				<td>patientId : <input type="text" name="patientId" placeholder="12345"/></td>
+				<td></td>
+				<td></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="center-horizontal">14</td>
+				<td>patient/getPatientListByNfc.jsp</td>
+				<td>patient list</td>
+				<td>tagId : <input type="text" name="tagId" placeholder="1111"/></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="center-horizontal">15</td>
+				<td>patient/addNfc.jsp</td>
+				<td>add NFC tag</td>
+				<td>tagId : <input type="text" name="tagId" placeholder="1111"/></td>
 				<td>patientId : <input type="text" name="patientId" placeholder="12345"/></td>
 				<td></td>
 				<td></td>
