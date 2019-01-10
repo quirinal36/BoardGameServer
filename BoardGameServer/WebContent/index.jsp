@@ -119,9 +119,9 @@ $(function(){
 				<td class="center-horizontal">4</td>
 				<td>patient/getPatientsByDoctor.jsp</td>
 				<td></td>
-				<td>doctor : <input type="text" name="doctor" placeholder="doctor" value="1"/></td>
-				<td>search : <input type="text" name="search" placeholder="search" value="12345"/></td>
-				<td></td>
+				<td>doctor : <input type="text" name="doctor" placeholder="doctor" value="D0007"/></td>
+				<td>search : <input type="text" name="search" placeholder="search" value=""/></td>
+				<td>department : <input type="text" name="department" placeholder="department" value="진료부"/></td>
 				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>
@@ -231,12 +231,24 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-				<td class="center-horizontal">13</td>
+				<td class="center-horizontal">13-1</td>
 				<td>person/like.jsp</td>
 				<td>즐겨찾기 </td>
 				<td>uniqueId : <input type="text" name="uniqueId" placeholder="D0000"/></td>
 				<td>patientId : <input type="text" name="patientId" placeholder="12345"/></td>
 				<td></td>
+				<td></td>
+				<td class="center-horizontal">
+					<input type="button" value="전송" class="send-button"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="center-horizontal">13-2</td>
+				<td>person/disLike.jsp</td>
+				<td>즐겨찾기 삭제</td>
+				<td>uniqueId : <input type="text" name="uniqueId" placeholder="D0000"/></td>
+				<td>patientId : <input type="text" name="patientId" placeholder="12345"/></td>
+				<td>id : <input type="text" name="id" placeholder="id 를 입력하세요"/></td>
 				<td></td>
 				<td class="center-horizontal">
 					<input type="button" value="전송" class="send-button"/>

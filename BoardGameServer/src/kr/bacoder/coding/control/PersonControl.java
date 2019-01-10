@@ -13,7 +13,41 @@ import kr.bacoder.coding.bean.Person;
 public class PersonControl {
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
 	
-	
+	public int disLike(int id) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("delete from LikePatient where id = ?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, id);
+			
+			logger.info(pstmt.toString());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public int disLike(Person person, Patient patient) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("delete from LikePatient where personId = ? and patientId = ?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, person.getUniqueId());
+			pstmt.setString(2, patient.getPatientId());
+			
+			logger.info(pstmt.toString());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 	public int insertLike(Person person, Patient patient) {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
