@@ -1,3 +1,5 @@
+<%@page import="kr.bacoder.coding.bean.Photo"%>
+<%@page import="kr.bacoder.coding.control.PhotoControl"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="kr.bacoder.coding.control.PatientControl"%>
 <%@page import="kr.bacoder.coding.bean.Patient"%>
@@ -12,6 +14,7 @@ String sex = request.getParameter("sex");
 String address = request.getParameter("address");
 String phone = request.getParameter("phone");
 String photoUrl = request.getParameter("photoUrl");
+String uploader = request.getParameter("uploader");
 
 Patient patient = new Patient();
 patient.setPatientId(patientId);
@@ -26,6 +29,17 @@ if(patient != null && patient.getId()>0){
 	patient.setSex(sex);
 	patient.setAddress(address);
 	patient.setPhone(phone);
+	
+	if(photoUrl!=null && photoUrl.length()>0){
+		PhotoControl photoControl = new PhotoControl();
+		Photo photoInfo = new Photo();
+		photoInfo.setPatientId(patientId);
+		photoInfo.setPhotoUrl(photoUrl);
+		photoInfo.setDoctor(patient.getDoctor());
+		photoInfo.setUploader(uploader);
+		
+		photoControl.addPhotoInfo(photoInfo);
+	}
 	result = control.updatePatient(patient);
 }else{
 	patient.setName(name);
