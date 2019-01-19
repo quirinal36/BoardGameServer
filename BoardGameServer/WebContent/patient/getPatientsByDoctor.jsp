@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <%@page import="kr.bacoder.coding.bean.Doctor"%>
 <%@page import="kr.bacoder.coding.control.PatientControl"%>
 <%@page import="java.net.URLEncoder"%>
