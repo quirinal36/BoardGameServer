@@ -12,10 +12,16 @@ nfc.setTagId(tagId);
 nfc.setPatientId(patientId);
 
 PatientControl control = new PatientControl();
-int result = control.insertNfc(nfc);
+
+int result = 0;
+if(nfc.getPatientId() != null && nfc.getPatientId().length() > 0){
+	result = control.insertNfc(nfc);
+}else{
+	result = control.deleteNfc(nfc);
+}
 
 JSONObject json = new JSONObject();
 json.put("result", result);
-
+json.put("errorMsg", control.getErrorMsg());
 out.print(json.toString());
 %>

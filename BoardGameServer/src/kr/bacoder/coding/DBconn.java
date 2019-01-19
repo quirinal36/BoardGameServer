@@ -21,7 +21,8 @@ import kr.bacoder.coding.bean.Photo;
 import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class DBconn {
-	Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
+	protected Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
+	protected String errorMsg;
 	
 	private String userName 	= "dev";
 	private String password 	= "789gagul";
@@ -53,34 +54,24 @@ public class DBconn {
 	    return conn;
 	}
 	
-	public String getData() throws SQLException, ClassNotFoundException{
-		JSONObject resultObj = new JSONObject();
-		try(Connection conn = getConnection()){
-			Statement stmt = conn.createStatement();
-			ResultSet rs;
-			rs = stmt.executeQuery("SELECT * FROM Map");
-
-			JSONArray array = new JSONArray();
-			while(rs.next()){
-				int id = rs.getInt("idMap");
-				String name = rs.getString("name");
-				int xLoc = rs.getInt("x_loc");
-				int yLoc = rs.getInt("y_loc");
-				int price = rs.getInt("price");
-
-				JSONObject item = new JSONObject();
-				item.put("id", id);
-				item.put("name", name);
-				item.put("xLoc", xLoc);
-				item.put("yLoc", yLoc);
-				item.put("price", price);
-				array.add(item);
-			}
-			resultObj.put("list", array);
-		}catch(SQLException e) {
-			e.printStackTrace();
+	protected boolean hasString(String input) {
+		if(input!=null && input.length()>0) {
+			return true;
+		}else {
+			return false;
 		}
-		return resultObj.toJSONString();
+	}
+	
+	protected void appendSql(StringBuilder sql, String key) {
+		sql.append(key).append("=?,");
+	}
+
+	public String getErrorMsg() {
+		return errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
 	}
 	
 }

@@ -24,14 +24,13 @@ import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Photo;
 import kr.bacoder.coding.bean.PhotoPatientInfo;
 
-public class PatientControl extends Controller{
-	Logger logger = Logger.getLogger(getClass().getSimpleName());
+public class PatientControl extends DBconn{
 
 	public JSONArray getNfcListJson(NfcTag nfc){
 //		List<NfcTag> list = new ArrayList<>();
 		JSONArray array = new JSONArray();
 		
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn = getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("select * from NfcTag ");
 			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
@@ -64,7 +63,7 @@ public class PatientControl extends Controller{
 	}
 	public List<NfcTag> getNfcList(NfcTag nfc){
 		List<NfcTag> list = new ArrayList<>();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("select * from NfcTag ");
 			if(nfc.getPatientId()!=null && nfc.getPatientId().length()>0) {
@@ -97,7 +96,7 @@ public class PatientControl extends Controller{
 	
 	public int updateNfc(NfcTag nfc) {
 		int result = 0;
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			if(nfc.getId() > 0) {
 				sql.append("update NfcTag set tagId=?, patientId=? where id =?");
@@ -108,14 +107,31 @@ public class PatientControl extends Controller{
 			
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
-			
+			setErrorMsg(e.getMessage());
+			e.printStackTrace();
 		}
 		return result;
 	}
-	
+	public int deleteNfc(NfcTag nfc) {
+		int result = 0;
+		try(Connection conn =  getConnection()){
+			String sql = new StringBuilder()
+					.append("delete from NfcTag")
+					.append(" ")
+					.append("where tagId=?")
+					.toString();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, nfc.getTagId());
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+			setErrorMsg(e.getMessage());
+		}
+		return result;
+	}
 	public int insertNfc(NfcTag nfc) {
 		int result = 0;
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("insert into NfcTag (tagId, patientId) values (?,?)");
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
@@ -124,14 +140,15 @@ public class PatientControl extends Controller{
 			
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
-			
+			setErrorMsg(e.getMessage());
+			e.printStackTrace();
 		}
 		return result;
 	}
 	
 	public List<Patient> getPatientListByNfc(NfcTag nfc){
 		List<Patient> result = new ArrayList<>();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM PatientInfo WHERE patientId IN (SELECT patientId FROM NfcTag WHERE tagId = ?)");
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
@@ -142,14 +159,15 @@ public class PatientControl extends Controller{
 				result.add(patient);
 			}
 		}catch(SQLException e) {
-			
+			setErrorMsg(e.getMessage());
+			e.printStackTrace();
 		}
 		return result;
 	}
 	
 	public List<Patient> getPatientByClassification(Photo photo) {
 		List<Patient> list = new ArrayList<>();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
 				.append("id, photo, p_date, name, age, birth, sex, phone, address, etc, doctor, memo, room, admission, patientId, doctorId, photoId")
@@ -174,7 +192,8 @@ public class PatientControl extends Controller{
 				list.add(patient);
 			}
 		}catch(SQLException e) {
-			
+			setErrorMsg(e.getMessage());
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -189,7 +208,7 @@ public class PatientControl extends Controller{
 	public int setPatientRepresentPhoto(Patient patient) {
 
 		int result = 0;
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE PatientInfo ").append("SET photoId=?, photo=(SELECT photoUrl FROM PhotoInfo WHERE id=?)").append("WHERE patientId=?");
 
@@ -201,12 +220,13 @@ public class PatientControl extends Controller{
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return result;
 	}
 	public List<Patient> searchPatientByQuery(String search){
 		List<Patient> result = new ArrayList<>();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT patient.id, patient.photo, patient.name, patient.doctor, patient.birth, patient.sex, ").append(" ")
 			.append("patient.address, patient.phone, patient.memo, patient.room, patient.admission, patient.patientId ").append(" ")
@@ -231,6 +251,7 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return result;
 	}
@@ -238,7 +259,7 @@ public class PatientControl extends Controller{
 		int result = 0;
 		int i = 1;
 		
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			String sql = "INSERT INTO PatientInfo "
 					+ "(photo, p_date, name, age, birth, sex, address, phone, etc, "
 					+ "doctor, memo, room, admission, patientId) "
@@ -265,6 +286,7 @@ public class PatientControl extends Controller{
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return result;
 	}
@@ -273,7 +295,7 @@ public class PatientControl extends Controller{
 		int result = 0;
 		int i = 1;
 		
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			
 			StringBuilder sql = new StringBuilder();
 			sql.append("UPDATE PatientInfo ");
@@ -358,12 +380,13 @@ public class PatientControl extends Controller{
 			result =pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return result;
 	}
 	public String getPatients(String query) {
 		JSONObject json = new JSONObject();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
@@ -404,6 +427,7 @@ public class PatientControl extends Controller{
 			json.put("list", array);
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return json.toJSONString();
 	}
@@ -411,7 +435,7 @@ public class PatientControl extends Controller{
 		org.json.JSONObject result = new org.json.JSONObject();
 		org.json.JSONArray array = new org.json.JSONArray();
 
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM PatientInfo ");
 			if(id != null && query != null) {
@@ -455,13 +479,14 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		result.put("list", array);
 		return result.toString();
 	}
 	public String getPatientsByDoctor(String doctor, String search) {
 		JSONObject json = new JSONObject();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
@@ -509,12 +534,13 @@ public class PatientControl extends Controller{
 			json.put("list", array);
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return json.toJSONString();
 	}
 	public JSONObject getPatientsByDoctor(String doctor, String search, String department) {
 		JSONObject json = new JSONObject();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
@@ -564,13 +590,14 @@ public class PatientControl extends Controller{
 			json.put("list", array);
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return json;
 	}
 	public List<Patient> getPatientsByDoctorList(String doctorId, String search) {
 		List<Patient> result = new ArrayList<>();
 		
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
@@ -617,12 +644,13 @@ public class PatientControl extends Controller{
 			//json.put("list", array);
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return result;
 	}
 	public Patient getPatientById(String patientId) {
 		Patient patient = new Patient();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			final String sql = "SELECT * FROM PatientInfo WHERE patientId=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, patientId);
@@ -646,13 +674,14 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 			return null;
 		}
 		return patient;
 	}
 	public Patient getPatientById(int id) {
 		Patient patient = new Patient();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			final String sql = "SELECT * FROM PatientInfo WHERE id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
@@ -676,12 +705,13 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return patient;
 	}
 	public String getPatient(int id) {
 		Patient patient = new Patient();
-		try(Connection conn = new DBconn().getConnection()){
+		try(Connection conn =  getConnection()){
 			final String sql = "SELECT * FROM PatientInfo WHERE id=?";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
@@ -703,6 +733,7 @@ public class PatientControl extends Controller{
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
+			setErrorMsg(e.getMessage());
 		}
 		return patient.toString();
 	}
