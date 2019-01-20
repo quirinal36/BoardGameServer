@@ -52,6 +52,7 @@ if(patient != null && patient.getId()>0){
 	result = control.updatePatient(patient);
 }else{
 	patient = new Patient();
+	patient.setPatientId(patientId);
 	patient.setName(name);
 	patient.setBirth(birth);
 	patient.setSex(sex);
