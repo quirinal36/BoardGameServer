@@ -42,7 +42,7 @@ if(patient != null && patient.getId()>0){
 		Photo photoInfo = new Photo();
 		photoInfo.setPatientId(patientId);
 		photoInfo.setPhotoUrl(photoUrl);
-		photoInfo.setDoctor(patient.getDoctor());
+		//photoInfo.setDoctor(patient.getDoctor());
 		photoInfo.setUploader(uploader);
 		photoInfo.setClassification(classification);
 		photoInfo.setDate(timeStamp);
@@ -51,6 +51,7 @@ if(patient != null && patient.getId()>0){
 	}
 	result = control.updatePatient(patient);
 }else{
+	patient = new Patient();
 	patient.setName(name);
 	patient.setBirth(birth);
 	patient.setSex(sex);
