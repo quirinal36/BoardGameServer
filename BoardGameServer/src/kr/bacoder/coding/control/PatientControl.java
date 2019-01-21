@@ -26,6 +26,35 @@ import kr.bacoder.coding.bean.PhotoPatientInfo;
 
 public class PatientControl extends DBconn{
 
+	/**
+	 * tagId,patientId 일치값 삭제
+	 * @param nfc
+	 * @return
+	 */
+	public int delNfc(NfcTag nfc) {
+		int result = 0;
+		
+		try(Connection conn = getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE from NfcTag ")
+			.append("WHERE tagId = ? and patientId = ? ");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1,  nfc.getTagId());
+			pstmt.setString(2,  nfc.getPatientId());
+			logger.info(pstmt.toString());
+			
+			result = pstmt.executeUpdate();
+
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			setErrorMsg(e.getMessage());
+		}
+		
+		return result;
+	}
+	
 	public JSONArray getNfcListJson(NfcTag nfc){
 //		List<NfcTag> list = new ArrayList<>();
 		JSONArray array = new JSONArray();
@@ -112,6 +141,13 @@ public class PatientControl extends DBconn{
 		}
 		return result;
 	}
+	
+	/**
+	 * tagId값으로 tag초기화 하기
+	 * 
+	 * @param nfc
+	 * @return
+	 */
 	public int deleteNfc(NfcTag nfc) {
 		int result = 0;
 		try(Connection conn =  getConnection()){
