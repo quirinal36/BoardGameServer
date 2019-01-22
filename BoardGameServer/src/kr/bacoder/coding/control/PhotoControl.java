@@ -124,7 +124,7 @@ public class PhotoControl extends Controller {
 					if(photo.getPatientId() > 0) {
 						sql.append("WHERE patient.patientId = ?").append(" ");
 					}
-					sql.append("order by photo.id desc ");
+					sql.append("order by photo.classification DESC, photo.id DESC ");
 					sql.append("limit 0, 50 ");
 			System.out.println(sql.toString());
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
