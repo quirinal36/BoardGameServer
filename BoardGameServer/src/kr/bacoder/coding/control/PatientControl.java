@@ -27,7 +27,7 @@ import kr.bacoder.coding.bean.PhotoPatientInfo;
 public class PatientControl extends DBconn{
 
 	/**
-	 * tagId,patientId ��ġ�� ����
+	 * tagId,patientId 占쏙옙치占쏙옙 占쏙옙占쏙옙
 	 * @param nfc
 	 * @return
 	 */
@@ -143,7 +143,7 @@ public class PatientControl extends DBconn{
 	}
 	
 	/**
-	 * tagId������ tag�ʱ�ȭ �ϱ�
+	 * tagId占쏙옙占쏙옙占쏙옙 tag占십깍옙화 占싹깍옙
 	 * 
 	 * @param nfc
 	 * @return
@@ -592,7 +592,7 @@ public class PatientControl extends DBconn{
 			.append(" ON ").append(" ")
 			.append("photo.id = patient.photoId").append(" ")
 			.append(", Person person").append(" ");
-		//	if(department!=null && department.length()>0 && department == "진료부") {
+		//	if(department!=null && department.length()>0 && department == "吏꾨즺遺�") {
 				sql.append(" WHERE patient.doctor IN (SELECT person.name FROM Person person WHERE person.uniqueId = ?) and patient.admission = 1");
 				sql.append(" ").append("ORDER BY patient.room ASC ");
 
