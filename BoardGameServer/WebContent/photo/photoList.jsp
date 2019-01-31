@@ -21,7 +21,16 @@ PhotoControl control = new PhotoControl();
 List<PhotoPatientInfo> list = control.getEmergencyPhotos(photo);
 %>
 <html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="http://www.bacoder.kr/webpr/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="http://www.bacoder.kr/webpr/css/table.css" />
+	</head>
 	<body>
+		<div class="wrap">
+		<header>
+			<jsp:include page="/inc/header.jsp"></jsp:include>
+		</header>
+		<div class="container">
 		<form method="get" action="/photo/photoList.jsp">
 			<a href="/" >홈으로 가기</a>
 			<div>
@@ -31,43 +40,37 @@ List<PhotoPatientInfo> list = control.getEmergencyPhotos(photo);
 			</div>
 			
 			<table border="1">
-				<tr>
-					<th> photoId </th>
-					<th> patientId </th>
-					<th> patientName </th>
-					<th> patientAge </th>
-					<th> patientPhone </th>
-					<th> patientSex </th>
-					<th> patientAddress </th>
-					<th> patientBirth </th>
-					<th> accessLv </th>
-					<th> classification </th>
-					<th> comment </th>
-					<th> date </th>
-					<th> photoUrl </th>
-					<th> uploader </th>
-					<th> doctor </th>
-				</tr>
-				<c:forEach items="<%=list %>" var="item">
+				<thead>
 					<tr>
-						<td>${item.photoId }</td>
-						<td>${item.patientId }</td>
-						<td>${item.patientName }</td>
-						<td>${item.patientAge }</td>
-						<td>${item.patientPhone }</td>
-						<td>${item.patientSex }</td>
-						<td>${item.patientAddress }</td>
-						<td>${item.patientBirth }</td>
-						<td>${item.accessLv }</td>
-						<td>${item.classification }</td>
-						<td>${item.comment }</td>
-						<td>${item.date }</td>
-						<td><a href="${item.photoUrl }" target="_blank">${item.photoUrl }</a></td>
-						<td>${item.uploader }</td>
-						<td>${item.doctor }</td>
+						<th> id </th>
+						<th> 환자ID </th>
+						<th> 이름 </th>
+						<th> 나이 </th>
+						<th> 전화번호 </th>
+						<th> 성별 </th>
+						<th> 주소 </th>
+						<th> 분류 </th>
+						<th> date </th>
 					</tr>
-				</c:forEach>
+				</thead>
+				<tbody>
+					<c:forEach items="<%=list %>" var="item">
+						<tr>
+							<td>${item.photoId }</td>
+							<td>${item.patientId }</td>
+							<td>${item.patientName }</td>
+							<td>${item.patientAge }</td>
+							<td>${item.patientPhone }</td>
+							<td>${item.patientSex }</td>
+							<td>${item.patientAddress }</td>
+							<td>${item.classification }</td>
+							<td>${item.date }</td>
+						</tr>
+					</c:forEach>
+				</tbody>
 			</table>
 		</form>
+		</div>
+		</div>
 	</body>
 </html>

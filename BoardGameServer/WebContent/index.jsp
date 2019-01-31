@@ -11,16 +11,11 @@ Logger logger = Logger.getLogger("index.jsp");
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="./resources/js/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://www.bacoder.kr/webpr/css/style.css" />
+<link rel="stylesheet" type="text/css" href="http://www.bacoder.kr/webpr/css/table.css" />
+
 <title>API 리스트</title>
 <style type="text/css">
-table{
-	width: 100%;
-	border: 1px solid #000;
-	border-collapse : collapse;
-}
-th, td{
-	border: 1px solid #444;
-}
 .center-horizontal{
 	text-align:center;
 }
@@ -55,7 +50,11 @@ $(function(){
 </script>
 </head>
 	<body>
-		<a href="./admin/index.jsp">어드민페이지</a>
+		<div class="wrap">
+		<header>
+			<jsp:include page="/inc/header.jsp"></jsp:include>
+		</header>
+		<div class="container">
 		<table>
 			<thead>
 				<colgroup>
@@ -317,5 +316,7 @@ $(function(){
 					</tr>
 			</tbody>
 		</table>
+		</div>
+		</div>
 	</body>
 </html>
