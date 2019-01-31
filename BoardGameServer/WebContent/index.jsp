@@ -55,6 +55,7 @@ $(function(){
 </script>
 </head>
 	<body>
+		<a href="./admin/index.jsp">어드민페이지</a>
 		<table>
 			<thead>
 				<colgroup>
