@@ -15,7 +15,7 @@ Photo photo = new Photo();
 photo.setPatientId(patientId);
 PhotoControl control = new PhotoControl();
 
-JSONArray array = control.getPhotos(photo);
+JSONArray array = control.getOnlyPhotos(photo);
 resultJson.put("list", array);
 out.print(resultJson.toJSONString());
 %>

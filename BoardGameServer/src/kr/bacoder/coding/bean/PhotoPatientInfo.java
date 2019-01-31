@@ -112,4 +112,24 @@ public class PhotoPatientInfo extends Photo{
 		result.put("patientSex", info.getPatientSex());
 		return result;
 	}
+	public static JSONObject parseJSONforOpen(PhotoPatientInfo info) {
+		JSONObject result = new JSONObject();
+		result.put("accessLv", info.getAccessLv());
+		result.put("classification", info.getClassification());
+		result.put("comment", info.getComment());
+		result.put("date", info.getDate());
+		result.put("doctor", info.getDoctor());
+		result.put("patientId", info.getPatientId());
+		result.put("patientName", info.getPatientName());
+		result.put("id", info.getPhotoId());
+		result.put("photoUrl", info.getPhotoUrl());
+		result.put("uploader", info.getUploader());
+		result.put("patientAge", info.getPatientAge());
+		//result.put("patientAddress", info.getPatientAddress());
+		result.put("patientBirth", info.getPatientBirth());
+		//result.put("patientEtc", info.getPatientEtc());
+		//result.put("patientPhone", info.getPatientPhone());
+		result.put("patientSex", info.getPatientSex());
+		return result;
+	}
 }

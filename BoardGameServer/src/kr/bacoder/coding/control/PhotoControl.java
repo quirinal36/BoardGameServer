@@ -105,6 +105,44 @@ public class PhotoControl extends Controller {
 		}
 		return result;
 	}
+	
+	public JSONArray getOnlyPhotos(Photo photo) {
+		JSONArray result = new JSONArray();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder()
+					.append("SELECT ").append(" ")
+					.append("patient.patientId AS patientId, name AS patientName, age AS patientAge,")
+					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
+					.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
+					.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
+					.append("photo.doctor, photo.id AS id")
+					.append(" ")
+					.append("FROM ").append(" ")
+					.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
+					.append("ON ").append(" ")
+					.append("photo.patientId = patient.patientId").append(" ");
+					if(photo.getPatientId() > 0) {
+						sql.append("WHERE patient.patientId = ?").append(" ");
+					}
+					sql.append("order by photo.classification DESC, photo.id DESC ");
+					sql.append("limit 0, 50 ");
+			System.out.println(sql.toString());
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(photo.getPatientId() > 0) {
+				pstmt.setInt(1, photo.getPatientId());
+			}
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				result.add(PhotoPatientInfo.parseJSONforOpen(p));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public int deletePhotoById(Photo photo) {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){

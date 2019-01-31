@@ -10,7 +10,7 @@ Logger logger = Logger.getLogger("index.jsp");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="/resources/js/sweetalert2.all.min.js"></script>
+<script src="./resources/js/sweetalert2.all.min.js"></script>
 <title>API 리스트</title>
 <style type="text/css">
 table{
@@ -295,6 +295,18 @@ $(function(){
 						<td class="center-horizontal">17</td>
 						<td>patient/getNfcList.jsp</td>
 						<td>NFC 태그 리스트 </td>
+						<td>tagId : <input type="text" name="tagId" placeholder="tagId" value="1111"/></td>
+						<td>patientId : <input type="text" name="patientId" placeholder="patientId" value=""/></td>
+						<td></td>
+						<td></td>
+						<td class="center-horizontal">
+							<input type="button" value="전송" class="send-button"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="center-horizontal">18</td>
+						<td>patient/delNfc.jsp</td>
+						<td>NFC tag 특정 환자정보 삭제  </td>
 						<td>tagId : <input type="text" name="tagId" placeholder="tagId" value="1111"/></td>
 						<td>patientId : <input type="text" name="patientId" placeholder="patientId" value=""/></td>
 						<td></td>
