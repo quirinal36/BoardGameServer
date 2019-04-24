@@ -24,12 +24,12 @@ public class DBconn {
 	protected Logger logger = Logger.getLogger(DBconn.class.getSimpleName());
 	protected String errorMsg;
 	
-	private String userName 	= "dev";
-	private String password 	= "789gagul";
+	private String userName 	= "pps";
+	private String password 	= "qhdghkdtp31!";
 	private String dbms 		= "mysql";
 	private String dbName 		= "new_schema";
-	private String serverName 	= "35.234.23.104";
-	private int portNumber 		= 3306;
+	private String serverName 	= "hsbong.synology.me";
+	private int portNumber 		= 3307;
 	
 	public Connection getConnection() throws SQLException {
 		try {
