@@ -33,11 +33,12 @@ public class OPRecordControl extends DBconn{
 		
 		try(Connection conn =  getConnection()){
 			String sql = "INSERT INTO OPRecord "
-					+ "(patientId, opdate, doctor, dx, anesthesia, opname, opfinding, opProcedure, opfee) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "(patientId, patientName, opdate, doctor, dx, anesthesia, opname, opfinding, opProcedure, opfee) "
+					+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(i++, record.getPatientId());
+			pstmt.setString(i++, record.getPatientName());
 			pstmt.setString(i++, record.getOpdate());
 			pstmt.setString(i++, record.getDoctor());
 			pstmt.setString(i++, record.getDx());

@@ -16,14 +16,15 @@
 //	final String path = getServletContext().getRealPath("/upload");
 	Logger logger = Logger.getLogger("addOPRecord.jsp");
 
-	String patientId = request.getParameter("patientId");
+	String patientId = request.getParameter("pId");
+	String patientName = request.getParameter("pName");
 	String opdate = request.getParameter("opdate");
 	String doctor = request.getParameter("doctor");
 	String dx = request.getParameter("dx");
 	String anesthesia = request.getParameter("anesthesia");
 	String opname = request.getParameter("opname");
 	String opfinding = request.getParameter("opfinding");
-	String opProcedure = request.getParameter("opProcedure");
+	String opProcedure = request.getParameter("opPrecedure");
 	String opfee = request.getParameter("opfee");
 	
 	
@@ -31,6 +32,9 @@
 	
 	if(patientId != null){
 		record.setPatientId(patientId);
+	}
+	if(patientName != null){
+		record.setPatientName(patientName);
 	}
 	if(opdate != null){
 		record.setOpdate(opdate);
