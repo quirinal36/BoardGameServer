@@ -65,6 +65,10 @@
  	Object obj = jsonParser.parse( body );
  	JSONObject jsonRequest = (JSONObject) obj;
 
+ 	//JSONObject jsonObj = new JSONObject(body);
+ 	//jsonObj.getInt(arg0)
+ 	//jsonObj.getString();
+ 	
 	String patientId = (String) jsonRequest.get("pId");
 	String patientName = (String) jsonRequest.get("pName");
 	String opdate = (String) jsonRequest.get("opdate");

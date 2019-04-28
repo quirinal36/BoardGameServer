@@ -593,7 +593,8 @@ public class PatientControl extends DBconn{
 			.append("photo.id = patient.photoId").append(" ")
 			.append(", Person person").append(" ");
 		//	if(department!=null && department.length()>0 && department == "吏꾨즺遺�") {
-				sql.append(" WHERE patient.doctor IN (SELECT person.name FROM Person person WHERE person.uniqueId = ?) and patient.admission = 1");
+				sql.append(" WHERE patient.doctor = (SELECT person.name FROM Person person WHERE person.uniqueId = ?) and patient.admission = 1");
+				sql.append(" ").append("AND patient.doctor = person.name ");
 				sql.append(" ").append("ORDER BY patient.room ASC ");
 
 //			.append(" WHERE patient.doctorId = ? and patient.doctorId = person.uniqueId").append(" ")
