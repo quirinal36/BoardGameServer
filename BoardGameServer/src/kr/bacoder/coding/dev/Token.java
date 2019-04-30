@@ -1,6 +1,9 @@
 package kr.bacoder.coding.dev;
 
+import java.util.Date;
 import java.util.logging.Logger;
+
+import javax.servlet.ServletException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,10 +23,10 @@ public class Token {
 		return this.signature.getBytes();
 	}
 	
+	
 	public int IsValidToken(String token) {
 		int result = 0;
-		logger.info("IsValidToken? : " + token);
-		Jws<Claims> jws;
+		//logger.info("IsValidToken? : " + token);
 		
 		String subject = "HACKER";
 		try {
@@ -35,43 +38,27 @@ public class Token {
 //		    .setSigningKey(getSignatureKey())         // (2)
 //		    .parseClaimsJws(token); // (3)
 //		    subject = jws.getBody().getSubject();
-		   // String sub = jws.getBody().getSubject();
+		   String sub = claims.getSubject();
+		   Date expirationDate = claims.getExpiration();
 		   // String exp = jws.getBody().getExpiration().toString();
-		    logger.info("authorized Token : "+ claims.getSubject());
+		    logger.info("authorized Token : "+ sub + "/" + expirationDate);
 		   result = 1;
-		   
+		   return result;
 		    // we can safely trust the JWT
 		   
 		}
-		catch (SignatureException e) {
-			logger.info("SignatureException : "+ e.toString());
+		catch (JwtException ex) {       // (4)
+		    logger.info("Un-authorized : "+ ex.getMessage());
 		    // we *cannot* use the JWT as intended by its creator
-			result = 0;
+		    return 0;
 		}
-		catch (ExpiredJwtException e) {
-			logger.info("ExpiredJwtException : "+ e.toString());
-		    // we *cannot* use the JWT as intended by its creator
-			result = 0;
 
-		}
-		catch (MalformedJwtException e) {
-			logger.info("ExpiredJwtException : "+ e.toString());
-		    // we *cannot* use the JWT as intended by its creator
-			result = 0;
-
-		}
-		catch (UnsupportedJwtException e) {
-			logger.info("ExpiredJwtException : "+ e.toString());
-		    // we *cannot* use the JWT as intended by its creator
-			result = 0;
-
-		}
-		finally {
-			logger.info("finally");
-			//return false;
-			return result;
-
-		}
+//		finally {
+//			logger.info("finally");
+//			//return false;
+//			return result;
+//
+//		}
 
 	}
 }
