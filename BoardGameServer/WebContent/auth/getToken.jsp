@@ -11,14 +11,20 @@ Logger logger = Logger.getLogger("getToken.jsp");
 String userId = request.getParameter("userId");
 String pwd = request.getParameter("userPwd");
 
-Token token = new Token();
-token.setUserId(userId);
-token.setUserPwd(pwd);
-token.setSubject(userId);
-token.setScope(1);
+if (userId != null && pwd != null) {
+	Token token = new Token();
+	token.setUserId(userId);
+	token.setUserPwd(pwd);
+	token.setSubject(userId);
+	token.setScope(1);
+	
+	DBconn dbconn = new DBconn();
+	TokenControl control = new TokenControl();
+	
+	out.print("" + control.getAccessToken(token));
+	
+} else {
+	out.print("error - require parameter");
 
-DBconn dbconn = new DBconn();
-TokenControl control = new TokenControl();
-
-out.print(control.getAccessToken(token));
+}
 %>

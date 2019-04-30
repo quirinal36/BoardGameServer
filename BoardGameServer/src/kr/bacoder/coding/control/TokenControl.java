@@ -16,21 +16,24 @@ public class TokenControl extends DBconn {
 	private static final int RefreshTokenEXPDays = 7;
 
 
-	public boolean userCheck(String userId, String userPwd) {
+	public boolean userCheck(String userId, String userPwd) throws SQLException {
 		
 		SecurityUtil security = new SecurityUtil();
 		String ePwd = security.encryptSHA256(userPwd);
 		
 		try(Connection conn =  getConnection()){
-			String sql = "SELECT password FROM Person WHERE uniqueId = ?";
+			String sql = "SELECT person.password FROM Person person WHERE person.uniqueId = ?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userId);
 			
 			logger.info(pstmt.toString());
 			
+			//int result = 0;
+
 			ResultSet rs = pstmt.executeQuery();
 			if (userPwd == rs.getString("password")) {
+				logger.info("pwd check success");
 				return true;
 			} else {
 				logger.info("pwd check failed");
@@ -44,7 +47,7 @@ public class TokenControl extends DBconn {
 		}
 	}
 	
-	public String getAccessToken(Token token) {
+	public String getAccessToken(Token token) throws SQLException {
 		
 		if(userCheck(token.getUserId(), token.getUserPwd())) {
 			TokenUtil util = new TokenUtil();
