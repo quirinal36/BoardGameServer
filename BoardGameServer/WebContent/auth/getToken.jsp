@@ -17,25 +17,32 @@ if (userId != null && pwd != null) {
 	Token token = new Token();
 	token.setUserId(userId);
 	token.setUserPwd(pwd);
-	token.setSubject(userId);
-	token.setScope(1);
+	//token.setSubject(userId);
+	//token.setScope(1);
 	
 	DBconn dbconn = new DBconn();
 	TokenControl control = new TokenControl();
 	
 	try {
 		JSONObject obj = new JSONObject();
-		obj.put("rToken", control.getRefreshToken(token));
-		obj.put("aToken", control.getAccessToken(token));
+		String rToken = control.getRefreshToken(token);
+		String aToken = control.getAccessToken(token);
+		obj.put("rToken", rToken);
+		obj.put("aToken", aToken);
+		if(rToken != null && aToken != null) {
+			control.updateRefreshToken(userId, rToken); //DB에 리프레시 토큰 저장 
+			out.print(obj.toString());
+		} else {
+			response.sendError(401, "인증 실패");
+		}
 		
-		out.print("" + obj.toString());
 		
 	} catch(Exception e) {
 		out.print("" + e.getMessage());
 	}
 	
 } else {
-	out.print("error - require parameter");
+	response.sendError(401, "인증 실패 - 파라미터 확인하세요 ");
 
 }
 %>

@@ -27,11 +27,13 @@ public class TokenUtil {
 		return this.signature.getBytes();
 	}
 	
-	public String getToken(String subject, int role, int expDays) {
+	public String getToken(String subject, String userId, int role, int expDays) {
 				
 		Date expirationDate = new Date();
 		LocalDateTime dateTime = LocalDateTime.now();
-		dateTime = dateTime.plusDays(expDays);
+//		dateTime = dateTime.plusDays(expDays);
+		dateTime = dateTime.plusMinutes(expDays);
+
 		expirationDate = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
 		//logger.info(expirationDate.toString());
 		String jwt = 
@@ -39,6 +41,7 @@ public class TokenUtil {
 		    .setIssuer("http://hsbong.synology.me")
 			  .setSubject("" + subject)
 			  .setExpiration(expirationDate)
+			  .setId(userId)
 			  .claim("role", role)
 			  .signWith(
 			    SignatureAlgorithm.HS256,
@@ -61,13 +64,18 @@ public class TokenUtil {
 				       .parseClaimsJws(token).getBody();
 			
 		   role = (int) claims.get("role");
-		   String userId = claims.getSubject();
+		   String subject = claims.getSubject();
+		   String userId = claims.getId();
 		   Date expirationDate = claims.getExpiration();
 
 		   logger.info("authorized Token : "+ claims.getSubject() + "/" + expirationDate);
 		  
 		   return role;
 		    // we can safely trust the JWT   
+		}
+		catch (ExpiredJwtException e) {
+			logger.info("Expired : "+ e.getMessage());
+		    return -1;
 		}
 		catch (JwtException ex) {       // (4)
 		    logger.info("Un-authorized : "+ ex.getMessage());
@@ -85,7 +93,9 @@ public class TokenUtil {
 				       .parseClaimsJws(tokenStr).getBody();
 			
 		   token.setSubject(claims.getSubject()); 
-		   token.setExpDays(claims.getExpiration());
+		   token.setExpDate(claims.getExpiration());
+		   token.setUserId(claims.getId());
+		   token.setRole((int) claims.get("role"));
 		//   token.setScope(claims.get("scope");
 		   
 		   // String exp = jws.getBody().getExpiration().toString();

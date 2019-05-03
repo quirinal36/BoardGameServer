@@ -4,22 +4,15 @@ import java.util.Date;
 
 public class Token {
 
-	private String tokenType;
 	private String tokenStr;
 	private String name;
-	private String subject; //userId(token)
-	private int scope; //role
-	private Date expDays;
+	private String subject; //token type
+	private int role;     //userLevel
+	private Date expDate;
 	private String userId;
 	private String userPwd;
 	
 	
-	public String getTokenType() {
-		return tokenType;
-	}
-	public void setTokenType(String tokenType) {
-		this.tokenType = tokenType;
-	}
 	public String getTokenStr() {
 		return tokenStr;
 	}
@@ -38,17 +31,17 @@ public class Token {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public int getScope() {
-		return scope;
+	public int getRole() {
+		return role;
 	}
-	public void setScope(int scope) {
-		this.scope = scope;
+	public void setRole(int role) {
+		this.role = role;
 	}
-	public Date getExpDays() {
-		return expDays;
+	public Date getExpDate() {
+		return expDate;
 	}
-	public void setExpDays(Date expDays) {
-		this.expDays = expDays;
+	public void setExpDate(Date expDate) {
+		this.expDate = expDate;
 	}
 	public String getUserId() {
 		return userId;

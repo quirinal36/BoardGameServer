@@ -41,8 +41,8 @@
   logger.info("request : " + request.toString());
   logger.info("IsValidToken : " + token.IsValidToken(tokenStr));
   
-  if(tokenStr != null && token.IsValidToken(tokenStr) == 1) {
- 	 logger.info("addOPRecord/IsValidToken : 1");
+  if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
+ 	 logger.info("addOPRecord/IsValidToken : >1");
  	 try {
  	     InputStream inputStream = request.getInputStream();
  	     if (inputStream != null) {
@@ -127,10 +127,17 @@
  		
  		json.put("result", control.addRecordInfo(record));
  	 
-  } else {
- 	 logger.info("addOPRecord/IsValidToken : 0");
+  } else if (token.IsValidToken(tokenStr) == -1){
+ 	// logger.info("addOPRecord/IsValidToken : 0");
 
  	// out.print(json.toJSONString());
- 	out.print("Un-Authorized connection!");
-  }
+ 	//out.print("Un-Authorized connection!");
+ 	response.sendError(401, "유효기간이 만료되었습니다.");
+  } else {
+	 	 logger.info("addOPRecord/IsValidToken : 0");
+
+	  	// out.print(json.toJSONString());
+	  	//out.print("Un-Authorized connection!");
+	  	response.sendError(401, "인가되지 않은 접근입니다.");
+}
  %>
