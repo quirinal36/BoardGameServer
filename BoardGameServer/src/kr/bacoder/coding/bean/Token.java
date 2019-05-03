@@ -1,13 +1,15 @@
 package kr.bacoder.coding.bean;
 
+import java.util.Date;
+
 public class Token {
 
 	private String tokenType;
 	private String tokenStr;
 	private String name;
-	private String subject;
-	private int scope;
-	private int expDays;
+	private String subject; //userId(token)
+	private int scope; //role
+	private Date expDays;
 	private String userId;
 	private String userPwd;
 	
@@ -42,10 +44,10 @@ public class Token {
 	public void setScope(int scope) {
 		this.scope = scope;
 	}
-	public int getExpDays() {
+	public Date getExpDays() {
 		return expDays;
 	}
-	public void setExpDays(int expDays) {
+	public void setExpDays(Date expDays) {
 		this.expDays = expDays;
 	}
 	public String getUserId() {

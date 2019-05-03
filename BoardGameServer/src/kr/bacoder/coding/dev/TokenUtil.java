@@ -16,6 +16,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import kr.bacoder.coding.bean.Token;
 
 public class TokenUtil {
 	Logger logger = Logger.getLogger(UploadUtil.class.getSimpleName());
@@ -26,7 +27,7 @@ public class TokenUtil {
 		return this.signature.getBytes();
 	}
 	
-	public String getToken(String subject, String name, int scope, int expDays) {
+	public String getToken(String subject, int role, int expDays) {
 				
 		Date expirationDate = new Date();
 		LocalDateTime dateTime = LocalDateTime.now();
@@ -36,10 +37,9 @@ public class TokenUtil {
 		String jwt = 
 		    Jwts.builder()
 		    .setIssuer("http://hsbong.synology.me")
-			  .setSubject("users/" + subject)
+			  .setSubject("" + subject)
 			  .setExpiration(expirationDate)
-			  .claim("name", name)
-			  .claim("scope", scope)
+			  .claim("role", role)
 			  .signWith(
 			    SignatureAlgorithm.HS256,
 			    getSignatureKey()
@@ -51,7 +51,8 @@ public class TokenUtil {
 	
 	
 	public int IsValidToken(String token) {
-		int result = 0;
+		//int result = 0;
+		int role = 0;
 		//logger.info("IsValidToken? : " + token);
 		
 		try {
@@ -59,14 +60,14 @@ public class TokenUtil {
 				       .setSigningKey(getSignatureKey())
 				       .parseClaimsJws(token).getBody();
 			
-		   String sub = claims.getSubject();
+		   role = (int) claims.get("role");
+		   String userId = claims.getSubject();
 		   Date expirationDate = claims.getExpiration();
-		   // String exp = jws.getBody().getExpiration().toString();
-		    logger.info("authorized Token : "+ sub + "/" + expirationDate);
-		   result = 1;
-		   return result;
-		    // we can safely trust the JWT
-		   
+
+		   logger.info("authorized Token : "+ claims.getSubject() + "/" + expirationDate);
+		  
+		   return role;
+		    // we can safely trust the JWT   
 		}
 		catch (JwtException ex) {       // (4)
 		    logger.info("Un-authorized : "+ ex.getMessage());
@@ -75,4 +76,29 @@ public class TokenUtil {
 		}
 	}
 	
+	public Token getInfoByToken(String tokenStr) {
+		
+		Token token = new Token();
+		try {
+			Claims claims = Jwts.parser()         
+				       .setSigningKey(getSignatureKey())
+				       .parseClaimsJws(tokenStr).getBody();
+			
+		   token.setSubject(claims.getSubject()); 
+		   token.setExpDays(claims.getExpiration());
+		//   token.setScope(claims.get("scope");
+		   
+		   // String exp = jws.getBody().getExpiration().toString();
+		    logger.info("getInfoByToken: authorized Token");
+
+		   return token;
+		    // we can safely trust the JWT
+		   
+		}
+		catch (JwtException ex) {       // (4)
+		    logger.info("Un-authorized : "+ ex.getMessage());
+		    // we *cannot* use the JWT as intended by its creator
+		    return null;
+		}
+	}
 }
