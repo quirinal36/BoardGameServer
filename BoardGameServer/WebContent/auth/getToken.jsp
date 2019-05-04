@@ -14,19 +14,17 @@ String pwd = request.getParameter("userPwd");
 logger.info("getToken.jsp params : "+ userId + " , " + pwd);
 
 if (userId != null && pwd != null) {
-	Token token = new Token();
-	token.setUserId(userId);
-	token.setUserPwd(pwd);
-	//token.setSubject(userId);
-	//token.setScope(1);
+	Person person = new Person();
+	person.setUniqueId(userId);
+	person.setPassword(pwd);
 	
 	DBconn dbconn = new DBconn();
 	TokenControl control = new TokenControl();
 	
 	try {
 		JSONObject obj = new JSONObject();
-		String rToken = control.getRefreshToken(token);
-		String aToken = control.getAccessToken(token);
+		String rToken = control.getRefreshToken(person);
+		String aToken = control.getAccessToken(person);
 		obj.put("rToken", rToken);
 		obj.put("aToken", aToken);
 		if(rToken != null && aToken != null) {

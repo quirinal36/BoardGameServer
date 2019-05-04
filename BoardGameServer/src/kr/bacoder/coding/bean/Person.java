@@ -23,6 +23,7 @@ public class Person {
 	public static final String DEPARTMENT_KEY = "department";
 	public static final String USER_LEVEL_KEY = "userLevel";
 	public static final String NUM_KEY = "NUM";
+	public static final String R_TOKEN_KEY = "rToken";
 	
 	private int id;
 	private String name;
@@ -39,6 +40,7 @@ public class Person {
 	private String department;
 	private String birth;
 	private int userLevel;
+	private String rToken;
 	
 	/**
 	 * 생성자
@@ -46,6 +48,7 @@ public class Person {
 	public Person() {
 		this.userLevel = 0;
 	}
+	
 	
 	public int getId() {
 		return id;
@@ -161,6 +164,15 @@ public class Person {
 		return userLevel;
 	}
 	
+	public String getrToken() {
+		return rToken;
+	}
+
+	public void setrToken(String rToken) {
+		this.rToken = rToken;
+	}
+
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
