@@ -96,9 +96,7 @@ public class TokenUtil {
 		   token.setExpDate(claims.getExpiration());
 		   token.setUserId(claims.getId());
 		   token.setRole((int) claims.get("role"));
-		//   token.setScope(claims.get("scope");
-		   
-		   // String exp = jws.getBody().getExpiration().toString();
+
 		    logger.info("getInfoByToken: authorized Token");
 
 		   return token;

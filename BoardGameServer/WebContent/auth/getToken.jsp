@@ -27,7 +27,7 @@ if (userId != null && pwd != null) {
 		String aToken = control.getAccessToken(person);
 		obj.put("rToken", rToken);
 		obj.put("aToken", aToken);
-		if(rToken != null && aToken != null) {
+		if(rToken.length() > 0 && aToken.length() > 0) {
 			control.updateRefreshToken(userId, rToken); //DB에 리프레시 토큰 저장 
 			out.print(obj.toString());
 		} else {
