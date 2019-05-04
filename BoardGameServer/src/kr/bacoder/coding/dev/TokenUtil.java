@@ -27,12 +27,12 @@ public class TokenUtil {
 		return this.signature.getBytes();
 	}
 	
-	public String getToken(String subject, String userId, int role, int expDays) {
+	public String getToken(String subject, String userId, int role, int expMins) {
 				
 		Date expirationDate = new Date();
 		LocalDateTime dateTime = LocalDateTime.now();
 //		dateTime = dateTime.plusDays(expDays);
-		dateTime = dateTime.plusMinutes(expDays);
+		dateTime = dateTime.plusMinutes(expMins);
 
 		expirationDate = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
 		//logger.info(expirationDate.toString());

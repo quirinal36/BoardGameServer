@@ -13,8 +13,8 @@ import kr.bacoder.coding.dev.TokenUtil;
 
 public class TokenControl extends DBconn {
 	
-	private static final int AccessTokenEXPHours = 1;
-	private static final int RefreshTokenEXPHours = 24 * 28;
+	private static final int AccessTokenEXPMins = 1;
+	private static final int RefreshTokenEXPMins = 60 * 24 * 28;
 	
 	private static final String ATokenSubject = "AccessToken";
 	private static final String RTokenSubject = "RefreshToken";
@@ -72,7 +72,7 @@ public class TokenControl extends DBconn {
 		
 		if(userLv > 0) {
 			TokenUtil util = new TokenUtil();
-			return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPHours);
+			return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins);
 		} else {
 			return null;
 		}	
@@ -87,7 +87,7 @@ public class TokenControl extends DBconn {
 		
 		if(userLv > 0) {
 			TokenUtil util = new TokenUtil();
-			return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPHours);
+			return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins);
 		} else {
 			return null;
 		}	
