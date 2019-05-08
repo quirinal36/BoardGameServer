@@ -132,12 +132,12 @@
 
  	// out.print(json.toJSONString());
  	//out.print("Un-Authorized connection!");
- 	response.sendError(401, "유효기간이 만료되었습니다.");
+ 	response.sendError(401, token.expiredToken);
   } else {
 	 	 logger.info("addOPRecord/IsValidToken : 0");
 
 	  	// out.print(json.toJSONString());
 	  	//out.print("Un-Authorized connection!");
-	  	response.sendError(401, "인가되지 않은 접근입니다.");
+	  	response.sendError(401, token.unauthorized);
 }
  %>

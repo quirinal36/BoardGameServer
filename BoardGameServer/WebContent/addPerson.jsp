@@ -3,6 +3,7 @@
 <%@page import="kr.bacoder.coding.DBconn"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="java.util.logging.Logger"%>
+<%@page import="kr.bacoder.coding.dev.TokenUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 Logger logger = Logger.getLogger("addPerson.jsp");
@@ -24,12 +25,15 @@ person.setAddress(address);
 person.setUniqueId(uniqueId);
 person.setPhoto(photo);
 
-DBconn dbconn = new DBconn();
 
-JSONObject json = new JSONObject();
-PersonControl control = new PersonControl();
+	DBconn dbconn = new DBconn();
 
-json.put("result", control.insertPerson(person));
-String result = json.toJSONString();
+	JSONObject json = new JSONObject();
+	PersonControl control = new PersonControl();
+
+	json.put("result", control.insertPerson(person));
+	String result = json.toJSONString();
+	out.print(result);
+
+
 %>
-<%=result%>

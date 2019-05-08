@@ -4,9 +4,11 @@
 <%@page import="kr.bacoder.coding.DBconn"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="java.util.logging.Logger"%>
+<%@page import="kr.bacoder.coding.dev.TokenUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 Logger logger = Logger.getLogger("addPatient.jsp");
+
 
 String name = request.getParameter("name");
 String ageStr = request.getParameter("age");
@@ -35,12 +37,23 @@ patient.setAddress(address);
 patient.setEtc(etc);
 patient.setPatientId(patientId);
 
-DBconn dbconn = new DBconn();
+TokenUtil token = new TokenUtil();
+String tokenStr = request.getHeader("Authorization");
 
-logger.info(patient.toString());
-PatientControl control = new PatientControl();
+if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
 
-JSONObject json = new JSONObject();
-json.put("result", control.insertPatient(patient));
-String result = json.toJSONString();
+	DBconn dbconn = new DBconn();
+	
+	logger.info(patient.toString());
+	PatientControl control = new PatientControl();
+	
+	JSONObject json = new JSONObject();
+	json.put("result", control.insertPatient(patient));
+	String result = json.toJSONString();
+
+} else if (token.IsValidToken(tokenStr) == -1){
+		response.sendError(401, token.expiredToken);
+} else {
+		response.sendError(401, token.unauthorized);
+}
 %>
