@@ -11,18 +11,16 @@ import kr.bacoder.coding.bean.Token;
 import kr.bacoder.coding.dev.SecurityUtil;
 import kr.bacoder.coding.dev.TokenUtil;
 
-/**
- * @author bonghwangse
- *
- */
 public class TokenControl extends DBconn {
 	
 	private static final int AccessTokenEXPMins = 1;
-	private static final int RefreshTokenEXPMins = 60 * 24 * 7;
+	private static final int RefreshTokenEXPMins = 60 * 24 * 28;
 	
 	private static final String ATokenSubject = "AccessToken";
 	private static final String RTokenSubject = "RefreshToken";
-
+	
+	public final static String expiredToken = "유효기간이 만료되었습니다";
+	public final static String unauthorized = "인가되지 않은 접근입니다";
 
 	public Person userValid(Person person)  {
 		
@@ -54,18 +52,17 @@ public class TokenControl extends DBconn {
 				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
 				person.setrToken(rs.getString(Person.R_TOKEN_KEY));
 				
-//				return person;
+				return person;
 			} else {
 				logger.info("pwd check failed");
-//				return null;
+				return null;
 			}
 
 		}catch (SQLException e) {
 			e.printStackTrace();
 			setErrorMsg(e.getMessage());
-//			return null;
+			return null;
 		}
-		return person;
 	}
 	
 	public String getAccessToken(Person person) {	
@@ -79,7 +76,7 @@ public class TokenControl extends DBconn {
 			TokenUtil util = new TokenUtil();
 			return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins);
 		} else {
-			return "";
+			return null;
 		}	
 	}
 	
@@ -94,17 +91,10 @@ public class TokenControl extends DBconn {
 			TokenUtil util = new TokenUtil();
 			return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins);
 		} else {
-			return "";
+			return null;
 		}	
 	}
 	
-	
-	/**
-	 * update RefreshToken update into database
-	 * @param userId
-	 * @param rToken
-	 * @return int result
-	 */
 	public int updateRefreshToken(String userId, String rToken) {
 		
 		int result = 0;
@@ -127,21 +117,11 @@ public class TokenControl extends DBconn {
 		return result;
 	}
 	
-
-	/**
-	 * @param rToken
-	 * @return
-	 */
-	public String updateAToken(String rToken) {
-		TokenUtil util = new TokenUtil();
-		Token token = new Token();
-		token = util.getInfoByToken(rToken);
-		if(token.getSubject().equals("RefreshToken")) {
-			return util.getToken(ATokenSubject, token.getUserId(), token.getRole(), AccessTokenEXPMins);
-		} else {
-			logger.info("subject : "+ token.getSubject());
-			return "";
-		}
-	}
-	
+//	public String updateAToken(String rToken, String aToken) {
+//		
+//		
+//		
+//		return newAccessToken;
+//	}
+//	
 }

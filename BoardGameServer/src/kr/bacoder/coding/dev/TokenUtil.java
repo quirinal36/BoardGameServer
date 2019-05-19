@@ -23,6 +23,9 @@ public class TokenUtil {
 	
 	private static String signature = "qhdghkdtpqoralrudqhdcksdnqhdtjdus";
 
+	public final static String expiredToken = "유효기간이 만료되었습니다";
+	public final static String unauthorized = "인가되지 않은 접근입니다";
+	
 	public byte[] getSignatureKey() {
 		return this.signature.getBytes();
 	}
