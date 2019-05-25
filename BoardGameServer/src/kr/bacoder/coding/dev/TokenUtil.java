@@ -21,6 +21,7 @@ import kr.bacoder.coding.bean.Token;
 public class TokenUtil {
 	Logger logger = Logger.getLogger(UploadUtil.class.getSimpleName());
 	
+	
 	private static String signature = "qhdghkdtpqoralrudqhdcksdnqhdtjdus";
 
 	public final static String expiredToken = "유효기간이 만료되었습니다";
