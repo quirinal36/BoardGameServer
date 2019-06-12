@@ -114,11 +114,19 @@ public class TokenControl extends DBconn {
 		return result;
 	}
 	
-//	public String updateAToken(String rToken, String aToken) {
-//		
-//		
-//		
-//		return newAccessToken;
-//	}
-//	
+	public String updateAToken(String rToken) {
+		TokenUtil util = new TokenUtil();
+		//String newAccessToken = "";	
+		Person person = new Person();
+		person = util.getInfoByToken(rToken);
+		logger.info("TokenControl.udateAToken (userId): "+ person.getUniqueId());
+		
+		if(person != null && person.getUserLevel() > 1) {
+			return util.getToken(ATokenSubject, person.getUniqueId(), person.getUserLevel(), AccessTokenEXPMins);
+		} else {
+			return null;
+		}
+		
+	}
+	
 }

@@ -15,16 +15,16 @@ if (rToken != null) {
 
 	DBconn dbconn = new DBconn();
 	TokenControl control = new TokenControl();
-	String newaToken = "";
+	String newAToken = "";
 	
 	try {
-		newaToken = control.updateAToken(rToken);
+		newAToken = control.updateAToken(rToken);
 		//JSONObject obj = new JSONObject();
 		//obj.put("rToken", rToken);
 
-		if(newaToken.length() > 0) {
+		if(newAToken.length() > 0) {
 			logger.info("UpdateToken succeed");
-			out.print(newaToken);
+			out.print(newAToken);
 		} else {
 			logger.info("null");
 			response.sendError(401, "인증 실패");

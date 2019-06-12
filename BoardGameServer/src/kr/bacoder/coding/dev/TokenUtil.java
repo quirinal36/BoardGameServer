@@ -16,6 +16,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Token;
 
 public class TokenUtil {
@@ -88,22 +89,23 @@ public class TokenUtil {
 		}
 	}
 	
-	public Token getInfoByToken(String tokenStr) {
+	public Person getInfoByToken(String tokenStr) {
 		
-		Token token = new Token();
+		Person person = new Person();
 		try {
 			Claims claims = Jwts.parser()         
 				       .setSigningKey(getSignatureKey())
 				       .parseClaimsJws(tokenStr).getBody();
 			
-		   token.setSubject(claims.getSubject()); 
-		   token.setExpDate(claims.getExpiration());
-		   token.setUserId(claims.getId());
-		   token.setRole((int) claims.get("role"));
+			Date expirationDate = claims.getExpiration();
+//		   token.setSubject(claims.getSubject()); 
+//		   token.setExpDate(claims.getExpiration());
+		   person.setUniqueId(claims.getId());
+		   person.setUserLevel((int) claims.get("role"));
 
 		    logger.info("getInfoByToken: authorized Token");
 
-		   return token;
+		   return person;
 		    // we can safely trust the JWT
 		   
 		}
