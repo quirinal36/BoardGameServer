@@ -31,7 +31,7 @@ if (rToken != null) {
 		}
 		
 	} catch(Exception e) {
-		out.print("exception" + e.getMessage());
+		out.print("exception: " + e.getMessage());
 	}
 	
 } else {

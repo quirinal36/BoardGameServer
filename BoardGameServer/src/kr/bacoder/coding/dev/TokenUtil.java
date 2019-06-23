@@ -115,4 +115,24 @@ public class TokenUtil {
 		    return null;
 		}
 	}
+	
+public String getIdByToken(String tokenStr) {
+		
+		try {
+			Claims claims = Jwts.parser()         
+				       .setSigningKey(getSignatureKey())
+				       .parseClaimsJws(tokenStr).getBody();
+
+		   String uniqueId = claims.getId();
+//		    logger.info("getInfoByToken: authorized Token");
+
+		   return uniqueId;
+		   
+		}
+		catch (JwtException ex) {       // (4)
+		    logger.info("Un-authorized : "+ ex.getMessage());
+		    // we *cannot* use the JWT as intended by its creator
+		    return null;
+		}
+	}
 }

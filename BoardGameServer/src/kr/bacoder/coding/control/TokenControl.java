@@ -65,31 +65,41 @@ public class TokenControl extends DBconn {
 	public String getAccessToken(Person person) {	
 		Person validPerson = new Person();
 		validPerson = userValid(person); 
-		int userLv = validPerson.getUserLevel();
 		
-		logger.info("getAccessToken : "+ userLv);
-		
-		if(userLv > 0) {
-			TokenUtil util = new TokenUtil();
-			return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins);
+		if(validPerson != null) {
+			int userLv = validPerson.getUserLevel();
+			
+			logger.info("getAccessToken : "+ userLv);
+			
+			if(userLv > 0) {
+				TokenUtil util = new TokenUtil();
+				return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins);
+			} else {
+				return null;
+			}	
 		} else {
 			return null;
-		}	
+		}
 	}
 	
 	public String getRefreshToken(Person person) {
 		Person validPerson = new Person();
 		validPerson = userValid(person); 
-		int userLv = validPerson.getUserLevel();
 		
-		logger.info("getRefreshToken : "+ userLv);
-		
-		if(userLv > 0) {
-			TokenUtil util = new TokenUtil();
-			return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins);
+		if(validPerson != null) {
+			int userLv = validPerson.getUserLevel();
+			
+			logger.info("getRefreshToken : "+ userLv);
+			
+			if(userLv > 0) {
+				TokenUtil util = new TokenUtil();
+				return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins);
+			} else {
+				return null;
+			}	
 		} else {
 			return null;
-		}	
+		}
 	}
 	
 	public int updateRefreshToken(String userId, String rToken) {
@@ -127,6 +137,38 @@ public class TokenControl extends DBconn {
 			return null;
 		}
 		
+	}
+	
+	public Person getPersonByToken(String aToken) {
+		TokenUtil util = new TokenUtil();
+		Person person = new Person();
+		String uniqueId = util.getIdByToken(aToken); //유효성 검사 및 id 얻
+		
+		if(aToken != null && uniqueId != null) {			
+			
+			try(Connection conn = new DBconn().getConnection()){
+				PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Person WHERE uniqueId = ?");
+				pstmt.setString(1, uniqueId);
+				
+				ResultSet rs = pstmt.executeQuery();
+				while(rs.next()){
+					person.setId(rs.getInt("NUM"));
+					person.setName(rs.getString("name"));
+					person.setPhone(rs.getString("phone"));
+					person.setPhoto(rs.getString("photo"));
+					person.setUniqueId(rs.getString("uniqueId"));
+					person.setDepartment(rs.getString("department"));
+					person.setBirth(rs.getString("birth"));
+					person.setUserLevel(rs.getInt("userLevel"));
+				}
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			return person;
+			
+		} else {
+			return null;
+		}
 	}
 	
 }

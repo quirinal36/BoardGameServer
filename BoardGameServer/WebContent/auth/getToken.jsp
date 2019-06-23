@@ -25,9 +25,11 @@ if (userId != null && pwd != null) {
 		JSONObject obj = new JSONObject();
 		String rToken = control.getRefreshToken(person);
 		String aToken = control.getAccessToken(person);
-		obj.put("rToken", rToken);
-		obj.put("aToken", aToken);
-		if(rToken.length() > 0 && aToken.length() > 0) {
+	//	logger.info("token : "+ rToken +"/"+aToken);
+		
+		if(rToken != null && rToken.length() > 0 && aToken != null && aToken.length() > 0) {
+			obj.put("rToken", rToken);
+			obj.put("aToken", aToken);
 			control.updateRefreshToken(userId, rToken); //DB에 리프레시 토큰 저장 
 			out.print(obj.toString());
 		} else {
