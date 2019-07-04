@@ -18,6 +18,8 @@ public class Photo extends SearchInfo {
     private String uploader;
     private String comment;
     private int accessLv;
+    private String sync;
+    
 	public int getPhotoId() {
 		return photoId;
 	}
@@ -97,6 +99,13 @@ public class Photo extends SearchInfo {
 	public void setAccessLv(String accessLv) {
 		setAccessLv(Integer.parseInt(accessLv));
 	}
+	public String getSync() {
+		return sync;
+	}
+	public void setSync(String sync) {
+		this.sync = sync;
+	}
+	
 	public static Photo makePhoto(ResultSet rs) throws SQLException {
 		Photo result = new Photo();
 		result.setAccessLv(rs.getInt("accessLv"));
@@ -129,4 +138,5 @@ public class Photo extends SearchInfo {
     public String toString() {
     	return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
+  
 }

@@ -191,6 +191,44 @@ public class PhotoControl extends Controller {
 		}
 		return list;
 	}
+	
+	public List<PhotoPatientInfo> getPhotoList(Photo photo){
+		List<PhotoPatientInfo> list = new ArrayList<>();
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ").append(" ")
+				.append("patient.patientId AS patientId, patient.name AS patientName, age AS patientAge,")
+				.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
+				.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
+				.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
+				.append("photo.doctor, photo.id AS id")
+				.append(" ")
+				.append("FROM ").append(" ")
+				.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
+				.append("ON ").append(" ")
+				.append("photo.patientId = patient.patientId").append(" ");
+			sql.append("WHERE photo.classification IS NOT NULL AND photo.classification like ? ")
+				.append(" AND photo.sync = ?")
+				.append(" order by photo.id desc");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, photo.getClassification());
+			pstmt.setString(2, photo.getSync());
+
+			logger.info(pstmt.toString());
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				PhotoPatientInfo p = PhotoPatientInfo.makeInfo(rs);
+				list.add(p);
+			}
+		}catch(SQLException e) {
+			
+		}
+		return list;
+	}
+	
+	
 	public int updatePhoto(Photo photo) {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
