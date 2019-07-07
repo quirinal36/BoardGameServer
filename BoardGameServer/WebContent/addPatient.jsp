@@ -37,10 +37,10 @@ patient.setAddress(address);
 patient.setEtc(etc);
 patient.setPatientId(patientId);
 
-TokenUtil token = new TokenUtil();
+/* TokenUtil token = new TokenUtil();
 String tokenStr = request.getHeader("Authorization");
 
-if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
+if(tokenStr != null && token.IsValidToken(tokenStr) > 1) { */
 
 	DBconn dbconn = new DBconn();
 	
@@ -51,9 +51,9 @@ if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
 	json.put("result", control.insertPatient(patient));
 	String result = json.toJSONString();
 
-} else if (token.IsValidToken(tokenStr) == -1){
+/* } else if (token.IsValidToken(tokenStr) == -1){
 		response.sendError(401, token.expiredToken);
 } else {
 		response.sendError(401, token.unauthorized);
-}
+} */
 %>

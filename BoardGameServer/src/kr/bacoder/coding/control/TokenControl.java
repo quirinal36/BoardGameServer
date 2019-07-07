@@ -13,7 +13,7 @@ import kr.bacoder.coding.dev.TokenUtil;
 
 public class TokenControl extends DBconn {
 	
-	private static final int AccessTokenEXPMins = 1;
+	private static final int AccessTokenEXPMins = 60 * 24;
 	private static final int RefreshTokenEXPMins = 60 * 24 * 28;
 	
 	private static final String ATokenSubject = "AccessToken";

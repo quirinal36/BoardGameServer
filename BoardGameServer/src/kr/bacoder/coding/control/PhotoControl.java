@@ -46,7 +46,7 @@ public class PhotoControl extends Controller {
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = new StringBuilder()
 					.append("SELECT ").append(" ")
-					.append("photo.id, patient.patientId, photoUrl, classification, photo.doctor, date, uploader, comment, accessLv, name AS patientName, age AS patientAge,")
+					.append("photo.id, patient.patientId, photoUrl, classification, photo.doctor, date, uploader, comment, accessLv, patient.name AS patientName, age AS patientAge,")
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 					.append("patient.birth AS patientBirth, patient.etc AS patientEtc")
 					.append(" ")
@@ -74,7 +74,7 @@ public class PhotoControl extends Controller {
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder()
 					.append("SELECT ").append(" ")
-					.append("patient.patientId AS patientId, name AS patientName, age AS patientAge,")
+					.append("patient.patientId AS patientId, patient.name AS patientName, patient.age AS patientAge,")
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 					.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 					.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
@@ -111,7 +111,7 @@ public class PhotoControl extends Controller {
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder()
 					.append("SELECT ").append(" ")
-					.append("patient.patientId AS patientId, name AS patientName, age AS patientAge,")
+					.append("patient.patientId AS patientId, patient.name AS patientName, patient.age AS patientAge,")
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 					.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 					.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
@@ -197,11 +197,11 @@ public class PhotoControl extends Controller {
 		try(Connection conn = new DBconn().getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
-				.append("patient.patientId AS patientId, patient.name AS patientName, age AS patientAge,")
+				.append("photo.patientId AS patientId, patient.name AS patientName, age AS patientAge,")
 				.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 				.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 				.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
-				.append("photo.doctor, photo.id AS id")
+				.append("photo.doctor, photo.id AS id, photo.sync AS sync")
 				.append(" ")
 				.append("FROM ").append(" ")
 				.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
@@ -266,6 +266,26 @@ public class PhotoControl extends Controller {
 		}
 		return result;
 	}
+	
+	public int updatePhotoSync(Photo photo) {
+		int result = 0;
+		try(Connection conn =  new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			if(photo.getPhotoId() > 0) {
+				sql.append("update PhotoInfo set sync=? where id =?");
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, photo.getSync());
+			pstmt.setInt(2, photo.getPhotoId());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+//			setErrorMsg(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public org.json.JSONObject toJSONObject(List<PhotoPatientInfo> input){
 		org.json.JSONObject result = new org.json.JSONObject();
 		org.json.JSONArray array = new org.json.JSONArray();

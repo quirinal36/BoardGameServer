@@ -427,7 +427,7 @@ public class PatientControl extends DBconn{
 			ResultSet rs;
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
-			.append("patient.id AS patientId, name AS patientName, age AS patientAge,")
+			.append("patient.id AS patientId, patient.name AS patientName, patient.age AS patientAge,")
 			.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 			.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 			.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
