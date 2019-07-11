@@ -23,18 +23,21 @@ public class PhotoControl extends Controller {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, photoUrl, classification, doctor, date, uploader, comment, accessLv) "
-					+ "VALUES (?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, captureDate, uploader, comment, accessLv, sync) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?)";
+			
+			java.sql.Date sqlDate = new java.sql.Date(photoInfo.getCaptureDate().getTime());
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, photoInfo.getPatientId());
 			pstmt.setString(2, photoInfo.getPhotoUrl());
 			pstmt.setString(3, photoInfo.getClassification());
 			pstmt.setString(4, photoInfo.getDoctor());
-			pstmt.setString(5, photoInfo.getDate());
+			pstmt.setDate(5, sqlDate);
 			pstmt.setString(6, photoInfo.getUploader());
 			pstmt.setString(7, photoInfo.getComment());
 			pstmt.setInt(8, photoInfo.getAccessLv());
+			pstmt.setString(9, photoInfo.getSync());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -201,7 +204,7 @@ public class PhotoControl extends Controller {
 				.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 				.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 				.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
-				.append("photo.doctor, photo.id AS id, photo.sync AS sync")
+				.append("photo.doctor, photo.id AS id, photo.sync AS sync, photo.captureDate AS captureDate")
 				.append(" ")
 				.append("FROM ").append(" ")
 				.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")

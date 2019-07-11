@@ -28,6 +28,11 @@
 	String comment = request.getParameter("comment");
 	String accessLv = request.getParameter("accessLv");
 	String date = request.getParameter("date");
+	String sync = request.getParameter("sync");
+
+	SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date captureDate = transFormat.parse(date);
+
 	
 	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	
@@ -54,13 +59,18 @@
 	if(accessLv != null){
 		photoInfo.setAccessLv(accessLv);
 	}
-	
-	if(date != null){
-		photoInfo.setDate(date);
-	} 
-	else {
-		photoInfo.setDate(timeStamp);
+	if(sync != null){
+		photoInfo.setSync(sync);
+	} else {
+		photoInfo.setSync("3");
 	}
+	if(date != null){
+		photoInfo.setCaptureDate(captureDate);
+	} else {
+		photoInfo.setCaptureDate(new Date());
+
+	}
+
 	
 	JSONObject json = new JSONObject();
 //	String imgUrl = new String();
