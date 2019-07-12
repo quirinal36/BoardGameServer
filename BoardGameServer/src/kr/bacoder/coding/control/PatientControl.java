@@ -429,8 +429,8 @@ public class PatientControl extends DBconn{
 			StringBuilder sql = new StringBuilder();
 			 sql.append("INSERT INTO PatientInfo ")
 			 .append("(photo, p_date, name, age, birth, sex, address, phone, etc, ")
-			 .append("doctor, memo, room, admission, patientId) ")
-			 .append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ")
+			 .append("doctor, memo, memo_emr, room, admission, patientId) ")
+			 .append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ")
 			 .append("ON DUPLICATE KEY UPDATE ");
 			
 			if(hasString(patient.getPhoto())) {
@@ -460,6 +460,9 @@ public class PatientControl extends DBconn{
 			if(hasString(patient.getMemo())) {
 				appendSql(sql, "memo");
 			}
+			if(hasString(patient.getMemo_emr())) {
+				appendSql(sql, "memo_emr");
+			}
 			if(hasString(patient.getRoom())) {
 				appendSql(sql, "room");
 			}
@@ -468,7 +471,6 @@ public class PatientControl extends DBconn{
 				sql.append("age=?,");
 			}
 			sql.append("admission=?");
-			sql.append(" WHERE patientId=?");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(i++, patient.getPhoto());
@@ -482,6 +484,7 @@ public class PatientControl extends DBconn{
 			pstmt.setString(i++, patient.getEtc());
 			pstmt.setString(i++, patient.getDoctor());
 			pstmt.setString(i++, patient.getMemo());
+			pstmt.setString(i++, patient.getMemo_emr());
 			pstmt.setString(i++, patient.getRoom());
 			pstmt.setInt(i++, patient.isAdmission()?1:0);
 			pstmt.setString(i++, patient.getPatientId());
@@ -513,6 +516,9 @@ public class PatientControl extends DBconn{
 			if(hasString(patient.getMemo())) {
 				pstmt.setString(i++, patient.getMemo());
 			}
+			if(hasString(patient.getMemo_emr())) {
+				pstmt.setString(i++, patient.getMemo_emr());
+			}
 			if(hasString(patient.getRoom())) {
 				pstmt.setString(i++, patient.getRoom());
 			}
@@ -521,7 +527,6 @@ public class PatientControl extends DBconn{
 				pstmt.setInt(i++, patient.getAge());
 			}
 			pstmt.setInt(i++, patient.isAdmission()?1:0);
-			pstmt.setString(i++, patient.getPatientId());
 			
 			logger.info(pstmt.toString());
 			

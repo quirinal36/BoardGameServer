@@ -14,6 +14,8 @@ String name = request.getParameter("name");
 String ageStr = request.getParameter("age");
 String doctor = request.getParameter("doctor");
 String memo = request.getParameter("memo");
+String memo_emr = request.getParameter("memo_emr");
+
 String room = request.getParameter("room");
 String photo = request.getParameter("photo");
 String birth = request.getParameter("birth");
@@ -23,11 +25,13 @@ String address = request.getParameter("address");
 String etc = request.getParameter("etc");
 String patientId = request.getParameter("patientId");
 
+
 Patient patient = new Patient();
 patient.setName(name);
 patient.setAge(ageStr);
 patient.setDoctor(doctor);
 patient.setMemo(memo);
+patient.setMemo_emr(memo_emr);
 patient.setRoom(room);
 patient.setPhoto(photo);
 patient.setBirth(birth);

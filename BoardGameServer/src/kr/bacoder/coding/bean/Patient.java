@@ -17,6 +17,7 @@ public class Patient {
 	private String address;
 	private String phone;
 	private String memo;
+	private String memo_emr;
 	private String room;
 	private boolean admission;
 	private String etc;
@@ -147,6 +148,14 @@ public class Patient {
 			
 		}
 	}
+	public String getMemo_emr() {
+		return memo_emr;
+	}
+	public void setMemo_emr(String memo_emr) {
+		this.memo_emr = memo_emr;
+	}
+	
+	
 	public static Patient parseToPatient(ResultSet rs) throws SQLException {
 		Patient result = new Patient();
 		result.setId(rs.getInt("id"));
