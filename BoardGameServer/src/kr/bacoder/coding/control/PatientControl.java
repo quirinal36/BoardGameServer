@@ -420,6 +420,120 @@ public class PatientControl extends DBconn{
 		}
 		return result;
 	}
+	
+	public int addPatient(Patient patient) {
+		int result = 0;
+		int i = 1;
+		
+		try(Connection conn =  getConnection()){
+			StringBuilder sql = new StringBuilder();
+			 sql.append("INSERT INTO PatientInfo ")
+			 .append("(photo, p_date, name, age, birth, sex, address, phone, etc, ")
+			 .append("doctor, memo, room, admission, patientId) ")
+			 .append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ")
+			 .append("ON DUPLICATE KEY UPDATE ");
+			
+			if(hasString(patient.getPhoto())) {
+				appendSql(sql, "photo");
+			}
+			if(hasString(patient.getName())) {
+				appendSql(sql, "name");
+			}
+			if(hasString(patient.getBirth())) {
+				appendSql(sql, "birth");
+			}
+			if(hasString(patient.getSex())) {
+				appendSql(sql, "sex");
+			}
+			if(hasString(patient.getPhone())) {
+				appendSql(sql, "phone");
+			}
+			if(hasString(patient.getAddress())) {
+				appendSql(sql, "address");
+			}
+			if(hasString(patient.getEtc())) {
+				appendSql(sql, "etc");
+			}
+			if(hasString(patient.getDoctor())) {
+				appendSql(sql, "doctor");
+			}
+			if(hasString(patient.getMemo())) {
+				appendSql(sql, "memo");
+			}
+			if(hasString(patient.getRoom())) {
+				appendSql(sql, "room");
+			}
+			
+			if(patient.getAge() > 0) {
+				sql.append("age=?,");
+			}
+			sql.append("admission=?");
+			sql.append(" WHERE patientId=?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(i++, patient.getPhoto());
+			pstmt.setString(i++, new SimpleDateFormat("yyyyMMddhhmm", Locale.KOREA).format(new Date()));
+			pstmt.setString(i++, patient.getName());
+			pstmt.setInt(i++, patient.getAge());
+			pstmt.setString(i++, patient.getBirth());
+			pstmt.setString(i++, patient.getSex());
+			pstmt.setString(i++, patient.getAddress());
+			pstmt.setString(i++, patient.getPhone());
+			pstmt.setString(i++, patient.getEtc());
+			pstmt.setString(i++, patient.getDoctor());
+			pstmt.setString(i++, patient.getMemo());
+			pstmt.setString(i++, patient.getRoom());
+			pstmt.setInt(i++, patient.isAdmission()?1:0);
+			pstmt.setString(i++, patient.getPatientId());
+			
+			if(hasString(patient.getPhoto())) {
+				pstmt.setString(i++, patient.getPhoto());
+			}
+			if(hasString(patient.getName())) {
+				pstmt.setString(i++, patient.getName());
+			}
+			if(hasString(patient.getBirth())) {
+				pstmt.setString(i++, patient.getBirth());
+			}
+			if(hasString(patient.getSex())) {
+				pstmt.setString(i++, patient.getSex());
+			}
+			if(hasString(patient.getPhone())) {
+				pstmt.setString(i++, patient.getPhone());
+			}
+			if(hasString(patient.getAddress())) {
+				pstmt.setString(i++, patient.getAddress());
+			}
+			if(hasString(patient.getEtc())) {
+				pstmt.setString(i++, patient.getEtc());
+			}
+			if(hasString(patient.getDoctor())) {
+				pstmt.setString(i++, patient.getDoctor());
+			}
+			if(hasString(patient.getMemo())) {
+				pstmt.setString(i++, patient.getMemo());
+			}
+			if(hasString(patient.getRoom())) {
+				pstmt.setString(i++, patient.getRoom());
+			}
+			
+			if(patient.getAge()>0) {
+				pstmt.setInt(i++, patient.getAge());
+			}
+			pstmt.setInt(i++, patient.isAdmission()?1:0);
+			pstmt.setString(i++, patient.getPatientId());
+			
+			logger.info(pstmt.toString());
+			
+			result =pstmt.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			setErrorMsg(e.getMessage());
+		}
+		return result;
+	}
+	
+	
 	public String getPatients(String query) {
 		JSONObject json = new JSONObject();
 		try(Connection conn =  getConnection()){

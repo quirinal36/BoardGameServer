@@ -48,7 +48,7 @@ if(tokenStr != null && token.IsValidToken(tokenStr) > 1) { */
 	PatientControl control = new PatientControl();
 	
 	JSONObject json = new JSONObject();
-	json.put("result", control.insertPatient(patient));
+	json.put("result", control.addPatient(patient));
 	String result = json.toJSONString();
 
 /* } else if (token.IsValidToken(tokenStr) == -1){
