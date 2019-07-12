@@ -2,6 +2,7 @@ package kr.bacoder.coding.bean;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,6 +20,7 @@ public class Photo extends SearchInfo {
     private String comment;
     private int accessLv;
     private String sync;
+    private Date captureDate;
     
 	public int getPhotoId() {
 		return photoId;
@@ -104,7 +106,15 @@ public class Photo extends SearchInfo {
 	}
 	public void setSync(String sync) {
 		this.sync = sync;
+	}	
+	
+	public Date getCaptureDate() {
+		return captureDate;
 	}
+	public void setCaptureDate(Date captureDate) {
+		this.captureDate = captureDate;
+	}
+	
 	
 	public static Photo makePhoto(ResultSet rs) throws SQLException {
 		Photo result = new Photo();
