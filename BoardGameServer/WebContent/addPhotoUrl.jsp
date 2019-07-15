@@ -1,5 +1,7 @@
 <%@page import="kr.bacoder.coding.control.PhotoControl"%>
+<%@page import="kr.bacoder.coding.control.PatientControl"%>
 <%@page import="kr.bacoder.coding.bean.Photo"%>
+<%@page import="kr.bacoder.coding.bean.Patient"%>
 <%@page import="kr.bacoder.coding.dev.UploadUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="kr.bacoder.coding.DBconn"%>
@@ -29,6 +31,8 @@
 	String accessLv = request.getParameter("accessLv");
 	String date = request.getParameter("date");
 	String sync = request.getParameter("sync");
+	String newPatient = request.getParameter("newPatient");
+
 
 	SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
 	Date captureDate = transFormat.parse(date);
@@ -62,7 +66,7 @@
 	if(sync != null){
 		photoInfo.setSync(sync);
 	} else {
-		photoInfo.setSync("3");
+		photoInfo.setSync("2");
 	}
 	if(date != null){
 		photoInfo.setCaptureDate(captureDate);
@@ -83,6 +87,21 @@
 	PhotoControl control = new PhotoControl();
 	
 	json.put("result", control.addPhotoInfo(photoInfo));
+	
+ 	logger.info("newPatient: "+ newPatient);
+
+	if(newPatient != null) {
+		Patient patient = new Patient();
+		PatientControl patientControl = new PatientControl();
+		if(patientId != null){
+			patient.setPatientId(patientId);
+		}
+		if(patientName != null){
+			patient.setName(patientName);
+		}
+		patientControl.addPatient(patient);
+	 	logger.info("patient: "+ patient.toString());
+	}
 	
 	out.print(json.toJSONString());
 %>

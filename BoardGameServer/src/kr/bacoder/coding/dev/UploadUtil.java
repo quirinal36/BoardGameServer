@@ -21,7 +21,7 @@ public class UploadUtil {
 		logger.info(path);
 		
 		StringBuilder photoUrl = new StringBuilder();
-		photoUrl.append("http://www.bacoder.kr/upload/").append("/");
+		//photoUrl.append("http://www.bacoder.kr/upload/").append("/");
 		String ext = fileName.substring(fileName.lastIndexOf("."));
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA).format(new Date());
 		
