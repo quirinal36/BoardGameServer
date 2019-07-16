@@ -36,6 +36,6 @@ public class SooMacroControl {
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		return filename;
+		return verNumber+","+filename;
 	}
 }

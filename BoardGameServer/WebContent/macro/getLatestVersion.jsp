@@ -20,9 +20,9 @@ if(prevVer!=null && prevVer.length()!=0){
 }
 
 SooMacroControl control = new SooMacroControl();
-String filename = control.getLatestVerFileName(macro);
+String verNumAndFileName = control.getLatestVerFileName(macro);
 
-out.print(filename); 
+out.print(verNumAndFileName); //verNum,fileName
 
 
 %>
