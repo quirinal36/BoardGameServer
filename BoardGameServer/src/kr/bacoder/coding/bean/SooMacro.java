@@ -17,6 +17,7 @@ public class SooMacro {
 	private Date downloadDate;
 	private int downloadVer;
 	private int previousVer;
+	private String userName;
 	
 	public int getId() {
 		return id;
@@ -90,6 +91,13 @@ public class SooMacro {
 	public void setPreviousVer(int previousVer) {
 		this.previousVer = previousVer;
 	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
 	public static JSONObject parseJSON(SooMacro info) {
 		JSONObject result = new JSONObject();
 		result.put("id", info.getId());

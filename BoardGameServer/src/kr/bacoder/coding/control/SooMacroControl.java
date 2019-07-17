@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.json.simple.JSONObject;
 
 import kr.bacoder.coding.DBconn;
+import kr.bacoder.coding.bean.Photo;
 import kr.bacoder.coding.bean.SooMacro;
 
 public class SooMacroControl {
@@ -30,12 +31,54 @@ public class SooMacroControl {
 //				logger.info("prviousVer :"+macro.getPreviousVer());
 
 				if(macro.getPreviousVer() != verNumber) {  //최신버전이 아니면 filename출력 
-					filename = rs.getString("filename");				
+					filename = rs.getString("filename");		
+					macro.setFileName(filename);
+					macro.setDownloadVer(verNumber);
+					addMacroLog(macro);
+					increaseDownloadCount(macro);
 				}
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
 		return verNumber+","+filename;
+	}
+	
+	public int addMacroLog(SooMacro macro) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			String sql = "INSERT INTO soo_macro_logs "
+					+ "(ip, downloader, filename, downloadVer, previousVer) "
+					+ "VALUES (?,?,?,?,?)";
+						
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, macro.getIpAddress());
+			pstmt.setString(2, macro.getDownloader());
+			pstmt.setString(3, macro.getFileName());
+			pstmt.setInt(4, macro.getDownloadVer());
+			pstmt.setInt(5, macro.getPreviousVer());
+			result= pstmt.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int increaseDownloadCount(SooMacro macro) {
+		int result = 0;
+		try(Connection conn =  new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			
+			sql.append("UPDATE soo_macro_version SET downloadCount = downloadCount + 1 WHERE version_number = ?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, macro.getDownloadVer());
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+//			setErrorMsg(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
