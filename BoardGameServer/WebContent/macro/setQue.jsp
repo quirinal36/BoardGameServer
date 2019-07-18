@@ -16,3 +16,5 @@ SooMacroControl control = new SooMacroControl();
 int result = control.setQue(Integer.parseInt(que));
 
 out.print(result); 
+
+%>
