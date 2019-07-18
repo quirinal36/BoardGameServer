@@ -81,4 +81,39 @@ public class SooMacroControl {
 		}
 		return result;
 	}
+	
+	public int getQue() throws SQLException {
+		int town = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			PreparedStatement pstmt = conn.prepareStatement("SELECT town FROM linm_recall WHERE id = 1");
+			
+		//	logger.info("SELECT * FROM Person WHERE phone =? and uniqueId = ?");
+//			logger.info("phone: " + phone);
+//			logger.info("deviceId: " + deviceId);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				town = rs.getInt("town");
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return town;
+	}
+	public int setQue(int que) {
+		int result = 0;
+		try(Connection conn =  new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			
+			sql.append("UPDATE linm_recall SET town = ? WHERE id = 1");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, que);
+			
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+//			setErrorMsg(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
