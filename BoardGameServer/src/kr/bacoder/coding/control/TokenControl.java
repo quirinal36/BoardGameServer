@@ -15,10 +15,12 @@ public class TokenControl extends DBconn {
 	
 	private static final int AccessTokenEXPMins = 60 * 24;
 	private static final int RefreshTokenEXPMins = 60 * 24 * 28;
-	
+	private static final int PhotoTokenEXPMins = 60 * 24;
+
 	private static final String ATokenSubject = "AccessToken";
 	private static final String RTokenSubject = "RefreshToken";
-	
+	private static final String PTokenSubject = "PhotoToken";
+
 	public Person userValid(Person person)  {
 		
 		SecurityUtil security = new SecurityUtil();
@@ -60,6 +62,17 @@ public class TokenControl extends DBconn {
 			setErrorMsg(e.getMessage());
 			return null;
 		}
+	}
+	
+	public String getPhotoToken(Token token) {
+		Person person = new Person();
+		person.setUniqueId(token.getUserId());
+		person.setPassword(token.getUserPwd());
+		if(userValid(person) != null) {
+			TokenUtil util = new TokenUtil();
+			return util.getToken(ATokenSubject, person.getUniqueId(), userLv, AccessTokenEXPMins);
+		}
+		return "";
 	}
 	
 	public String getAccessToken(Person person) {	
