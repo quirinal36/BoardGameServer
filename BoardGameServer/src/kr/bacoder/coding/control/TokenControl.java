@@ -64,16 +64,16 @@ public class TokenControl extends DBconn {
 		}
 	}
 	
-	public String getPhotoToken(Token token) {
-		Person person = new Person();
-		person.setUniqueId(token.getUserId());
-		person.setPassword(token.getUserPwd());
-		if(userValid(person) != null) {
-			TokenUtil util = new TokenUtil();
-			return util.getToken(ATokenSubject, person.getUniqueId(), userLv, AccessTokenEXPMins);
-		}
-		return "";
-	}
+//	public String getPhotoToken(Token token) {
+//		Person person = new Person();
+//		person.setUniqueId(token.getUserId());
+//		person.setPassword(token.getUserPwd());
+//		if(userValid(person) != null) {
+//			TokenUtil util = new TokenUtil();
+//			return util.getToken(ATokenSubject, person.getUniqueId(), userLv, AccessTokenEXPMins);
+//		}
+//		return "";
+//	}
 	
 	public String getAccessToken(Person person) {	
 		Person validPerson = new Person();
