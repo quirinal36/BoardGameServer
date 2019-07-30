@@ -81,7 +81,7 @@ public class TokenControl extends DBconn {
 		}
 		if(userValid(person) != null) {
 			TokenUtil util = new TokenUtil();
-			return util.getToken(PTokenSubject, person.getUniqueId(), 0, expMin, scope);
+			return util.getToken(PTokenSubject, person.getUniqueId(), 0, PhotoTokenEXPMins, scope);
 		} else {
 			return null;
 		}
