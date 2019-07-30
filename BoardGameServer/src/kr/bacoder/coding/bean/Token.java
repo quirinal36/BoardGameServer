@@ -11,7 +11,8 @@ public class Token {
 	private Date expDate;
 	private String userId;
 	private String userPwd;
-	
+	private String scope;
+	private int expMin;
 	
 	public String getTokenStr() {
 		return tokenStr;
@@ -54,6 +55,18 @@ public class Token {
 	}
 	public void setUserPwd(String userPwd) {
 		this.userPwd = userPwd;
+	}
+	public String getScope() {
+		return scope;
+	}
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+	public int getExpMin() {
+		return expMin;
+	}
+	public void setExpMin(int expMin) {
+		this.expMin = expMin;
 	}
 	
 	

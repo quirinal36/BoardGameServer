@@ -18,8 +18,13 @@ public class SooMacroControl {
 	public String getLatestVerFileName(SooMacro macro) throws SQLException {
 		String filename = "0";
 		int verNumber = 0;
+		String filename2 = "";
+		String filename3 = "";
+		String filename4 = "";
+		String filename5 = "";
+		String result = "";
 		try(Connection conn = new DBconn().getConnection()){
-			PreparedStatement pstmt = conn.prepareStatement("SELECT filename, version_number FROM soo_macro_version WHERE version_number = (SELECT MAX(version_number) FROM soo_macro_version)");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT filename, filename2, filename3, filename4, filename5, version_number FROM soo_macro_version WHERE version_number = (SELECT MAX(version_number) FROM soo_macro_version)");
 			
 		//	logger.info("SELECT * FROM Person WHERE phone =? and uniqueId = ?");
 //			logger.info("phone: " + phone);
@@ -31,17 +36,37 @@ public class SooMacroControl {
 //				logger.info("prviousVer :"+macro.getPreviousVer());
 
 				if(macro.getPreviousVer() != verNumber) {  //최신버전이 아니면 filename출력 
-					filename = rs.getString("filename");		
+					filename = rs.getString("filename");
+					filename2 = rs.getString("filename2");		
+					filename3 = rs.getString("filename3");		
+					filename4 = rs.getString("filename4");		
+					filename5 = rs.getString("filename5");							
 					macro.setFileName(filename);
 					macro.setDownloadVer(verNumber);
+					
+					result = ""+verNumber+","+filename;
+					if(filename2 != null && filename2.length()>0) {
+						result = result + "|"+filename2;
+					}
+					if(filename3 != null && filename3.length()>0) {
+						result = result + "|"+filename3;
+					}
+					if(filename4 != null && filename4.length()>0) {
+						result = result + "|"+filename4;
+					}
+					if(filename5 != null && filename5.length()>0) {
+						result = result + "|"+filename5;
+					}
 					addMacroLog(macro);
 					increaseDownloadCount(macro);
+				} else {
+					result = verNumber+","+filename;
 				}
 			}
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-		return verNumber+","+filename;
+		return result;
 	}
 	
 	public int addMacroLog(SooMacro macro) {

@@ -23,8 +23,8 @@ public class PhotoControl extends Controller {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO PhotoInfo "
-					+ "(patientId, photoUrl, classification, doctor, captureDate, uploader, comment, accessLv, sync) "
-					+ "VALUES (?,?,?,?,?,?,?,?,?)";
+					+ "(patientId, photoUrl, classification, doctor, captureDate, uploader, comment, accessLv, sync, contentType, size, thumbnailFilename, thumbnailSize) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			
 			java.sql.Date sqlDate = new java.sql.Date(photoInfo.getCaptureDate().getTime());
 			
@@ -38,6 +38,10 @@ public class PhotoControl extends Controller {
 			pstmt.setString(7, photoInfo.getComment());
 			pstmt.setInt(8, photoInfo.getAccessLv());
 			pstmt.setString(9, photoInfo.getSync());
+			pstmt.setString(10, photoInfo.getContentType());
+			pstmt.setInt(11, photoInfo.getFileSize());
+			pstmt.setString(12, photoInfo.getThumbnailName());
+			pstmt.setInt(13, photoInfo.getThumbnailSize());
 			result= pstmt.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();

@@ -64,15 +64,27 @@ public class TokenControl extends DBconn {
 		}
 	}
 	
+	//userLv=0
 	public String getPhotoToken(Token token) {
 		Person person = new Person();
 		person.setUniqueId(token.getUserId());
 		person.setPassword(token.getUserPwd());
+		String scope = "";
+		int expMin = 0;
+		if(token.getScope() != null) {
+			scope = token.getScope();
+		} 
+		if(token.getExpMin() == 0) {
+			expMin = PhotoTokenEXPMins;
+		} else {
+			expMin = token.getExpMin();
+		}
 		if(userValid(person) != null) {
 			TokenUtil util = new TokenUtil();
-			return util.getToken(ATokenSubject, person.getUniqueId(), userLv, AccessTokenEXPMins);
+			return util.getToken(PTokenSubject, person.getUniqueId(), 0, expMin, scope);
+		} else {
+			return null;
 		}
-		return "";
 	}
 	
 	public String getAccessToken(Person person) {	
@@ -86,7 +98,7 @@ public class TokenControl extends DBconn {
 			
 			if(userLv > 0) {
 				TokenUtil util = new TokenUtil();
-				return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins);
+				return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins, "all");
 			} else {
 				return null;
 			}	
@@ -106,7 +118,7 @@ public class TokenControl extends DBconn {
 			
 			if(userLv > 0) {
 				TokenUtil util = new TokenUtil();
-				return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins);
+				return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins, "all");
 			} else {
 				return null;
 			}	
@@ -145,7 +157,7 @@ public class TokenControl extends DBconn {
 		logger.info("TokenControl.udateAToken (userId): "+ person.getUniqueId());
 		
 		if(person != null && person.getUserLevel() > 1) {
-			return util.getToken(ATokenSubject, person.getUniqueId(), person.getUserLevel(), AccessTokenEXPMins);
+			return util.getToken(ATokenSubject, person.getUniqueId(), person.getUserLevel(), AccessTokenEXPMins, "all");
 		} else {
 			return null;
 		}

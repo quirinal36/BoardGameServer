@@ -21,6 +21,10 @@ public class Photo extends SearchInfo {
     private int accessLv;
     private String sync;
     private Date captureDate;
+    private String contentType;
+    private int fileSize;
+    private String thumbnailName;
+    private int thumbnailSize;
     
 	public int getPhotoId() {
 		return photoId;
@@ -114,7 +118,30 @@ public class Photo extends SearchInfo {
 	public void setCaptureDate(Date captureDate) {
 		this.captureDate = captureDate;
 	}
-	
+	public String getContentType() {
+		return contentType;
+	}
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+	public int getFileSize() {
+		return fileSize;
+	}
+	public void setFileSize(int fileSize) {
+		this.fileSize = fileSize;
+	}	
+	public String getThumbnailName() {
+		return thumbnailName;
+	}
+	public void setThumbnailName(String thumbnailName) {
+		this.thumbnailName = thumbnailName;
+	}
+	public int getThumbnailSize() {
+		return thumbnailSize;
+	}
+	public void setThumbnailSize(int thumbnailSize) {
+		this.thumbnailSize = thumbnailSize;
+	}
 	
 	public static Photo makePhoto(ResultSet rs) throws SQLException {
 		Photo result = new Photo();

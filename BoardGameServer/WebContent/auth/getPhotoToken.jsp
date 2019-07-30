@@ -12,37 +12,37 @@ String userId = request.getParameter("userId");
 String pwd = request.getParameter("userPwd");
 String code = request.getParameter("code");
 String expMin = request.getParameter("expMin");
+String scope = request.getParameter("scope");
 
-logger.info("getToken.jsp params : "+ userId + " , " + pwd);
+//logger.info("getPhotoToken.jsp params : "+ userId + " , " + pwd);
+logger.info("code : "+userId+"/"+pwd+"/"+code);
 
-if (userId != null && pwd != null && code == "qhdghkdtp") {
-	Person person = new Person();
-	person.setUniqueId(userId);
-	person.setPassword(pwd);
+if (userId != null && pwd != null && code.equals("qhdghkdtp")) {
+
+	Token token = new Token();
+	token.setUserId(userId);
+	token.setUserPwd(pwd);
+	token.setScope(scope);
+	if(expMin != null && expMin.length() > 0) {
+		token.setExpMin(Integer.parseInt(expMin));
+	} else {
+		token.setExpMin(0);
+	}
 	
 	DBconn dbconn = new DBconn();
 	TokenControl control = new TokenControl();
 	
 	try {
-		JSONObject obj = new JSONObject();
-		String rToken = control.getRefreshToken(person);
-		String aToken = control.getAccessToken(person);
-	//	logger.info("token : "+ rToken +"/"+aToken);
+		String pToken = control.getPhotoToken(token);
 		
-		if(rToken != null && rToken.length() > 0 && aToken != null && aToken.length() > 0) {
-			obj.put("rToken", rToken);
-			obj.put("aToken", aToken);
-			control.updateRefreshToken(userId, rToken); //DB에 리프레시 토큰 저장 
-			out.print(obj.toString());
+		if(pToken != null && pToken.length() > 0) {
+			out.print(pToken);
 		} else {
 			response.sendError(401, "인증 실패");
 		}
-		
-		
 	} catch(Exception e) {
 		out.print("" + e.getMessage());
 	}
-	
 } else {
 	response.sendError(401, "인증 실패 - 파라미터 확인하세요 ");
 

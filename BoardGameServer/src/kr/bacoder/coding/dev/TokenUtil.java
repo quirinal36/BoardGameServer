@@ -32,7 +32,7 @@ public class TokenUtil {
 		return this.signature.getBytes();
 	}
 	
-	public String getToken(String subject, String userId, int role, int expMins) {
+	public String getToken(String subject, String userId, int role, int expMins, String scope) {
 				
 		Date expirationDate = new Date();
 		LocalDateTime dateTime = LocalDateTime.now();
@@ -47,6 +47,7 @@ public class TokenUtil {
 			  .setSubject("" + subject)
 			  .setExpiration(expirationDate)
 			  .setId(userId)
+			  .claim("scope", scope)
 			  .claim("role", role)
 			  .signWith(
 			    SignatureAlgorithm.HS256,

@@ -32,6 +32,11 @@
 	String date = request.getParameter("date");
 	String sync = request.getParameter("sync");
 	String newPatient = request.getParameter("newPatient");
+	String fileSize = request.getParameter("fileSize");
+	String thumbnailName = request.getParameter("thumbnailName");
+	String thumbnailSize = request.getParameter("thumbnailSize");
+	String contentType = request.getParameter("contentType");
+	String token = request.getParameter("token");
 
 
 	SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -74,7 +79,20 @@
 		photoInfo.setCaptureDate(new Date());
 
 	}
-
+	if(contentType != null){
+		photoInfo.setContentType(contentType);
+	} else {
+		photoInfo.setContentType("image/JPEG");
+	}
+	if(fileSize != null){
+		photoInfo.setFileSize(Integer.parseInt(fileSize));
+	}
+	if(thumbnailName != null){
+		photoInfo.setThumbnailName(thumbnailName);
+	}
+	if(thumbnailSize != null){
+		photoInfo.setThumbnailSize(Integer.parseInt(thumbnailSize));
+	}
 	
 	JSONObject json = new JSONObject();
 //	String imgUrl = new String();
