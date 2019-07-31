@@ -2,7 +2,9 @@ package kr.bacoder.coding.bean;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
+import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.json.simple.JSONObject;
 
 public class PhotoPatientInfo extends Photo{
@@ -72,6 +74,7 @@ public class PhotoPatientInfo extends Photo{
 			result.setClassification(rs.getString("classification"));
 			result.setComment(rs.getString("comment"));
 			result.setDate(rs.getString("date"));
+			result.setCaptureDate(rs.getDate("captureDate"));
 			result.setDoctor(rs.getString("doctor"));
 			result.setPatientId(rs.getInt("patientId"));
 			result.setPhotoUrl(rs.getString("photoUrl"));
@@ -98,6 +101,7 @@ public class PhotoPatientInfo extends Photo{
 		result.put("classification", info.getClassification());
 		result.put("comment", info.getComment());
 		result.put("date", info.getDate());
+		result.put("captureDate", info.getCaptureDate());
 		result.put("doctor", info.getDoctor());
 		result.put("patientId", info.getPatientId());
 		result.put("patientName", info.getPatientName());
@@ -110,6 +114,7 @@ public class PhotoPatientInfo extends Photo{
 		result.put("patientEtc", info.getPatientEtc());
 		result.put("patientPhone", info.getPatientPhone());
 		result.put("patientSex", info.getPatientSex());
+		//System.out.println("captureDate : " + info.getCaptureDate());
 		return result;
 	}
 	public static JSONObject parseJSONforOpen(PhotoPatientInfo info) {
@@ -118,6 +123,7 @@ public class PhotoPatientInfo extends Photo{
 		result.put("classification", info.getClassification());
 		result.put("comment", info.getComment());
 		result.put("date", info.getDate());
+		result.put("captureDate", info.getCaptureDate());
 		result.put("doctor", info.getDoctor());
 		result.put("patientId", info.getPatientId());
 		result.put("patientName", info.getPatientName());

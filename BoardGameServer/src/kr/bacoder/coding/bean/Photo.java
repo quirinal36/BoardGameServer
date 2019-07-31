@@ -150,6 +150,7 @@ public class Photo extends SearchInfo {
 		result.setClassification(rs.getString("classification"));
 		result.setComment(rs.getString("comment"));
 		result.setDate(rs.getString("date"));
+		result.setCaptureDate(rs.getDate("captureDate"));
 		result.setDoctor(rs.getString("doctor"));
 		result.setPatientId(rs.getInt("patientId"));
 		result.setPhotoId(rs.getInt("id"));
@@ -164,6 +165,7 @@ public class Photo extends SearchInfo {
 		result.put("classification", photo.getClassification());
 		result.put("comment", photo.getComment());
 		result.put("date", photo.getDate());
+		result.put("captureDate", photo.getCaptureDate());
 		result.put("doctor", photo.getDoctor());
 		result.put("patientId", photo.getPatientId());
 		result.put("id", photo.getPhotoId());

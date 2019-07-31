@@ -213,14 +213,20 @@ public class PhotoControl extends Controller {
 				.append("FROM ").append(" ")
 				.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
 				.append("ON ").append(" ")
-				.append("photo.patientId = patient.patientId").append(" ");
-			sql.append("WHERE photo.classification IS NOT NULL AND photo.classification like ? ")
-				.append(" AND photo.sync = ?")
-				.append(" order by photo.id desc");
+				.append("photo.patientId = patient.patientId").append(" ")
+				.append("WHERE photo.sync = ?");
+			if(photo.getClassification() != null && photo.getClassification().length()>0) {
+				sql.append(" AND photo.classification IS NOT NULL AND photo.classification like ")
+				.append("'"+photo.getClassification()+"'");
+			}
+				sql.append(" order by photo.id desc");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
-			pstmt.setString(1, photo.getClassification());
-			pstmt.setString(2, photo.getSync());
+			if(photo.getSync() == null || photo.getSync().length() ==0) {
+				pstmt.setString(1, "2");
+			} else {
+				pstmt.setString(1, photo.getSync());
+			}
 
 			logger.info(pstmt.toString());
 			
