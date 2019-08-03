@@ -101,7 +101,7 @@ public class PhotoPatientInfo extends Photo{
 		result.put("classification", info.getClassification());
 		result.put("comment", info.getComment());
 		result.put("date", info.getDate());
-		result.put("captureDate", info.getCaptureDate());
+		result.put("captureDate", info.getCaptureDate().toString());
 		result.put("doctor", info.getDoctor());
 		result.put("patientId", info.getPatientId());
 		result.put("patientName", info.getPatientName());
@@ -123,7 +123,7 @@ public class PhotoPatientInfo extends Photo{
 		result.put("classification", info.getClassification());
 		result.put("comment", info.getComment());
 		result.put("date", info.getDate());
-		result.put("captureDate", info.getCaptureDate());
+		result.put("captureDate", info.getCaptureDate().toString());
 		result.put("doctor", info.getDoctor());
 		result.put("patientId", info.getPatientId());
 		result.put("patientName", info.getPatientName());
