@@ -11,8 +11,6 @@ Logger logger = Logger.getLogger("index.jsp");
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="./resources/js/sweetalert2.all.min.js"></script>
-<link rel="stylesheet" type="text/css" href="http://www.bacoder.kr/webpr/css/style.css" />
-<link rel="stylesheet" type="text/css" href="http://www.bacoder.kr/webpr/css/table.css" />
 
 <title>API 리스트</title>
 <style type="text/css">
@@ -98,7 +96,7 @@ $(function(){
 						<td>userName: <input type="text" name="userName" placeholder="userName" value="봉황세"/></td>
 						<td>userBirth: <input type="text" name="userBirth" placeholder="userBirth" value="19821003"/></td>
 						<td>userId: <input type="text" name="userId" placeholder="userId" value="D0007"/></td>
-						<td></td>
+						<td>password: <input type="text" name="password" value="1111"/></td>
 						<td class="center-horizontal">
 							<input type="button" value="전송" class="send-button"/>
 						</td>

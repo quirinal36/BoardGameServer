@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
+import kr.bacoder.coding.dev.BongPasswordEncoder;
 import kr.bacoder.coding.dev.SecurityUtil;
 
 public class PersonControl {
