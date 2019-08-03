@@ -13,6 +13,8 @@ String pwd = request.getParameter("userPwd");
 
 logger.info("getToken.jsp params : "+ userId + " , " + pwd);
 
+
+
 if (userId != null && pwd != null) {
 	Person person = new Person();
 	person.setUniqueId(userId);
@@ -42,7 +44,7 @@ if (userId != null && pwd != null) {
 	}
 	
 } else {
-	response.sendError(401, "인증 실패 - 파라미터 확인하세요 ");
+	response.sendError(402, "인증 실패 - 파라미터 확인하세요 ");
 
 }
 %>

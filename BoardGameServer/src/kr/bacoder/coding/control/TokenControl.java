@@ -31,7 +31,7 @@ public class TokenControl extends DBconn {
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, person.getUniqueId());
-			pstmt.setString(2, person.getPassword());
+			pstmt.setString(2, ePwd);
 			
 			logger.info(pstmt.toString());			
 			
