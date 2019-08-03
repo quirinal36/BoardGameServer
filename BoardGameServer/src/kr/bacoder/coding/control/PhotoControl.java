@@ -257,6 +257,18 @@ public class PhotoControl extends Controller {
 			if(hasString(photo.getDoctor())) {
 				appendSql(sql, "doctor");
 			}
+			if(hasString(photo.getThumbnailName())) {
+				appendSql(sql, "thumbnailFilename");
+			}
+			if(photo.getFileSize() > 0) {
+				appendSql(sql, "size");
+			}
+			if(photo.getFileSize() > 0) {
+				appendSql(sql, "thumbnailSize");
+			}
+			if(hasString(photo.getSync())) {
+				appendSql(sql, "sync");
+			}
 			sql.replace(sql.lastIndexOf(","), sql.lastIndexOf(",")+1, " ");
 			sql.append("WHERE id = ?");
 			
@@ -271,11 +283,25 @@ public class PhotoControl extends Controller {
 			if(hasString(photo.getDoctor())) {
 				pstmt.setString(i++, photo.getDoctor());
 			}
+			if(hasString(photo.getThumbnailName())) {
+				pstmt.setString(i++, photo.getThumbnailName());
+			}
+			if(photo.getFileSize() > 0) {
+				pstmt.setInt(i++, photo.getFileSize());
+			}
+			if(photo.getThumbnailSize() > 0) {
+				pstmt.setInt(i++, photo.getThumbnailSize());
+			}
+			if(hasString(photo.getSync())) {
+				pstmt.setInt(i++, Integer.parseInt(photo.getSync()));
+			}
+			
 			pstmt.setInt(i++, photo.getPhotoId());
+			
 			logger.info(pstmt.toString());
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
-			
+			e.printStackTrace();
 		}
 		return result;
 	}
