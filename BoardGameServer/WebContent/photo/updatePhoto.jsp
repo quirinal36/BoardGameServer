@@ -33,7 +33,7 @@ if(sync != null && sync.length()>0) {
 	photo.setSync(sync);
 }
 
-logger.info("photo : " +photo.toString());
+//logger.info("photo : " +photo.toString());
 
 PhotoControl control = new PhotoControl();
 int result = control.updatePhoto(photo);

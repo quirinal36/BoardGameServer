@@ -122,7 +122,7 @@ public class PhotoControl extends Controller {
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
 					.append("patient.birth AS patientBirth, patient.etc AS patientEtc,")
 					.append("photo.accessLv, photo.classification, photo.comment, photo.date, photo.photoUrl, photo.uploader,")
-					.append("photo.doctor, photo.id AS id")
+					.append("photo.doctor, photo.id AS id, photo.captureDate AS captureDate")
 					.append(" ")
 					.append("FROM ").append(" ")
 					.append("PatientInfo patient RIGHT JOIN PhotoInfo photo").append(" ")
@@ -263,7 +263,7 @@ public class PhotoControl extends Controller {
 			if(photo.getFileSize() > 0) {
 				appendSql(sql, "size");
 			}
-			if(photo.getFileSize() > 0) {
+			if(photo.getThumbnailSize() > 0) {
 				appendSql(sql, "thumbnailSize");
 			}
 			if(hasString(photo.getSync())) {
