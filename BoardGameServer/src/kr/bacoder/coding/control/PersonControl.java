@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
@@ -112,6 +114,36 @@ public class PersonControl {
 		}
 		return person.toString();
 	}
+	public String getPerson(String name, String birth, String uniqueId, String password) throws SQLException {
+		PasswordEncoder passwordEncoder = new BongPasswordEncoder();
+		
+		Person person = new Person();
+		try(Connection conn = new DBconn().getConnection()){
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Person WHERE name =? and birth = ? and uniqueId = ?");
+			pstmt.setString(1, name);
+			pstmt.setString(2, birth);
+			pstmt.setString(3, uniqueId);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				person.setId(rs.getInt("NUM"));
+				person.setName(rs.getString("name"));
+				person.setPhone(rs.getString("phone"));
+				person.setPhoto(rs.getString("photo"));
+				person.setUniqueId(rs.getString("uniqueId"));
+				person.setDepartment(rs.getString("department"));
+				person.setBirth(rs.getString("birth"));
+				person.setUserLevel(rs.getInt("userLevel"));
+				person.setPassword(rs.getString("password"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		logger.info(person.toString());
+		boolean passwordResult = passwordEncoder.matches(password, person.getPassword());
+		logger.info("match=" + passwordResult);
+		return person.toString();
+	}
 	public String getPerson(String uniqueId) throws SQLException {
 		Person person = new Person();
 		try(Connection conn = new DBconn().getConnection()){
@@ -129,6 +161,7 @@ public class PersonControl {
 	}
 	
 	public int insertPerson(Person person) {
+//		PasswordEncoder passwordEncoder = new BongPasswordEncoder();
 		
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
