@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
+import kr.bacoder.coding.dev.SecurityUtil;
 
 public class PersonControl {
 	Logger logger = Logger.getLogger(getClass().getSimpleName());
@@ -130,6 +131,9 @@ public class PersonControl {
 	
 	public int insertPerson(Person person) {
 		
+		SecurityUtil security = new SecurityUtil();
+		String ePwd = security.encryptSHA256(person.getPassword());
+		
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO Person "
@@ -142,7 +146,7 @@ public class PersonControl {
 			pstmt.setString(1, person.getName());
 			pstmt.setString(2, person.getEmail());
 			pstmt.setString(3, person.getPhone());
-			pstmt.setString(4, person.getPassword());
+			pstmt.setString(4, ePwd);
 			pstmt.setString(5, person.getUniqueId());
 			pstmt.setString(6, person.getPhoto());
 			pstmt.setString(7, person.getDepartment());
