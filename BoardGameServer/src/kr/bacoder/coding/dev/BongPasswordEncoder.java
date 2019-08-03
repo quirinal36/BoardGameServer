@@ -10,13 +10,13 @@ public class BongPasswordEncoder implements PasswordEncoder {
 	}
 
 	@Override
-	public String encode(CharSequence arg0) {
-		return passwordEncoder.encode(arg0);
+	public String encode(CharSequence input) {
+		return passwordEncoder.encode(input);
 	}
 
 	@Override
-	public boolean matches(CharSequence arg0, String arg1) {
-		return passwordEncoder.matches(arg0, arg1);
+	public boolean matches(CharSequence input, String db) {
+		return passwordEncoder.matches(input, db);
 	}
 
 }

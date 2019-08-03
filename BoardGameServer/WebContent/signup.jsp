@@ -30,7 +30,7 @@
 	person.setName(name);
 	person.setPhone(phone);
 	person.setEmail(email);
-	//person.setPassword(password);
+	person.setPassword(password);
 	person.setUniqueId(uniqueId);
 	person.setDepartment(department);
 	

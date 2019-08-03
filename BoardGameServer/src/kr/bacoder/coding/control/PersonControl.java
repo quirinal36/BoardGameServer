@@ -165,8 +165,9 @@ public class PersonControl {
 	public int insertPerson(Person person) {
 //		PasswordEncoder passwordEncoder = new BongPasswordEncoder();
 		
-		SecurityUtil security = new SecurityUtil();
-		String ePwd = security.encryptSHA256(person.getPassword());
+//		SecurityUtil security = new SecurityUtil();
+//		String ePwd = security.encryptSHA256(person.getPassword());	
+		PasswordEncoder passwordEncoder = new BongPasswordEncoder();
 		
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
@@ -180,7 +181,7 @@ public class PersonControl {
 			pstmt.setString(1, person.getName());
 			pstmt.setString(2, person.getEmail());
 			pstmt.setString(3, person.getPhone());
-			pstmt.setString(4, ePwd);
+			pstmt.setString(4, passwordEncoder.encode(person.getPassword()));
 			pstmt.setString(5, person.getUniqueId());
 			pstmt.setString(6, person.getPhoto());
 			pstmt.setString(7, person.getDepartment());

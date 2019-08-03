@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Token;
+import kr.bacoder.coding.dev.BongPasswordEncoder;
 import kr.bacoder.coding.dev.SecurityUtil;
 import kr.bacoder.coding.dev.TokenUtil;
 
@@ -21,17 +24,18 @@ public class TokenControl extends DBconn {
 	private static final String RTokenSubject = "RefreshToken";
 	private static final String PTokenSubject = "PhotoToken";
 
+	PasswordEncoder passwordEncoder = new BongPasswordEncoder();
+	
 	public Person userValid(Person person)  {
 		
-		SecurityUtil security = new SecurityUtil();
-		String ePwd = security.encryptSHA256(person.getPassword());
+//		SecurityUtil security = new SecurityUtil();
+//		String ePwd = security.encryptSHA256(person.getPassword());
 		
 		try(Connection conn =  getConnection()){
-			String sql = "SELECT * FROM Person WHERE uniqueId = ? AND password = ?";
+			String sql = "SELECT * FROM Person WHERE uniqueId = ?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, person.getUniqueId());
-			pstmt.setString(2, ePwd);
 			
 			logger.info(pstmt.toString());			
 			
@@ -51,9 +55,15 @@ public class TokenControl extends DBconn {
 				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
 				person.setrToken(rs.getString(Person.R_TOKEN_KEY));
 				
-				return person;
+				if(passwordEncoder.matches(person.getPassword(), rs.getString(Person.PASSWORD_KEY))) {
+					return person;
+				} else {
+					logger.info("pwd check failed");
+					return null;
+				}
+					
 			} else {
-				logger.info("pwd check failed");
+				logger.info("user not found");
 				return null;
 			}
 

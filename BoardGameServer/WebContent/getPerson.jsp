@@ -12,9 +12,8 @@ Logger logger = Logger.getLogger("getPerson.jsp");
 String userName = request.getParameter("userName");
 String userId = request.getParameter("userId");
 String userBirth = request.getParameter("userBirth");
-String password = request.getParameter("password");
 
 DBconn dbconn = new DBconn();
 PersonControl control = new PersonControl();
-out.print(control.getPerson(userName, userBirth, userId, password));
+out.print(control.getPerson(userName, userBirth, userId));
 %>

@@ -21,7 +21,7 @@ TokenUtil token = new TokenUtil();
 
 logger.info("IsValidToken : " + token.IsValidToken(tokenStr));
 
-if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
+if(tokenStr != null && token.IsValidToken(tokenStr) >= 0) {
 	JSONArray array = control.getOnlyPhotos(photo);
 	resultJson.put("list", array);
 	out.print(resultJson.toJSONString());

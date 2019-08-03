@@ -20,6 +20,7 @@ public class Person {
 	public static final String EMAIL_KEY = "email";
 	public static final String PHOTO_KEY = "photo";
 	public static final String UNIQUE_ID_KEY = "uniqueId";
+	public static final String PASSWORD_KEY = "password";
 	public static final String DEPARTMENT_KEY = "department";
 	public static final String USER_LEVEL_KEY = "userLevel";
 	public static final String NUM_KEY = "NUM";

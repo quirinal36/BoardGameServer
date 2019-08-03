@@ -13,5 +13,6 @@ String userId = request.getParameter("userId");
 
 DBconn dbconn = new DBconn();
 PersonControl control = new PersonControl();
+
 out.print(control.getPerson(userId));
 %>
