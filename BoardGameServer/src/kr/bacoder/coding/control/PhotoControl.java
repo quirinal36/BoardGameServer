@@ -55,7 +55,7 @@ public class PhotoControl extends Controller {
 					.append("SELECT ").append(" ")
 					.append("photo.id, patient.patientId, photoUrl, classification, photo.doctor, date, uploader, comment, accessLv, patient.name AS patientName, age AS patientAge,")
 					.append("patient.sex AS patientSex, patient.phone AS patientPhone, patient.address AS patientAddress,")
-					.append("patient.birth AS patientBirth, patient.etc AS patientEtc")
+					.append("patient.birth AS patientBirth, patient.etc AS patientEtc, captureDate")
 					.append(" ")
 					.append("FROM ").append(" ")
 					.append("PhotoInfo photo, PatientInfo patient ").append(" ")

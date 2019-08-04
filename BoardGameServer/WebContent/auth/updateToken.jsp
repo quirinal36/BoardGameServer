@@ -35,7 +35,7 @@ if (rToken != null) {
 	}
 	
 } else {
-	response.sendError(401, "인증 실패 - 파라미터 확인하세요 ");
+	response.sendError(402, "인증 실패 - 파라미터 확인하세요 ");
 
 }
 %>

@@ -4,6 +4,7 @@
 <%@page import="kr.bacoder.coding.DBconn"%>
 <%@page import="org.json.simple.JSONObject"%>
 <%@page import="java.util.logging.Logger"%>
+<%@page import="kr.bacoder.coding.dev.TokenUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 Logger logger = Logger.getLogger("updatePatient.jsp");
@@ -22,35 +23,45 @@ String memo = request.getParameter("memo");
 String room = request.getParameter("room");
 String admission = request.getParameter("admission");
 String patientId = request.getParameter("patientId");
+
 // logger.info("admission: " + admission);
 
-Patient patient = new Patient();
-patient.setName(name);
-patient.setPhoto(photo);
-patient.setBirth(birth);
-patient.setSex(sex);
-patient.setPhone(phone);
-patient.setAddress(address);
-patient.setEtc(etc);
-patient.setId(Integer.parseInt(id));
-patient.setAge(age);
-patient.setDoctor(doctor);
-patient.setMemo(memo);
-patient.setRoom(room);
-patient.setPatientId(patientId);
-if(admission!=null && admission.length()>0){
-	boolean adm = Boolean.parseBoolean(admission);
-	logger.info("adm: " + adm);
-	patient.setAdmission(adm);
+String tokenStr = request.getHeader("Authorization");
+TokenUtil token = new TokenUtil();
+
+if(tokenStr != null && token.IsValidToken(tokenStr) > 0) {  
+	Patient patient = new Patient();
+	patient.setName(name);
+	patient.setPhoto(photo);
+	patient.setBirth(birth);
+	patient.setSex(sex);
+	patient.setPhone(phone);
+	patient.setAddress(address);
+	patient.setEtc(etc);
+	patient.setId(Integer.parseInt(id));
+	patient.setAge(age);
+	patient.setDoctor(doctor);
+	patient.setMemo(memo);
+	patient.setRoom(room);
+	patient.setPatientId(patientId);
+	
+	if(admission!=null && admission.length()>0){
+		boolean adm = Boolean.parseBoolean(admission);
+		logger.info("adm: " + adm);
+		patient.setAdmission(adm);
+	}
+
+	DBconn dbconn = new DBconn();
+	PatientControl control = new PatientControl();
+
+	logger.info(patient.toString());
+
+	JSONObject json = new JSONObject();
+	json.put("result", control.updatePatient(patient));
+
+	out.print(json.toJSONString());
+
+} else {
+ 	response.sendError(401, token.unauthorized);
 }
-
-DBconn dbconn = new DBconn();
-PatientControl control = new PatientControl();
-
-logger.info(patient.toString());
-
-JSONObject json = new JSONObject();
-json.put("result", control.updatePatient(patient));
-String result = json.toJSONString();
 %>
-<%=result%>
