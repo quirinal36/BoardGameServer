@@ -29,8 +29,7 @@ public class TokenControl extends DBconn {
 	public Person userValid(Person person)  {
 		
 //		SecurityUtil security = new SecurityUtil();
-//		String ePwd = security.encryptSHA256(person.getPassword());
-		
+//		String ePwd = security.encryptSHA256(person.getPassword());	
 		try(Connection conn =  getConnection()){
 			String sql = "SELECT * FROM Person WHERE uniqueId = ?";
 			

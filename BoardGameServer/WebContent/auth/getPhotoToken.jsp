@@ -22,7 +22,11 @@ if (userId != null && pwd != null && code.equals("qhdghkdtp")) {
 	Token token = new Token();
 	token.setUserId(userId);
 	token.setUserPwd(pwd);
-	token.setScope(scope);
+	if(scope != null && scope.length() > 0) {
+		token.setScope(scope);
+	} else {
+		token.setScope("photo");
+	}
 	if(expMin != null && expMin.length() > 0) {
 		token.setExpMin(Integer.parseInt(expMin));
 	} else {

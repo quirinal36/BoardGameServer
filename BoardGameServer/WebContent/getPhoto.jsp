@@ -19,14 +19,14 @@ PhotoControl control = new PhotoControl();
 
 TokenUtil token = new TokenUtil();
 
-logger.info("IsValidToken : " + token.IsValidToken(tokenStr));
+logger.info("IsValidToken : " + token.IsValidPhotoToken(tokenStr));
 
-if(tokenStr != null && token.IsValidToken(tokenStr) >= 0) {
+if(tokenStr != null && token.IsValidPhotoToken(tokenStr)) {
 	JSONArray array = control.getOnlyPhotos(photo);
 	resultJson.put("list", array);
 	out.print(resultJson.toJSONString());
 } else {
-	 logger.info("getPhoto/IsValidToken : 0");
+	 logger.info("getPhoto/IsValidPhotoToken : false");
  	response.sendError(401, token.unauthorized);
 }
 %>

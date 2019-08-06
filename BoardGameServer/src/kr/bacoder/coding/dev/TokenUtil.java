@@ -90,6 +90,43 @@ public class TokenUtil {
 		}
 	}
 	
+	public boolean IsValidPhotoToken(String token) {
+		//int result = 0;
+		int role = 0;
+		//logger.info("IsValidToken? : " + token);
+		
+		try {
+			Claims claims = Jwts.parser()         
+				       .setSigningKey(getSignatureKey())
+				       .parseClaimsJws(token).getBody();
+			
+		   role = (int) claims.get("role");
+		   String subject = claims.getSubject();
+		   String userId = claims.getId();
+		   Date expirationDate = claims.getExpiration();
+		   String scope = claims.get("scope").toString();
+
+		   logger.info("authorized Token : "+ claims.getSubject() + "/" + expirationDate);
+		  
+		   if(scope.equals("photo") || role > 0) {
+			   return true;
+		   } else {
+			   return false;
+		   }
+
+		    // we can safely trust the JWT   
+		}
+		catch (ExpiredJwtException e) {
+			logger.info("Expired : "+ e.getMessage());
+			return false;
+		}
+		catch (JwtException ex) {       // (4)
+		    logger.info("Un-authorized : "+ ex.getMessage());
+		    // we *cannot* use the JWT as intended by its creator
+		    return false;
+		}
+	}
+	
 	public Person getInfoByToken(String tokenStr) {
 		
 		Person person = new Person();
@@ -136,4 +173,24 @@ public String getIdByToken(String tokenStr) {
 		    return null;
 		}
 	}
+public String getScopeByToken(String tokenStr) {
+	
+	try {
+		Claims claims = Jwts.parser()         
+			       .setSigningKey(getSignatureKey())
+			       .parseClaimsJws(tokenStr).getBody();
+
+	   String scope = claims.get("scope").toString();
+//	    logger.info("getInfoByToken: authorized Token");
+
+	   return scope;
+	   
+	}
+	catch (JwtException ex) {       // (4)
+	    logger.info("Un-authorized : "+ ex.getMessage());
+	    // we *cannot* use the JWT as intended by its creator
+	    return null;
+	}
+}
+
 }
