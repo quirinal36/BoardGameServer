@@ -702,7 +702,7 @@ public class PatientControl extends DBconn{
 			sql.append("SELECT ").append(" ")
 			.append("patient.id AS id, patient.name AS name, patient.age AS age,")
 			.append("patient.sex AS sex, patient.phone AS phone, patient.address AS address,")
-			.append("patient.birth AS birth, patient.etc AS etc, photo.photoUrl AS photo,")
+			.append("patient.birth AS birth, patient.etc AS etc, photo.photoId AS photo,")
 			.append("patient.memo, patient.room, patient.admission,")
 			.append("person.name AS doctor, patient.patientId AS patientId")
 			.append(" ")
