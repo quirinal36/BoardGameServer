@@ -24,6 +24,13 @@
 	String photoUrl = request.getParameter("photoUrl");
 	String patientId = request.getParameter("pId");
 	String patientName = request.getParameter("pName");
+	
+	String birth = request.getParameter("birth");
+	String sex = request.getParameter("sex");
+	String address = request.getParameter("address");
+	String phone = request.getParameter("phone");
+	String adm = request.getParameter("adm");
+	
 	String classification = request.getParameter("class");
 	String doctor = request.getParameter("doc");
 	String uploader = request.getParameter("uploader");
@@ -40,12 +47,13 @@
 
 
 	SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-	Date captureDate = transFormat.parse(date);
+	//Date captureDate = transFormat.parse(date);
 
 	
 	String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(new Date());
 	
 	Photo photoInfo = new Photo();
+	
 	
 	if(patientId != null){
 		photoInfo.setPatientId(patientId);
@@ -74,6 +82,7 @@
 		photoInfo.setSync("2");
 	}
 	if(date != null){
+		Date captureDate = transFormat.parse(date);
 		photoInfo.setCaptureDate(captureDate);
 	} else {
 		photoInfo.setCaptureDate(new Date());
@@ -117,6 +126,16 @@
 		if(patientName != null){
 			patient.setName(patientName);
 		}
+		patient.setBirth(birth);
+		patient.setSex(sex);
+		patient.setAddress(address);
+		patient.setPhone(phone);
+		if(adm!=null && adm.length()>0){
+			boolean admission = Boolean.parseBoolean(adm);
+			logger.info("adm: " + adm);
+			patient.setAdmission(admission);
+		}
+		
 		patientControl.addPatient(patient);
 	 	logger.info("patient: "+ patient.toString());
 	}
