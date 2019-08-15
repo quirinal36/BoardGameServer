@@ -639,6 +639,23 @@ public class PatientControl extends DBconn{
 		result.put("list", array);
 		return result.toString();
 	}
+	
+	public String getMemo(String patientId) throws SQLException {
+		Patient patient = new Patient();
+		try(Connection conn = new DBconn().getConnection()){
+			PreparedStatement pstmt = conn.prepareStatement("SELECT id, memo FROM PatientInfo WHERE patientId = ?");
+			pstmt.setInt(1, Integer.parseInt(patientId));
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				patient.setId(rs.getInt("id"));
+				patient.setMemo(rs.getString("memo"));
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return patient.toString();
+	}
 //	public String getPatientsByDoctor(String doctor, String search) {
 //		JSONObject json = new JSONObject();
 //		try(Connection conn =  getConnection()){

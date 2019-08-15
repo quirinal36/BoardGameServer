@@ -20,7 +20,7 @@ String sync = request.getParameter("sync");
 String tokenStr = request.getHeader("Authorization");
 TokenUtil token = new TokenUtil();
 
-if(tokenStr != null && token.IsValidToken(tokenStr) > 0) {
+if(tokenStr != null && token.IsValidPhotoToken(tokenStr)) {
 	Photo photo = new Photo();
 	photo.setPhotoId(id);
 	photo.setComment(comment);
