@@ -29,13 +29,16 @@ if (userId != null && pwd != null) {
 		String aToken = control.getAccessToken(person);
 	//	logger.info("token : "+ rToken +"/"+aToken);
 		
-		if(rToken != null && rToken.length() > 0 && aToken != null && aToken.length() > 0) {
+		if(rToken != null && rToken.length() > 1 && aToken != null && aToken.length() > 1) {
 			obj.put("rToken", rToken);
 			obj.put("aToken", aToken);
 			control.updateRefreshToken(userId, rToken); //DB에 리프레시 토큰 저장 
 			out.print(obj.toString());
+		} else if (rToken.equals("0") && aToken.equals("0")) {
+			response.sendError(402, "userlevel failure");
 		} else {
 			response.sendError(401, "인증 실패");
+
 		}
 		
 		
@@ -44,7 +47,7 @@ if (userId != null && pwd != null) {
 	}
 	
 } else {
-	response.sendError(402, "인증 실패 - 파라미터 확인하세요 ");
+	response.sendError(405, "인증 실패 - 파라미터 확인하세요 ");
 
 }
 %>

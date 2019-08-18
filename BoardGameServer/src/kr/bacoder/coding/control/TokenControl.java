@@ -109,7 +109,7 @@ public class TokenControl extends DBconn {
 				TokenUtil util = new TokenUtil();
 				return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins, "all");
 			} else {
-				return null;
+				return "0";
 			}	
 		} else {
 			return null;
@@ -129,7 +129,7 @@ public class TokenControl extends DBconn {
 				TokenUtil util = new TokenUtil();
 				return util.getToken(RTokenSubject, validPerson.getUniqueId(), userLv, RefreshTokenEXPMins, "all");
 			} else {
-				return null;
+				return "0";
 			}	
 		} else {
 			return null;
