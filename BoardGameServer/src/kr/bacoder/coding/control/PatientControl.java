@@ -133,7 +133,8 @@ public class PatientControl extends DBconn{
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, nfc.getTagId());
 			pstmt.setString(2, nfc.getPatientId());
-			
+			pstmt.setInt(3, nfc.getId());
+			 logger.info("updateNfc : " + sql.toString());
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
 			setErrorMsg(e.getMessage());
@@ -141,6 +142,43 @@ public class PatientControl extends DBconn{
 		}
 		return result;
 	}
+	public int updateNfcPatientIdbytagId(NfcTag nfc) {
+		int result = 0;
+		try(Connection conn =  getConnection()){
+			StringBuilder sql = new StringBuilder();
+			if(nfc.getId() > 0) {
+				sql.append("update NfcTag set patientId=? where tagId =?");
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getPatientId());
+			pstmt.setString(2, nfc.getTagId());
+			 logger.info("updateNfc : " + sql.toString());
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			setErrorMsg(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public int updateNfcPatientIdbyId(NfcTag nfc) {
+		int result = 0;
+		try(Connection conn =  getConnection()){
+			StringBuilder sql = new StringBuilder();
+			if(nfc.getId() > 0) {
+				sql.append("update NfcTag set patientId=? where id =?");
+			}
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, nfc.getPatientId());
+			pstmt.setInt(2, nfc.getId());
+			 logger.info("updateNfc : " + sql.toString());
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			setErrorMsg(e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	
 	/**
 	 * tagId占쏙옙占쏙옙占쏙옙 tag占십깍옙화 占싹깍옙
@@ -186,7 +224,8 @@ public class PatientControl extends DBconn{
 		List<Patient> result = new ArrayList<>();
 		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM PatientInfo WHERE patientId IN (SELECT patientId FROM NfcTag WHERE tagId = ?)");
+			sql.append("SELECT id, p_date, name, birth, sex, etc, doctor, memo, room, admission, patientId, doctorId, photoId"
+					+ " FROM PatientInfo WHERE patientId IN (SELECT patientId FROM NfcTag WHERE tagId = ?)");
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, nfc.getTagId());
 			ResultSet rs = pstmt.executeQuery();
@@ -206,7 +245,7 @@ public class PatientControl extends DBconn{
 		try(Connection conn =  getConnection()){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ").append(" ")
-				.append("id, photo, p_date, name, age, birth, sex, phone, address, etc, doctor, memo, room, admission, patientId, doctorId, photoId")
+				.append("id, photo, p_date, name, age, birth, sex, etc, doctor, memo, room, admission, patientId, doctorId, photoId")
 				.append(" ")
 				.append("FROM ").append(" ")
 				.append("PatientInfo").append(" ")
@@ -468,9 +507,14 @@ public class PatientControl extends DBconn{
 			}
 			
 			if(patient.getAge() > 0) {
-				sql.append("age=?,");
+				appendSql(sql, "age");
+				//sql.append("age=?");
 			}
-			sql.append("admission=?");
+			if(patient.isAdmission()) {
+				appendSql(sql, "admission");
+			//	sql.append("admission=?");
+			}
+			sql.replace(sql.lastIndexOf(","), sql.lastIndexOf(",")+1, " ");
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(i++, patient.getPhoto());
@@ -526,7 +570,9 @@ public class PatientControl extends DBconn{
 			if(patient.getAge()>0) {
 				pstmt.setInt(i++, patient.getAge());
 			}
-			pstmt.setInt(i++, patient.isAdmission()?1:0);
+			if(patient.isAdmission()) {
+				pstmt.setInt(i++, patient.isAdmission()?1:0);
+			}
 			
 			logger.info(pstmt.toString());
 			

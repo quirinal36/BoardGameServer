@@ -24,6 +24,7 @@ String phone = request.getParameter("phone");
 String address = request.getParameter("address");
 String etc = request.getParameter("etc");
 String patientId = request.getParameter("patientId");
+String admission = request.getParameter("adm");
 
 
 Patient patient = new Patient();
@@ -40,6 +41,12 @@ patient.setPhone(phone);
 patient.setAddress(address);
 patient.setEtc(etc);
 patient.setPatientId(patientId);
+
+if(admission!=null && admission.length()>0){
+	boolean adm = Boolean.parseBoolean(admission);
+	//logger.info("adm: " + adm);
+	patient.setAdmission(adm);
+}
 
 /* TokenUtil token = new TokenUtil();
 String tokenStr = request.getHeader("Authorization");
