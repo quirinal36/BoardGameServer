@@ -689,13 +689,16 @@ public class PatientControl extends DBconn{
 	public String getMemo(String patientId) throws SQLException {
 		Patient patient = new Patient();
 		try(Connection conn = new DBconn().getConnection()){
-			PreparedStatement pstmt = conn.prepareStatement("SELECT id, memo FROM PatientInfo WHERE patientId = ?");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT id, memo, ifnull (photoId, (select max(new_schema.PhotoInfo.id) from PhotoInfo where PhotoInfo.patientId = ?)) as photoId FROM PatientInfo WHERE patientId = ?");
 			pstmt.setInt(1, Integer.parseInt(patientId));
+			pstmt.setInt(2, Integer.parseInt(patientId));
 			
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()){
 				patient.setId(rs.getInt("id"));
 				patient.setMemo(rs.getString("memo"));
+				patient.setPhotoId(rs.getInt("photoId"));
+
 			}
 		}catch(SQLException e){
 			e.printStackTrace();

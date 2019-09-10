@@ -15,6 +15,7 @@ if(que!=null && que.length()!=0){
 
 
 
+
 %>
 <html>
 	<head>
@@ -23,15 +24,19 @@ if(que!=null && que.length()!=0){
 	<body>
 		<div class="wrap">
 		<header>
-		
+		현재 위치는..
 		</header>
+				<img src="http://hsbong.synology.me:8080/macroImg/zone.png" alt="">
+		<br>
 		<div class="container">
 		<form method="get" action="linm.jsp">
-			<div>
-				귀환하기 : <input type="hidden" name="que" value="<%=1%>"/>
+		<div>
+				*귀환하기 : <input type="hidden" name="que" value="<%=1%>"/>
 				<input type="submit" value="전송"/>
 			</div>
 		</form>
+		<!--  <a onClick="window.location.reload()">새로고침</a> -->
+		<a href="http://hsbong.synology.me:8080/pps/macro/linm.jsp">새로고침</a>
 		</div>
 		</div>
 	</body>
