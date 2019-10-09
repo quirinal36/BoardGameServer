@@ -1,5 +1,8 @@
 package kr.bacoder.coding.bean;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,6 +20,7 @@ public class OPRecord {
 	String opProcedure;
 	String opfee;
 	String search;
+	String duration;
 	String ref;
 	
 	public int getId() {
@@ -91,11 +95,84 @@ public class OPRecord {
 	public void setSearch(String search) {
 		this.search = search;
 	}
+	public String getDuration() {
+		return duration;
+	}
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 	public String getRef() {
 		return ref;
 	}
 	public void setRef(String ref) {
 		this.ref = ref;
+	}
+	
+	public static OPRecord parseToOPRecord(ResultSet rs) throws SQLException {
+		OPRecord result = new OPRecord();
+		
+		result.setId(rs.getInt("id"));
+		try {
+			result.setPatientId(rs.getString("patientId"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setPatientName(rs.getString("patientName"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setOpdate(rs.getString("opdate"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setDoctor(rs.getString("doctor"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setDx(rs.getString("dx"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setAnesthesia(rs.getString("anesthesia"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setOpname(rs.getString("opname"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setOpfinding(rs.getString("opfinding"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setOpProcedure(rs.getString("opProcedure"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setOpfee(rs.getString("opfee"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setSearch(rs.getString("search"));
+		}catch(SQLException e) {
+
+		}
+		try {
+			result.setRef(rs.getString("ref"));
+		}catch(SQLException e) {
+
+		}
+		return result;
 	}
 	
 	@Override

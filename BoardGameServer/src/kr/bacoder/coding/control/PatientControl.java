@@ -19,6 +19,7 @@ import org.json.simple.JSONObject;
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Doctor;
 import kr.bacoder.coding.bean.NfcTag;
+import kr.bacoder.coding.bean.OPRecord;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Person;
 import kr.bacoder.coding.bean.Photo;
@@ -330,6 +331,49 @@ public class PatientControl extends DBconn{
 		}
 		return result;
 	}
+	public List<OPRecord> searchRecordByQuery(OPRecord record){
+		List<OPRecord> result = new ArrayList<>();
+		try(Connection conn =  getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT oprecord.id, patientId, patientName, opdate, doctor, dx, opname, anesthesia, ").append(" ")
+			.append("opfinding, opProcedure, opfee").append(" ")
+			.append("FROM OPRecord oprecord").append(" ");
+			if(record.getSearch()!=null && record.getSearch().length() > 1) {
+				String search = "%"+record.getSearch()+"%";
+				sql.append("WHERE (oprecord.dx like ? ").append(" ");
+				sql.append("OR oprecord.opname like ? )").append(" ");
+				//sql.append("OR oprecord.opfinding like ?").append(" ");
+			}
+			if(record.getDoctor()!=null && record.getDoctor().length() > 0) {
+				sql.append("AND oprecord.doctor = ?").append(" ");
+			} 
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			if(record.getSearch()!=null && record.getSearch().length() > 1) {
+				String search = "%"+record.getSearch()+"%";
+				logger.info("search: "+ search);
+				pstmt.setString(1, search);
+				pstmt.setString(2, search);
+			//	pstmt.setString(3, search);
+			
+				if(record.getDoctor()!=null && record.getDoctor().length() > 0) {
+					pstmt.setString(3, record.getDoctor());
+				}
+			}
+			logger.info("query: "+ record.getSearch()+"/" + sql.toString());
+			logger.info("pstmt: "+ pstmt.toString());
+
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				result.add(OPRecord.parseToOPRecord(rs));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			setErrorMsg(e.getMessage());
+		}
+		return result;
+	}
+	
 	public int insertPatient(Patient patient) {
 		int result = 0;
 		int i = 1;
