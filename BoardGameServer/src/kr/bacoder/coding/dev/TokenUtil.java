@@ -32,6 +32,7 @@ public class TokenUtil {
 		return this.signature.getBytes();
 	}
 	
+	
 	public String getToken(String subject, String userId, int role, int expMins, String scope) {
 				
 		Date expirationDate = new Date();
@@ -60,6 +61,7 @@ public class TokenUtil {
 	
 	
 	public int IsValidToken(String token) {
+		
 		//int result = 0;
 		int role = 0;
 		//logger.info("IsValidToken? : " + token);

@@ -27,7 +27,7 @@ public class TokenControl extends DBconn {
 	PasswordEncoder passwordEncoder = new BongPasswordEncoder();
 	
 	public Person userValid(Person person)  {
-		
+
 //		SecurityUtil security = new SecurityUtil();
 //		String ePwd = security.encryptSHA256(person.getPassword());	
 		try(Connection conn =  getConnection()){
