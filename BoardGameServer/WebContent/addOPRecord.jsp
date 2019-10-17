@@ -41,8 +41,8 @@
   logger.info("request : " + request.toString());
   logger.info("IsValidToken : " + token.IsValidToken(tokenStr));
   
-  if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
- 	 logger.info("addOPRecord/IsValidToken : >1");
+//  if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
+// 	 logger.info("addOPRecord/IsValidToken : >1");
  	 try {
  	     InputStream inputStream = request.getInputStream();
  	     if (inputStream != null) {
@@ -127,17 +127,17 @@
  		
  		json.put("result", control.addRecordInfo(record));
  	 
-  } else if (token.IsValidToken(tokenStr) == -1){
+//  } else if (token.IsValidToken(tokenStr) == -1){
  	// logger.info("addOPRecord/IsValidToken : 0");
 
  	// out.print(json.toJSONString());
  	//out.print("Un-Authorized connection!");
- 	response.sendError(401, token.expiredToken);
-  } else {
-	 	 logger.info("addOPRecord/IsValidToken : 0");
+// 	response.sendError(401, token.expiredToken);
+//  } else {
+//	 	 logger.info("addOPRecord/IsValidToken : 0");
 
 	  	// out.print(json.toJSONString());
 	  	//out.print("Un-Authorized connection!");
-	  	response.sendError(401, token.unauthorized);
-}
+//	  	response.sendError(401, token.unauthorized);
+//}
  %>
