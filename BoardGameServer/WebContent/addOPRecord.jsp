@@ -36,10 +36,10 @@
   StringBuilder stringBuilder = new StringBuilder();
   BufferedReader bufferedReader = null;
 
-  TokenUtil token = new TokenUtil();
-  String tokenStr = request.getHeader("Authorization");
-  logger.info("request : " + request.toString());
-  logger.info("IsValidToken : " + token.IsValidToken(tokenStr));
+//  TokenUtil token = new TokenUtil();
+//  String tokenStr = request.getHeader("Authorization");
+//  logger.info("request : " + request.toString());
+//  logger.info("IsValidToken : " + token.IsValidToken(tokenStr));
   
 //  if(tokenStr != null && token.IsValidToken(tokenStr) > 1) {
 // 	 logger.info("addOPRecord/IsValidToken : >1");

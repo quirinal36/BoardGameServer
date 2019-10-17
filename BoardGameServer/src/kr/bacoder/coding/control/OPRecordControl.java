@@ -30,6 +30,8 @@ public class OPRecordControl extends DBconn{
 	public int addRecordInfo(OPRecord record) {
 		int result = 0;
 		int i = 1;
+		int k = 1;
+		int j = 1;
 		
 		try(Connection conn =  getConnection()){
 			
@@ -48,20 +50,20 @@ public class OPRecordControl extends DBconn{
 				//update
 				String sql = "UPDATE OPRecord SET "
 						+ "patientId = ?, patientName = ?, opdate = ?, doctor = ?, dx = ?, "
-						+ "anesthesia = ?, opname = ?, opfinding = ?, opProcedure = ?, opfee = ?) "
+						+ "anesthesia = ?, opname = ?, opfinding = ?, opProcedure = ?, opfee = ? "
 						+ "WHERE id = " + result1.getInt(1);
 				
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(i++, record.getPatientId());
-				pstmt.setString(i++, record.getPatientName());
-				pstmt.setString(i++, record.getOpdate());
-				pstmt.setString(i++, record.getDoctor());
-				pstmt.setString(i++, record.getDx());
-				pstmt.setString(i++, record.getAnesthesia());
-				pstmt.setString(i++, record.getOpname());
-				pstmt.setString(i++, record.getOpfinding());
-				pstmt.setString(i++, record.getOpProcedure());
-				pstmt.setString(i++, record.getOpfee());
+				pstmt.setString(k++, record.getPatientId());
+				pstmt.setString(k++, record.getPatientName());
+				pstmt.setString(k++, record.getOpdate());
+				pstmt.setString(k++, record.getDoctor());
+				pstmt.setString(k++, record.getDx());
+				pstmt.setString(k++, record.getAnesthesia());
+				pstmt.setString(k++, record.getOpname());
+				pstmt.setString(k++, record.getOpfinding());
+				pstmt.setString(k++, record.getOpProcedure());
+				pstmt.setString(k++, record.getOpfee());
 				
 				logger.info(pstmt.toString());
 				
@@ -72,16 +74,16 @@ public class OPRecordControl extends DBconn{
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(i++, record.getPatientId());
-				pstmt.setString(i++, record.getPatientName());
-				pstmt.setString(i++, record.getOpdate());
-				pstmt.setString(i++, record.getDoctor());
-				pstmt.setString(i++, record.getDx());
-				pstmt.setString(i++, record.getAnesthesia());
-				pstmt.setString(i++, record.getOpname());
-				pstmt.setString(i++, record.getOpfinding());
-				pstmt.setString(i++, record.getOpProcedure());
-				pstmt.setString(i++, record.getOpfee());
+				pstmt.setString(j++, record.getPatientId());
+				pstmt.setString(j++, record.getPatientName());
+				pstmt.setString(j++, record.getOpdate());
+				pstmt.setString(j++, record.getDoctor());
+				pstmt.setString(j++, record.getDx());
+				pstmt.setString(j++, record.getAnesthesia());
+				pstmt.setString(j++, record.getOpname());
+				pstmt.setString(j++, record.getOpfinding());
+				pstmt.setString(j++, record.getOpProcedure());
+				pstmt.setString(j++, record.getOpfee());
 				
 				logger.info(pstmt.toString());
 				
