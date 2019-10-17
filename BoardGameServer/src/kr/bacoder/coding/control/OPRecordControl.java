@@ -35,12 +35,13 @@ public class OPRecordControl extends DBconn{
 		
 		try(Connection conn =  getConnection()){
 			
-			String sql1 = "SELECT id FROM OPRecord WHERE patientId = ? AND opdate = ?";
+			String sql1 = "SELECT id FROM OPRecord WHERE patientId = ? AND opdate = ? AND doctor = ?";
 			
 			PreparedStatement pstmt1 = conn.prepareStatement(sql1);
 			pstmt1.setString(i++, record.getPatientId());
 			pstmt1.setString(i++, record.getOpdate());
-			
+			pstmt1.setString(i++, record.getDoctor());
+
 			logger.info(pstmt1.toString());
 			
 			ResultSet result1 =pstmt1.executeQuery();
