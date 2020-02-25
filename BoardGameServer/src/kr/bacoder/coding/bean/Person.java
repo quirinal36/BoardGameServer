@@ -25,7 +25,15 @@ public class Person {
 	public static final String USER_LEVEL_KEY = "userLevel";
 	public static final String NUM_KEY = "NUM";
 	public static final String R_TOKEN_KEY = "rToken";
-	
+	public static final String A_TOKEN_KEY = "aToken";
+	public static final String UUID_KEY = "uuid";
+	public static final String FROM_KEY = "from";
+	public static final String PROFILE_URL_KEY = "profileUrl";
+	public static final String COMPANY_ID_KEY = "company_id";
+	public static final String DEPARTMENT_ID_KEY = "department_id";
+	public static final String POSITION_KEY = "position";
+
+
 	private int id;
 	private String name;
 	private int age;
@@ -42,6 +50,14 @@ public class Person {
 	private String birth;
 	private int userLevel;
 	private String rToken;
+	private String uuid;
+	private String from;
+	private String profileUrl;
+	private String aToken;
+	private int companyId;
+	private int departmentId;
+	private String position;
+	
 	
 	/**
 	 * 생성자
@@ -171,6 +187,76 @@ public class Person {
 
 	public void setrToken(String rToken) {
 		this.rToken = rToken;
+	}
+
+
+	public String getUuid() {
+		return uuid;
+	}
+
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+
+	public String getFrom() {
+		return from;
+	}
+
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+
+	public String getProfileUrl() {
+		return profileUrl;
+	}
+
+
+	public void setProfileUrl(String profileUrl) {
+		this.profileUrl = profileUrl;
+	}
+
+
+	public String getaToken() {
+		return aToken;
+	}
+
+
+	public void setaToken(String aToken) {
+		this.aToken = aToken;
+	}
+
+
+	public int getCompanyId() {
+		return companyId;
+	}
+
+
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
+	}
+
+
+	public int getDepartmentId() {
+		return departmentId;
+	}
+
+
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
+	}
+
+
+	public String getPosition() {
+		return position;
+	}
+
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 
