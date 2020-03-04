@@ -27,6 +27,8 @@ if(que!=null && que.length()!=0){
 		현재 위치는..
 		</header>
 				<img src="http://hsbong.synology.me:8080/macroImg/zone.png" alt="">
+				<br>
+				<img src="http://hsbong.synology.me:8080/macroImg/map.png" alt="">
 		<br>
 		<div class="container">
 		<form method="get" action="linm.jsp">
