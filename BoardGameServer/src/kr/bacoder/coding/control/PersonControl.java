@@ -192,6 +192,30 @@ public class PersonControl {
 		}
 		return result;
 	}
+	public int insertPersonByUuid(Person person) {
+		
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			String sql = "INSERT INTO Person "
+					+ "(name, phone, birth, sex, uuid, userLevel) "
+					+ "VALUES (?,?,?,?,?,?)";
+			
+			logger.info(sql.toString());
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, person.getName());
+			pstmt.setString(2, person.getPhone());
+			pstmt.setString(3, person.getBirth());
+			pstmt.setString(4, person.getSex());
+			pstmt.setString(5, person.getUuid());
+			pstmt.setInt(6, person.getUserLevel());
+			result= pstmt.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public int updatePerson(Person person) {
 		
 		int result = 0;
