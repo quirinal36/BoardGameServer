@@ -192,6 +192,25 @@ public class PersonControl {
 		}
 		return result;
 	}
+	
+	public int getPersonByUuid(String uuid) throws SQLException {
+//		Person person = new Person();
+		int i = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Person WHERE uuid = ?");
+			pstmt.setString(1, uuid);
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+//				person.setId(rs.getInt("NUM"));
+				i++;
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
 	public int insertPersonByUuid(Person person) {
 		
 		int result = 0;

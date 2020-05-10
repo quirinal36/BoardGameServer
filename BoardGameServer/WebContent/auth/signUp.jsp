@@ -43,7 +43,10 @@
 	PersonControl control = new PersonControl();
 	logger.info(person.toString());
 	
-	json.put("result", control.insertPersonByUuid(person));
-	
+	if(control.getPersonByUuid(uuid) == 0) {
+		json.put("result", control.insertPersonByUuid(person));
+	} else {
+		json.put("result", -1);
+	}
 	out.print(json.toJSONString());
 %>
