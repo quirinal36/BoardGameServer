@@ -191,7 +191,7 @@ public class TokenControl extends DBconn {
 			
 			if(userLv > 0) {
 				TokenUtil util = new TokenUtil();
-				validPerson.setaToken(util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins, "all"));
+				validPerson.setaToken(util.getToken(ATokenSubject, validPerson.getId()+"", userLv, AccessTokenEXPMins, "all"));
 				return validPerson;
 			} else {
 				return null;
