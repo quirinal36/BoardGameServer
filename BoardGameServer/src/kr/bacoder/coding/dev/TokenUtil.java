@@ -33,7 +33,7 @@ public class TokenUtil {
 	}
 	
 	
-	public String getToken(String subject, String userId, int role, int expMins, String scope) {
+	public String getToken(String subject, String id, int role, int expMins, String scope) {
 				
 		Date expirationDate = new Date();
 		LocalDateTime dateTime = LocalDateTime.now();
@@ -47,7 +47,7 @@ public class TokenUtil {
 		    .setIssuer("http://hsbong.synology.me")
 			  .setSubject("" + subject)
 			  .setExpiration(expirationDate)
-			  .setId(userId)
+			  .setId(id)
 			  .claim("scope", scope)
 			  .claim("role", role)
 			  .signWith(
