@@ -46,7 +46,7 @@ public class TokenControl extends DBconn {
 //				person.setBirth(rs.getString(Person.BIRTH_KEY));
 				person.setDepartment(rs.getString(Person.DEPARTMENT_KEY));
 //				person.setEmail(rs.getString(Person.EMAIL_KEY));
-//				person.setId(rs.getInt(Person.NUM_KEY));
+				person.setId(rs.getInt(Person.NUM_KEY));
 //				person.setName(rs.getString(Person.NAME_KEY));
 //				person.setPhone(rs.getString(Person.PHONE_KEY));
 //				person.setPhoto(rs.getString(Person.PHOTO_KEY));
@@ -146,12 +146,13 @@ public class TokenControl extends DBconn {
 		
 		if(validPerson != null) {
 			int userLv = validPerson.getUserLevel();
+			String id = validPerson.getId()+"";
 			
 			logger.info("getAccessToken : "+ userLv);
 			
 			if(userLv > 0) {
 				TokenUtil util = new TokenUtil();
-				return util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins, "all");
+				return util.getToken(ATokenSubject, id, userLv, AccessTokenEXPMins, "all");
 			} else {
 				return "0";
 			}	
@@ -191,7 +192,8 @@ public class TokenControl extends DBconn {
 			
 			if(userLv > 0) {
 				TokenUtil util = new TokenUtil();
-				validPerson.setaToken(util.getToken(ATokenSubject, validPerson.getUniqueId(), userLv, AccessTokenEXPMins, "all"));
+				String userId = validPerson.getId()+"";
+				validPerson.setaToken(util.getToken(ATokenSubject, userId, userLv, AccessTokenEXPMins, "all"));
 				return validPerson;
 			} else {
 				return null;
