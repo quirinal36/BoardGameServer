@@ -192,8 +192,12 @@ public class TokenControl extends DBconn {
 			
 			if(userLv > 0) {
 				TokenUtil util = new TokenUtil();
+<<<<<<< HEAD
 				String userId = validPerson.getId()+"";
 				validPerson.setaToken(util.getToken(ATokenSubject, userId, userLv, AccessTokenEXPMins, "all"));
+=======
+				validPerson.setaToken(util.getToken(ATokenSubject, validPerson.getId()+"", userLv, AccessTokenEXPMins, "all"));
+>>>>>>> branch 'master' of https://github.com/quirinal36/BoardGameServer.git
 				return validPerson;
 			} else {
 				return null;
