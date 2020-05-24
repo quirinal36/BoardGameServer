@@ -22,7 +22,7 @@ public class Board {
 	private int status;
 	private String text;
 	private int type;
-	private Date expireDate;
+	private Timestamp expireDate;
 	private int replyCount;
 	private int userType;
 	private int userLevel;
@@ -32,9 +32,10 @@ public class Board {
 	private int userId;
     private String photoList;
     private JSONArray photoListArray;
-	
+	private String token;
 	private int photoId;
 	private String caption;
+	private int boardPatientId;
 	
 //	public Board() {}
 //	
@@ -94,11 +95,11 @@ public class Board {
 	public void setType(int type) {
 		this.type = type;
 	}
-	public Date getExpireDate() {
+	public Timestamp getExpireDate() {
 		return expireDate;
 	}
-	public void setExpireDate(Date expireDate) {
-		this.expireDate = expireDate;
+	public void setExpireDate(Timestamp timestamp) {
+		this.expireDate = timestamp;
 	}
 	public int getReplyCount() {
 		return replyCount;
@@ -211,6 +212,19 @@ public class Board {
 	}
 	
 
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public int getBoardPatientId() {
+		return boardPatientId;
+	}
+	public void setBoardPatientId(int boardPatientId) {
+		this.boardPatientId = boardPatientId;
+	}
+	
 	public JSONArray getPhotoListArray() {
 		if(this.photoList != null && this.photoList.length()>0) {
 			JSONArray array = new JSONArray(this.photoList);
