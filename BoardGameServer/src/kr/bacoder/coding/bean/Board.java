@@ -36,6 +36,7 @@ public class Board {
 	private int photoId;
 	private String caption;
 	private int boardPatientId;
+	private String youtubeLink;
 	
 //	public Board() {}
 //	
@@ -223,6 +224,12 @@ public class Board {
 	}
 	public void setBoardPatientId(int boardPatientId) {
 		this.boardPatientId = boardPatientId;
+	}
+	public String getYoutubeLink() {
+		return youtubeLink;
+	}
+	public void setYoutubeLink(String youtubeLink) {
+		this.youtubeLink = youtubeLink;
 	}
 	
 	public JSONArray getPhotoListArray() {

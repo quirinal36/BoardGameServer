@@ -189,7 +189,7 @@ public class BoardControl {
 		int result = 0;
 		DBconn db = new DBconn();
 		try (Connection conn = db.getConnection()){
-			final String sql = new StringBuilder().append("INSERT INTO Board_main (creatorId, patientId, status, text, type, accessLevel, groupId) VALUE (?,?,?,?,?,?,?) ").toString();
+			final String sql = new StringBuilder().append("INSERT INTO Board_main (creatorId, patientId, status, text, type, accessLevel, groupId, youtubeLink) VALUE (?,?,?,?,?,?,?,?) ").toString();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, board.getCreatorId());
 			pstmt.setInt(2, board.getPatientId());
@@ -198,6 +198,7 @@ public class BoardControl {
 			pstmt.setInt(5, board.getType());
 			pstmt.setInt(6, board.getAccessLevel());
 			pstmt.setInt(7, board.getGroupId());
+			pstmt.setString(8, board.getYoutubeLink());
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -209,7 +210,7 @@ public class BoardControl {
 		int result = 0;
 		DBconn db = new DBconn();
 		try (Connection conn = db.getConnection()){
-			final String sql = new StringBuilder().append("UPDATE Board_main SET creatorId=?, patientId=?, status=?, text=?, type=?, accessLevel=?, groupId=? WHERE id=?").toString();
+			final String sql = new StringBuilder().append("UPDATE Board_main SET creatorId=?, patientId=?, status=?, text=?, type=?, accessLevel=?, groupId=? , youtubeLink=? WHERE id=?").toString();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, board.getCreatorId());
 			pstmt.setInt(2, board.getPatientId());
@@ -218,7 +219,8 @@ public class BoardControl {
 			pstmt.setInt(5, board.getType());
 			pstmt.setInt(6, board.getAccessLevel());
 			pstmt.setInt(7, board.getGroupId());
-			pstmt.setInt(8, board.getId());
+			pstmt.setString(8, board.getYoutubeLink());
+			pstmt.setInt(9, board.getId());
 			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();

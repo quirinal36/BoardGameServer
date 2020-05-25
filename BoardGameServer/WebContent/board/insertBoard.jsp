@@ -55,6 +55,7 @@ String text = (String) jsonRequest.get("text");
 String type = (String) jsonRequest.get("type");
 String accessLevel = (String) jsonRequest.get("accessLevel");
 String groupId = (String) jsonRequest.get("groupId");
+String youtubeLink = (String) jsonRequest.get("youtubeLink");
 String token = request.getHeader("authorization");
 
 
@@ -83,6 +84,9 @@ if(groupId != null && groupId.length() > 0) {
 	board.setGroupId(Integer.parseInt(groupId));
 } else {
 	board.setGroupId(1);
+}
+if(youtubeLink != null && youtubeLink.length() > 0) {
+	board.setYoutubeLink(youtubeLink);
 }
 
 logger.info("text:"+text);
