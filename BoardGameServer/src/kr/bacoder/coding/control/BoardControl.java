@@ -39,6 +39,7 @@ public class BoardControl {
 							+ "board.expireDate,"
 							+ "board.accessLevel,"
 							+ "board.groupId,"
+							+ "board.youtubeLink,"
 							+ "(SELECT count(*) FROM Board_reply reply WHERE reply.boardId = board.id) AS replyCount,")
 					.append(" ")
 					.append("CASE ")
@@ -87,6 +88,7 @@ public class BoardControl {
 				board.setGroupId(rs.getInt("groupId"));
 				board.setReplyCount(rs.getInt("replyCount"));
 				board.setPhotoList(rs.getString("photoList"));
+				board.setYoutubeLink(rs.getString("youtubeLink"));
 
 				list.add(board);
 			}
@@ -118,6 +120,7 @@ public class BoardControl {
 							+ "board.expireDate,"
 							+ "board.accessLevel,"
 							+ "board.groupId,"
+							+ "board.youtubeLink,"
 							+ "(SELECT count(*) FROM Board_reply reply WHERE reply.boardId = board.id) AS replyCount,")
 					.append(" ")
 					.append("CASE ")
@@ -169,6 +172,7 @@ public class BoardControl {
 				board.setGroupId(rs.getInt("groupId"));
 				board.setReplyCount(rs.getInt("replyCount"));
 				board.setPhotoList(rs.getString("photoList"));
+				board.setYoutubeLink(rs.getString("youtubeLink"));
 
 				list.add(board);
 			}
