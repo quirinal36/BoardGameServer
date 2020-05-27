@@ -11,11 +11,14 @@ import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 
+import com.mysql.jdbc.Statement;
+
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Board;
 import kr.bacoder.coding.bean.Patient;
 
 public class BoardControl {
+
 
 	public List<Board> getBoardList(int userId, int userLevel){
 		DBconn db = new DBconn();
@@ -194,9 +197,9 @@ public class BoardControl {
 		int result = 0;
 		DBconn db = new DBconn();
 		try (Connection conn = db.getConnection()){
-			final String sql = new StringBuilder().append("INSERT INTO Board_main (creatorId, patientId, status, text, type, accessLevel, groupId, youtubeLink) VALUE (?,?,?,?,?,?,?,?) ")
+			final String sql = new StringBuilder().append("INSERT INTO Board_main (creatorId, patientId, status, text, type, accessLevel, groupId, youtubeLink) VALUE (?,?,?,?,?,?,?,?)")
 					.toString();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
+			PreparedStatement pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, board.getCreatorId());
 			pstmt.setInt(2, board.getPatientId());
 			pstmt.setInt(3, board.getStatus());
@@ -206,13 +209,13 @@ public class BoardControl {
 			pstmt.setInt(7, board.getGroupId());
 			pstmt.setString(8, board.getYoutubeLink());
 			result = pstmt.executeUpdate();
-			
-			if (result > 0) {
-				final String sql2 = new StringBuilder()
-						.append("select LAST_INSERT_ID()").toString();
-				PreparedStatement pstmt2 = conn.prepareStatement(sql2);
-				result = pstmt2.executeUpdate();
-			}
+			ResultSet rs = pstmt.getGeneratedKeys();
+			if (rs.next()) {
+		        result = rs.getInt(1);
+		    } else {
+		    	result = -2;
+		        // throw an exception from here
+		    }
 			
 			
 		}catch(SQLException e) {

@@ -72,6 +72,8 @@ if(status != null && status.length() > 0) {
 }
 if(text != null && text.length() > 0) {
 	board.setText(text);
+} else {
+	board.setText("");
 }
 if(type != null && type.length() > 0) {
 	board.setType(Integer.parseInt(type));
@@ -91,6 +93,12 @@ if(groupId != null && groupId.length() > 0) {
 if(youtubeLink != null && youtubeLink.length() > 0) {
 	board.setYoutubeLink(youtubeLink);
 }
+if(caption != null && caption.length() > 0) {
+	board.setCaption(caption);
+} else {
+	caption = "";
+	board.setCaption(caption);
+}
 
 logger.info("text:"+text);
 logger.info("token:"+token);
@@ -108,8 +116,10 @@ if(control.getPersonByToken(token) != null) {
 	boardId = boardCtl.insertBoard(board);
 	result.put("result", boardId);
 	logger.info("### boardId:"+boardId);
+	logger.info("### photoId:"+photoId);
 	
-	if(boardId >0 && photoId != null && photoId.length() >0) {
+	
+	if(boardId >0 && photoId != null && Integer.parseInt(photoId) >0) {
 		result.put("result", boardCtl.insertBoardPhoto(boardId, Integer.parseInt(photoId), caption));
 	}
 	out.print(result.toJSONString());
