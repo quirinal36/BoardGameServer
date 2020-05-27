@@ -57,6 +57,9 @@ String accessLevel = (String) jsonRequest.get("accessLevel");
 String groupId = (String) jsonRequest.get("groupId");
 String youtubeLink = (String) jsonRequest.get("youtubeLink");
 String token = request.getHeader("authorization");
+String photoId = (String) jsonRequest.get("photoId");
+String caption = (String) jsonRequest.get("caption");
+
 
 
 Board board = new Board();
@@ -101,7 +104,14 @@ if(control.getPersonByToken(token) != null) {
 	board.setUserLevel(person.getUserLevel());
 	
 	BoardControl boardCtl = new BoardControl();
-	result.put("result", boardCtl.insertBoard(board));
+	int boardId = 0;
+	boardId = boardCtl.insertBoard(board);
+	result.put("result", boardId);
+	logger.info("### boardId:"+boardId);
+	
+	if(boardId >0 && photoId != null && photoId.length() >0) {
+		result.put("result", boardCtl.insertBoardPhoto(boardId, Integer.parseInt(photoId), caption));
+	}
 	out.print(result.toJSONString());
 } else {
 	//token error (unauthorized)

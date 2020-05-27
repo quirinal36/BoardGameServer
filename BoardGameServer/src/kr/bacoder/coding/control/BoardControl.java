@@ -13,6 +13,7 @@ import org.json.simple.JSONArray;
 
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Board;
+import kr.bacoder.coding.bean.Patient;
 
 public class BoardControl {
 
@@ -193,7 +194,8 @@ public class BoardControl {
 		int result = 0;
 		DBconn db = new DBconn();
 		try (Connection conn = db.getConnection()){
-			final String sql = new StringBuilder().append("INSERT INTO Board_main (creatorId, patientId, status, text, type, accessLevel, groupId, youtubeLink) VALUE (?,?,?,?,?,?,?,?) ").toString();
+			final String sql = new StringBuilder().append("INSERT INTO Board_main (creatorId, patientId, status, text, type, accessLevel, groupId, youtubeLink) VALUE (?,?,?,?,?,?,?,?) ")
+					.toString();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, board.getCreatorId());
 			pstmt.setInt(2, board.getPatientId());
@@ -204,6 +206,15 @@ public class BoardControl {
 			pstmt.setInt(7, board.getGroupId());
 			pstmt.setString(8, board.getYoutubeLink());
 			result = pstmt.executeUpdate();
+			
+			if (result > 0) {
+				final String sql2 = new StringBuilder()
+						.append("select LAST_INSERT_ID()").toString();
+				PreparedStatement pstmt2 = conn.prepareStatement(sql2);
+				result = pstmt2.executeUpdate();
+			}
+			
+			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -226,6 +237,23 @@ public class BoardControl {
 			pstmt.setString(8, board.getYoutubeLink());
 			pstmt.setInt(9, board.getId());
 			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public int insertBoardPhoto(int boardId, int photoId, String caption) {
+		int result = 0;
+		DBconn db = new DBconn();
+		try (Connection conn = db.getConnection()){
+			final String sql = new StringBuilder().append("INSERT INTO Board_photo (boardId, photoId, caption) VALUE (?,?,?) ").toString();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardId);
+			pstmt.setInt(2, photoId);
+			pstmt.setString(3, caption);
+			result = pstmt.executeUpdate();
+			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
