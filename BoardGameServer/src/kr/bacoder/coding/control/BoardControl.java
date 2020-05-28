@@ -16,6 +16,7 @@ import com.mysql.jdbc.Statement;
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Board;
 import kr.bacoder.coding.bean.Patient;
+import kr.bacoder.coding.bean.Photo;
 
 public class BoardControl {
 
@@ -257,6 +258,20 @@ public class BoardControl {
 			pstmt.setString(3, caption);
 			result = pstmt.executeUpdate();
 			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public int deleteBoardById(Board board) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM Board_main WHERE id = ?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, board.getId());
+			result = pstmt.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}

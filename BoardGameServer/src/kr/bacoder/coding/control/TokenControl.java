@@ -23,6 +23,9 @@ public class TokenControl extends DBconn {
 	private static final String ATokenSubject = "AccessToken";
 	private static final String RTokenSubject = "RefreshToken";
 	private static final String PTokenSubject = "PhotoToken";
+	
+	public final static String expiredToken = "유효기간이 만료되었습니다";
+	public final static String unauthorized = "인가되지 않은 접근입니다";
 
 	PasswordEncoder passwordEncoder = new BongPasswordEncoder();
 	
