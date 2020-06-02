@@ -43,6 +43,7 @@ public class UploadUtil {
 		}
 		return photoUrl.toString();
 	}
+	
 	public Person setFile(String path, String imgEncodedStr, String fileName, Person person){
 		
 		try {
