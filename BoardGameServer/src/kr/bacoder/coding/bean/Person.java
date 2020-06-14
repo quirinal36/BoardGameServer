@@ -18,7 +18,7 @@ public class Person {
 	public static final String BIRTH_KEY = "birth";
 	public static final String PHONE_KEY = "phone";
 	public static final String EMAIL_KEY = "email";
-	public static final String PHOTO_KEY = "photo";
+	public static final String PHOTO_ID_KEY = "photoId";
 	public static final String UNIQUE_ID_KEY = "uniqueId";
 	public static final String PASSWORD_KEY = "password";
 	public static final String DEPARTMENT_KEY = "department";
@@ -45,7 +45,7 @@ public class Person {
 	private String phone;
 	private String password;
 	private String uniqueId;
-	private String photo;
+	private int photoId;
 	private String department;
 	private String birth;
 	private int userLevel;
@@ -142,11 +142,11 @@ public class Person {
 	public void setUniqueId(String uniqueId) {
 		this.uniqueId = uniqueId;
 	}
-	public String getPhoto() {
-		return photo;
+	public int getPhotoId() {
+		return photoId;
 	}
-	public void setPhoto(String photo) {
-		this.photo = photo;
+	public void setPhotoId(int photoId) {
+		this.photoId = photoId;
 	}
 	
 	public String getDepartment() {

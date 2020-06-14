@@ -84,7 +84,7 @@ public class PersonControl {
 				person.setName(rs.getString("name"));
 				person.setEmail(rs.getString("email"));
 				person.setPhone(rs.getString("phone"));
-				person.setPhoto(rs.getString("photo"));
+				person.setPhotoId(rs.getInt("photoId"));
 				person.setDepartment(rs.getString("department"));
 			}
 		}catch(SQLException e){
@@ -105,7 +105,7 @@ public class PersonControl {
 				person.setId(rs.getInt("NUM"));
 				person.setName(rs.getString("name"));
 				person.setPhone(rs.getString("phone"));
-				person.setPhoto(rs.getString("photo"));
+				person.setPhotoId(rs.getInt("photoId"));
 				person.setUniqueId(rs.getString("uniqueId"));
 				person.setDepartment(rs.getString("department"));
 				person.setBirth(rs.getString("birth"));
@@ -131,7 +131,7 @@ public class PersonControl {
 				person.setId(rs.getInt("NUM"));
 				person.setName(rs.getString("name"));
 				person.setPhone(rs.getString("phone"));
-				person.setPhoto(rs.getString("photo"));
+				person.setPhotoId(rs.getInt("photoId"));
 				person.setUniqueId(rs.getString("uniqueId"));
 				person.setDepartment(rs.getString("department"));
 				person.setBirth(rs.getString("birth"));
@@ -172,7 +172,7 @@ public class PersonControl {
 		int result = 0;
 		try(Connection conn = new DBconn().getConnection()){
 			String sql = "INSERT INTO Person "
-					+ "(name, email, phone, password, uniqueId, photo, department, userLevel) "
+					+ "(name, email, phone, password, uniqueId, photoId, department, userLevel) "
 					+ "VALUES (?,?,?,?,?,?,?,?)";
 			
 			logger.info(sql.toString());
@@ -183,7 +183,7 @@ public class PersonControl {
 			pstmt.setString(3, person.getPhone());
 			pstmt.setString(4, passwordEncoder.encode(person.getPassword()));
 			pstmt.setString(5, person.getUniqueId());
-			pstmt.setString(6, person.getPhoto());
+			pstmt.setInt(6, person.getPhotoId());
 			pstmt.setString(7, person.getDepartment());
 			pstmt.setInt(8, person.getUserLevel());
 			result= pstmt.executeUpdate();
@@ -251,8 +251,8 @@ public class PersonControl {
 			if(person.getPhone()!=null && person.getPhone().length()>0) {
 				sql.append("phone=?,");
 			}
-			if(person.getPhoto()!=null && person.getPhoto().length()>0) {
-				sql.append("photo=?,");
+			if(person.getPhotoId()>0) {
+				sql.append("photoId=?,");
 			}
 			if(person.getDepartment()!=null && person.getDepartment().length()>0) {
 				sql.append("department=?,");
@@ -277,8 +277,8 @@ public class PersonControl {
 			if(person.getPhone()!=null && person.getPhone().length()>0) {
 				pstmt.setString(i++, person.getPhone());
 			}
-			if(person.getPhoto()!=null && person.getPhoto().length()>0) {
-				pstmt.setString(i++, person.getPhoto());
+			if(person.getPhotoId()>0) {
+				pstmt.setInt(i++, person.getPhotoId());
 			}
 			if(person.getDepartment()!=null && person.getDepartment().length()>0) {
 				pstmt.setString(i++, person.getDepartment());
@@ -318,7 +318,7 @@ public class PersonControl {
 				person.setId(rs.getInt(Person.NUM_KEY));
 				person.setName(rs.getString(Person.NAME_KEY));
 				person.setPhone(rs.getString(Person.PHONE_KEY));
-				person.setPhoto(rs.getString(Person.PHOTO_KEY));
+				person.setPhotoId(rs.getInt(Person.PHOTO_ID_KEY));
 				person.setUniqueId(rs.getString(Person.UNIQUE_ID_KEY));
 				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
 				

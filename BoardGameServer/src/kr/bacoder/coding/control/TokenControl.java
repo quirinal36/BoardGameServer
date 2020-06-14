@@ -96,7 +96,7 @@ public class TokenControl extends DBconn {
 				person.setId(rs.getInt(Person.NUM_KEY));
 				person.setName(rs.getString(Person.NAME_KEY));
 //				person.setPhone(rs.getString(Person.PHONE_KEY));
-//				person.setPhoto(rs.getString(Person.PHOTO_KEY));
+				person.setPhotoId(rs.getInt(Person.PHOTO_ID_KEY));
 				person.setUniqueId(rs.getString(Person.UNIQUE_ID_KEY));
 				person.setUserLevel(rs.getInt(Person.USER_LEVEL_KEY));
 				person.setCompanyId(rs.getInt(Person.COMPANY_ID_KEY));

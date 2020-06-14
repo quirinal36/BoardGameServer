@@ -57,7 +57,7 @@ public class UploadUtil {
 			File file = new File(path + File.separator + timeStamp + ext);
 			FileOutputStream imageOutFile = new FileOutputStream(file);
 			imageOutFile.write(imageByteArray);
-			person.setPhoto("http://www.bacoder.kr/upload/" + file.getName());
+//			person.setPhoto("http://www.bacoder.kr/upload/" + file.getName());
 			imageOutFile.close();
 		} catch (FileNotFoundException fnfe) {
 			System.out.println("Image Path not found" + fnfe);

@@ -15,6 +15,7 @@ public class Board {
 	private String writerName;
 	private String writerUserId;
 	private String profileUrl;
+	private int profilePhotoId;
 	private String kImageUrl;
 	private Timestamp createdTime;
 	private Timestamp updatedTime;
@@ -230,6 +231,12 @@ public class Board {
 	}
 	public void setYoutubeLink(String youtubeLink) {
 		this.youtubeLink = youtubeLink;
+	}
+	public int getProfilePhotoId() {
+		return profilePhotoId;
+	}
+	public void setProfilePhotoId(int profilePhotoId) {
+		this.profilePhotoId = profilePhotoId;
 	}
 	
 	public JSONArray getPhotoListArray() {

@@ -30,6 +30,7 @@ public class BoardControl {
 							+ "board.creatorId,"
 							+ "user.name as writerName,"
 							+ "user.profileUrl as profileUrl,"
+							+ "user.photoId as profilePhotoId,"
 							+ "user.kImageUrl as kImageUrl, "
 							+ "user.patientId as patientId,"
 							+ "user.userType as userType,"
@@ -77,6 +78,7 @@ public class BoardControl {
 				board.setCreatorId(rs.getInt("creatorId"));
 				board.setWriterName(rs.getString("writerName"));
 				board.setProfileUrl(rs.getString("profileUrl"));
+				board.setProfilePhotoId(rs.getInt("profilePhotoId"));
 				board.setkImageUrl(rs.getString("kImageUrl"));
 				board.setPatientId(rs.getInt("patientId"));
 				board.setUserType(rs.getInt("userType"));
@@ -111,6 +113,7 @@ public class BoardControl {
 							+ "board.creatorId,"
 							+ "user.name as writerName,"
 							+ "user.profileUrl as profileUrl,"
+							+ "user.photoId as profilePhotoId,"
 							+ "user.kImageUrl as kImageUrl, "
 							+ "user.patientId as patientId,"
 							+ "user.userType as userType,"
@@ -161,6 +164,7 @@ public class BoardControl {
 				board.setCreatorId(rs.getInt("creatorId"));
 				board.setWriterName(rs.getString("writerName"));
 				board.setProfileUrl(rs.getString("profileUrl"));
+				board.setProfilePhotoId(rs.getInt("profilePhotoId"));
 				board.setkImageUrl(rs.getString("kImageUrl"));
 				board.setPatientId(rs.getInt("patientId"));
 				board.setUserType(rs.getInt("userType"));
