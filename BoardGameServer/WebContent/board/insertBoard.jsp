@@ -1,10 +1,14 @@
-<%@page import="org.json.simple.JSONObject"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONArray"%>
+<%@page import="org.json.JSONException"%>
+
 <%@page import="kr.bacoder.coding.bean.Board"%>
 <%@page import="kr.bacoder.coding.bean.Person"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Arrays"%>
+
 <%@page import="kr.bacoder.coding.control.BoardControl"%>
 <%@page import="kr.bacoder.coding.control.TokenControl"%>
-<%@page import="org.json.simple.parser.JSONParser"%>
 <%@page import="java.io.BufferedReader"%>
 <%@page import="java.io.BufferedReader"%>
 <%@page import="java.io.InputStream"%>
@@ -12,6 +16,7 @@
 <%@page import="java.io.IOException"%>
 <%@page import="java.util.logging.Logger"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%
 Logger logger = Logger.getLogger("insertBoard.jsp");
 
@@ -44,22 +49,52 @@ BufferedReader bufferedReader = null;
 	 }
 
 	 	body = stringBuilder.toString();
-	 	JSONParser jsonParser = new JSONParser();
+	 	logger.info("paramBody:"+body);
+	 	logger.info("token:"+request.getHeader("authorization"));
+
+	 	//JSONObject jsonRequest = new JSONObject(body);
+	 	//JSONParser parser = new JSONParser(); 
+	 	
+	 	String patientId = null;
+		String status = null;
+		String text = null;
+		String type = null;
+		String accessLevel = null;
+		String groupId = null;
+		String youtubeLink = null;
+		String token = null;
+		String photoId = null;
+		String caption = null;
+	 	
+ 	 	JSONObject jsonRequest = null;
+	 	try {
+	 		jsonRequest = new JSONObject(body);
+	 		
+	 		 //patientId = jsonRequest.getString("patientId");
+	 		 //status = jsonRequest.getString("status");
+	 		 text = jsonRequest.getString("text");
+	 		 type = jsonRequest.getString("type");
+	 		 //accessLevel = jsonRequest.getString("accessLevel");
+	 		 groupId = jsonRequest.getString("groupId");
+	 		 youtubeLink = jsonRequest.getString("youtubeLink");
+	 		 token = request.getHeader("authorization");
+	 		 photoId = jsonRequest.getString("photoId");
+	 		 //caption = jsonRequest.getString("caption");
+	 		
+	 	} catch (JSONException e) {
+	 		e.printStackTrace();
+	 	}
+	 	
+	 	
+/* 	 	JSONParser jsonParser = new JSONParser();
 	 	Object obj = jsonParser.parse( body );
-	 	JSONObject jsonRequest = (JSONObject) obj;
+	 	JSONObject jsonRequest = (JSONObject) obj; 
+	 	*/
 
 	 	
-String patientId = (String) jsonRequest.get("patientId");
-String status = (String) jsonRequest.get("status");
-String text = (String) jsonRequest.get("text");
-String type = (String) jsonRequest.get("type");
-String accessLevel = (String) jsonRequest.get("accessLevel");
-String groupId = (String) jsonRequest.get("groupId");
-String youtubeLink = (String) jsonRequest.get("youtubeLink");
-String token = request.getHeader("authorization");
-String photoId = (String) jsonRequest.get("photoId");
-String caption = (String) jsonRequest.get("caption");
 
+
+	logger.info("photoId:"+photoId);
 
 
 Board board = new Board();
@@ -105,27 +140,51 @@ logger.info("token:"+token);
 
 JSONObject result = new JSONObject();
 TokenControl control = new TokenControl();
-if(control.getPersonByToken(token) != null) {
-	Person person = control.getPersonByToken(token);
-	logger.info("id:"+person.getId());
-	board.setCreatorId(person.getId());
-	board.setUserLevel(person.getUserLevel());
+
+try {
+	if(control.getPersonByToken(token) != null) 
+	{
+		Person person = control.getPersonByToken(token);
+		logger.info("id:"+person.getId());
+		board.setCreatorId(person.getId());
+		board.setUserLevel(person.getUserLevel());
+		
+		BoardControl boardCtl = new BoardControl();
+		int boardId = 0;
+		boardId = boardCtl.insertBoard(board);
+		result.put("result", boardId);
+		logger.info("### boardId:"+boardId);
+		logger.info("### photoIdList:"+photoId);
 	
-	BoardControl boardCtl = new BoardControl();
-	int boardId = 0;
-	boardId = boardCtl.insertBoard(board);
-	result.put("result", boardId);
-	logger.info("### boardId:"+boardId);
-	logger.info("### photoId:"+photoId);
-	
-	
-	if(boardId >0 && photoId != null && Integer.parseInt(photoId) >0) {
-		result.put("result", boardCtl.insertBoardPhoto(boardId, Integer.parseInt(photoId), caption));
-	}
-	out.print(result.toJSONString());
-} else {
-	//token error (unauthorized)
-	result.put("result", -1);
-	out.print(result.toJSONString());
+		if(boardId >0 && photoId != null && !photoId.equals("null")) {
+			
+			//remove first and last character and create array of Strings splitting around the character ','
+			String[] strings = photoId.substring(1, photoId.length() - 1).split(",");
+
+			//Now since every element except the first one has an extra leading space, remove it
+			for (int i = 1; i < strings.length; i++) {
+			    strings[i] = strings[i].substring(1);
+			}
+			
+			List<String> idStringList = Arrays.asList(strings);
+
+			logger.info("### idStringList:"+idStringList.toString());
+			
+			for(int i=0;i<idStringList.size();i++)
+			{
+				logger.info("### photoId:"+Integer.parseInt(idStringList.get(i)));
+				result.put("result", boardCtl.insertBoardPhoto(boardId, Integer.parseInt(idStringList.get(i)), caption));
+			}
+		}
+		out.print(result.toString());
+		
+		
+	} else {
+		//token error (unauthorized)
+		result.put("result", -1);
+		out.print(result.toString());
+		}
+} catch(Exception e) {
+	e.printStackTrace();
 }
 %>
