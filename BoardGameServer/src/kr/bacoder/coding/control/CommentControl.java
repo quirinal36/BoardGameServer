@@ -14,6 +14,7 @@ import org.json.simple.JSONArray;
 import com.mysql.jdbc.Statement;
 
 import kr.bacoder.coding.DBconn;
+import kr.bacoder.coding.bean.Board;
 import kr.bacoder.coding.bean.Comment;
 import kr.bacoder.coding.bean.Patient;
 import kr.bacoder.coding.bean.Photo;
@@ -81,6 +82,49 @@ public class CommentControl {
 		return list;
 	}
 	
+	public int insertComment(Comment comment) {
+		int result = 0;
+		DBconn db = new DBconn();
+		try (Connection conn = db.getConnection()){
+			final String sql = new StringBuilder().append("INSERT INTO Board_reply (boardId, text, status, writerId, boardOwnerId, secret) VALUE (?,?,?,?,?,?)")
+					.toString();
+			PreparedStatement pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			pstmt.setInt(1, comment.getBoardId());
+			pstmt.setString(2, comment.getText());
+			pstmt.setInt(3, comment.getStatus());
+			pstmt.setInt(4, comment.getWriterId());
+			pstmt.setInt(5, comment.getBoardOwnerId());
+			pstmt.setInt(6, comment.getSecret());
+
+			result = pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
+			if (rs.next()) {
+		        result = rs.getInt(1);
+		    } else {
+		    	result = -2;
+		        // throw an exception from here
+		    }
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public int deleteCommentById(Comment comment) {
+		int result = 0;
+		try(Connection conn = new DBconn().getConnection()){
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM Board_reply WHERE id = ?");
+			
+			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, comment.getId());
+			result = pstmt.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	public JSONArray getCommentJsonArray (List<Comment> list) {
 		JSONArray array = new JSONArray();
