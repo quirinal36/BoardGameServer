@@ -9,8 +9,72 @@ import java.util.List;
 
 import kr.bacoder.coding.DBconn;
 import kr.bacoder.coding.bean.Group;
+import kr.bacoder.coding.bean.Patient;
 
 public class GroupControl {
+	
+	public Group getGroupInfo(String groupId, int userLevel) throws SQLException {
+		Group group = new Group();
+		
+		try(Connection conn = new DBconn().getConnection()){
+			final String sql = new StringBuilder()
+					.append("SELECT + " +
+							"			groupList.id as id," + 
+							"			groupList.groupType as groupType," + 
+							"			groupList.parentGroupId as parentGroupId," + 
+							"			(SELECT sublist.groupName From Group_list sublist WHERE sublist.id = groupList.parentGroupId ) AS parentGroupName," + 
+							"			(SELECT sublist.groupIconUrl From Group_list sublist WHERE sublist.id = groupList.parentGroupId ) AS parentGroupIconUrl," + 
+							"			groupList.groupName as groupName," + 
+							"			groupList.groupText as groupText," + 
+							"			groupList.groupIconUrl as groupIconUrl," + 
+							"			groupList.groupDetailPhotoUrl1 as groupDetailPhotoUrl1," + 
+							"			groupList.groupDetailPhotoUrl2 as groupDetailPhotoUrl2," + 
+							"			groupList.groupDetailPhotoUrl3 as groupDetailPhotoUrl3," + 
+							"			groupList.adminUserId as adminUserId," + 
+							"			groupList.presidentUserId as presidentUserId," + 
+							"			groupList.secret as secret," + 
+							"			groupList.createdTime as createdTime," + 
+							"			groupList.defaultUserLevel as defaultUserLevel," + 
+							"			groupList.accessLevel," + 
+							"			(SELECT count(*) FROM Group_user user WHERE (user.groupId = ?)) AS userCount" + 
+							"		FROM Group_list groupList" + 
+							"		WHERE" +  
+							"           groupList.id = ? AND " +
+							"			? >= groupList.accessLevel").toString();
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(groupId));
+			pstmt.setInt(2, Integer.parseInt(groupId));
+			pstmt.setInt(3, userLevel);
+
+			
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()){
+				
+				group.setId(rs.getInt("id"));
+				group.setGroupType(rs.getInt("groupType"));
+				group.setParentGroupId(rs.getInt("parentGroupId"));
+				group.setParentGroupName(rs.getString("parentGroupName"));
+				group.setParentGroupIconUrl(rs.getString("parentGroupIconUrl"));
+				group.setGroupName(rs.getString("groupName"));				
+				group.setGroupText(rs.getString("groupText"));
+				group.setGroupIconUrl(rs.getString("groupIconUrl"));
+				group.setGroupDetailPhotoUrl1(rs.getString("groupDetailPhotoUrl1"));
+				group.setGroupDetailPhotoUrl2(rs.getString("groupDetailPhotoUrl2"));
+				group.setGroupDetailPhotoUrl3(rs.getString("groupDetailPhotoUrl3"));
+				group.setAdminUserId(rs.getInt("adminUserId"));
+				group.setPresidentUserId(rs.getInt("presidentUserId"));
+				group.setSecret(rs.getInt("secret"));
+				group.setCreatedTime(rs.getDate("createdTime"));
+				group.setDefaultUserLevel(rs.getInt("defaultUserLevel"));
+				group.setAccessLevel(rs.getInt("accessLevel"));
+				group.setUserCount(rs.getInt("userCount"));
+
+			}
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return group;
+	}
 
 	public List<Group> getGroupListAll(int userId, int userLevel){
 		DBconn db = new DBconn();
