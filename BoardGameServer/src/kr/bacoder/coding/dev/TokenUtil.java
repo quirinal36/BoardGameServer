@@ -23,7 +23,7 @@ public class TokenUtil {
 	Logger logger = Logger.getLogger(UploadUtil.class.getSimpleName());
 	
 	
-	private static String signature = "qhdghkdtpqoralrudqhdcksdnqhdtjdus";
+	private static String signature = "test1";
 
 	public final static String expiredToken = "유효기간이 만료되었습니다";
 	public final static String unauthorized = "인가되지 않은 접근입니다";
